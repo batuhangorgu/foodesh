@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FooDash – Lezzet Kapında</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #E8230A;
+  --orange: #FF6B00;
+  --yellow: #FFB800;
+  --cream: #FFF8F0;
+  --dark: #1A0A00;
+  --card: #FFFFFF;
+  --muted: #8A6A5A;
+  --green: #22C55E;
+  --blue: #3B82F6;
+  --radius: 18px;
+  --shadow: 0 8px 32px rgba(232,35,10,0.13);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--dark);min-height:100vh;}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:7px;}
+::-webkit-scrollbar-track{background:#fff3ea;}
+::-webkit-scrollbar-thumb{background:var(--orange);border-radius:8px;}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 32px;height:68px;
+  background:rgba(255,248,240,0.92);backdrop-filter:blur(12px);
+  border-bottom:2px solid rgba(255,107,0,0.12);
+}
+.logo{font-family:'Fredoka One',cursive;font-size:1.8rem;color:var(--red);letter-spacing:1px;display:flex;align-items:center;gap:6px;cursor:pointer;}
+.logo span{color:var(--orange);}
+.nav-btns{display:flex;gap:10px;align-items:center;}
+.btn{cursor:pointer;border:none;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.93rem;transition:all .2s;}
+.btn-outline{background:transparent;border:2.5px solid var(--orange);color:var(--orange);padding:8px 22px;}
+.btn-outline:hover{background:var(--orange);color:#fff;}
+.btn-fill{background:linear-gradient(135deg,var(--red),var(--orange));color:#fff;padding:9px 26px;box-shadow:0 4px 16px rgba(232,35,10,0.25);}
+.btn-fill:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(232,35,10,0.35);}
+.btn-download{background:linear-gradient(135deg,#1A0A00,#3d1a00);color:#fff;padding:9px 22px;display:flex;align-items:center;gap:7px;font-size:.88rem;}
+.btn-download:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.25);}
+.btn-download svg{width:16px;height:16px;}
+
+/* ── PAGES ── */
+.page{display:none;padding-top:68px;min-height:100vh;}
+.page.active{display:block;}
+
+/* ── HERO ── */
+#page-home{
+  background:
+    radial-gradient(ellipse at 80% 10%, rgba(255,107,0,.18) 0%, transparent 55%),
+    radial-gradient(ellipse at 10% 80%, rgba(232,35,10,.13) 0%, transparent 55%),
+    var(--cream);
+}
+.hero{
+  display:flex;align-items:center;justify-content:space-between;
+  max-width:1100px;margin:0 auto;padding:70px 32px 50px;gap:40px;
+  flex-wrap:wrap;
+}
+.hero-text h1{
+  font-family:'Fredoka One',cursive;
+  font-size:clamp(2.4rem,5vw,4rem);
+  line-height:1.1;color:var(--dark);
+}
+.hero-text h1 em{
+  font-style:normal;
+  background:linear-gradient(135deg,var(--red),var(--orange));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-text p{margin:16px 0 28px;color:var(--muted);font-size:1.1rem;line-height:1.6;max-width:440px;}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+.hero-img{
+  width:340px;height:340px;border-radius:50%;
+  background:linear-gradient(135deg,var(--red),var(--orange));
+  display:flex;align-items:center;justify-content:center;
+  font-size:9rem;box-shadow:0 20px 60px rgba(232,35,10,0.3);
+  animation:float 3s ease-in-out infinite;flex-shrink:0;
+}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-18px);}}
+
+/* ── DOWNLOAD SECTION ── */
+.download-section{
+  background:linear-gradient(135deg,var(--dark) 0%, #3d1a00 100%);
+  padding:60px 32px;text-align:center;
+}
+.download-section h2{font-family:'Fredoka One',cursive;font-size:2rem;color:#fff;margin-bottom:10px;}
+.download-section p{color:#d4a896;margin-bottom:30px;}
+.download-cards{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+.dl-card{
+  background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.15);
+  border-radius:16px;padding:20px 32px;color:#fff;
+  display:flex;align-items:center;gap:14px;cursor:pointer;
+  transition:all .25s;text-align:left;
+}
+.dl-card:hover{background:rgba(255,107,0,0.2);border-color:var(--orange);transform:translateY(-3px);}
+.dl-card-icon{font-size:2.4rem;}
+.dl-card-text small{display:block;font-size:.75rem;opacity:.7;margin-bottom:2px;}
+.dl-card-text strong{font-size:1.1rem;}
+
+/* ── FEATURES ── */
+.features{max-width:1100px;margin:0 auto;padding:60px 32px;}
+.section-title{text-align:center;font-family:'Fredoka One',cursive;font-size:2rem;margin-bottom:36px;color:var(--dark);}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;}
+.feat-card{
+  background:#fff;border-radius:var(--radius);padding:28px 22px;
+  box-shadow:var(--shadow);text-align:center;transition:transform .25s;
+}
+.feat-card:hover{transform:translateY(-6px);}
+.feat-icon{font-size:2.8rem;margin-bottom:12px;}
+.feat-card h3{font-weight:800;margin-bottom:6px;}
+.feat-card p{color:var(--muted);font-size:.9rem;}
+
+/* ── MODAL / AUTH ── */
+.overlay{
+  display:none;position:fixed;inset:0;z-index:2000;
+  background:rgba(26,10,0,0.6);backdrop-filter:blur(6px);
+  align-items:center;justify-content:center;padding:20px;
+}
+.overlay.active{display:flex;}
+.modal{
+  background:#fff;border-radius:24px;padding:36px 32px;
+  width:100%;max-width:460px;max-height:88vh;overflow-y:auto;
+  box-shadow:0 24px 80px rgba(232,35,10,0.2);
+  animation:popIn .3s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes popIn{from{transform:scale(.85);opacity:0;}to{transform:scale(1);opacity:1;}}
+.modal-title{font-family:'Fredoka One',cursive;font-size:1.7rem;color:var(--red);margin-bottom:4px;}
+.modal-sub{color:var(--muted);font-size:.9rem;margin-bottom:24px;}
+.form-group{margin-bottom:16px;}
+.form-group label{display:block;font-weight:700;font-size:.85rem;margin-bottom:6px;color:var(--dark);}
+.form-group input,.form-group select,.form-group textarea{
+  width:100%;padding:11px 16px;border:2px solid #f0e0d6;border-radius:12px;
+  font-family:'Nunito',sans-serif;font-size:.95rem;color:var(--dark);
+  background:#fff8f5;outline:none;transition:border .2s;
+}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--orange);}
+.form-group textarea{min-height:80px;resize:vertical;}
+.role-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
+.role-card{
+  border:2.5px solid #f0e0d6;border-radius:14px;padding:16px 8px;
+  text-align:center;cursor:pointer;transition:all .2s;
+}
+.role-card:hover,.role-card.selected{border-color:var(--orange);background:#fff5ee;}
+.role-card .ri{font-size:2rem;margin-bottom:6px;}
+.role-card span{font-size:.8rem;font-weight:700;}
+.form-btn{
+  width:100%;padding:13px;border:none;border-radius:50px;
+  background:linear-gradient(135deg,var(--red),var(--orange));
+  color:#fff;font-family:'Nunito',sans-serif;font-weight:800;font-size:1rem;
+  cursor:pointer;box-shadow:0 6px 20px rgba(232,35,10,0.3);transition:all .2s;
+  margin-top:8px;
+}
+.form-btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(232,35,10,0.4);}
+.link-btn{background:none;border:none;color:var(--orange);font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;}
+.modal-footer{text-align:center;margin-top:16px;font-size:.9rem;color:var(--muted);}
+.modal-close{float:right;background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--muted);line-height:1;}
+
+/* ── DASHBOARD ── */
+#page-dashboard{background:#f7f0ea;}
+.dash-layout{display:flex;min-height:calc(100vh - 68px);}
+.sidebar{
+  width:230px;flex-shrink:0;background:linear-gradient(180deg,var(--dark) 0%,#3d1a00 100%);
+  padding:28px 0;position:sticky;top:68px;height:calc(100vh - 68px);overflow-y:auto;
+}
+.sidebar-logo{font-family:'Fredoka One',cursive;font-size:1.3rem;color:#fff;padding:0 24px 24px;border-bottom:1px solid rgba(255,255,255,.1);}
+.sidebar-logo span{color:var(--orange);}
+.sb-menu{list-style:none;padding:16px 0;}
+.sb-menu li a,.sb-menu li button{
+  display:flex;align-items:center;gap:10px;padding:12px 24px;
+  color:rgba(255,255,255,.7);text-decoration:none;font-weight:700;font-size:.9rem;
+  background:none;border:none;width:100%;cursor:pointer;font-family:'Nunito',sans-serif;
+  transition:all .2s;border-left:3px solid transparent;
+}
+.sb-menu li a:hover,.sb-menu li a.active,.sb-menu li button:hover{
+  color:#fff;background:rgba(255,107,0,.15);border-left-color:var(--orange);
+}
+.sb-menu .icon{font-size:1.1rem;}
+.dash-content{flex:1;padding:32px;overflow-x:hidden;}
+.dash-section{display:none;}
+.dash-section.active{display:block;}
+.dash-header{margin-bottom:28px;}
+.dash-header h2{font-family:'Fredoka One',cursive;font-size:1.8rem;color:var(--dark);}
+.dash-header p{color:var(--muted);}
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:28px;}
+.stat-card{background:#fff;border-radius:16px;padding:20px;box-shadow:var(--shadow);}
+.stat-card .num{font-family:'Fredoka One',cursive;font-size:2rem;color:var(--red);}
+.stat-card .lbl{font-size:.82rem;color:var(--muted);font-weight:700;}
+
+/* ── ADD ITEM FORM ── */
+.item-form{background:#fff;border-radius:var(--radius);padding:28px;box-shadow:var(--shadow);max-width:600px;}
+.item-form h3{font-family:'Fredoka One',cursive;font-size:1.3rem;margin-bottom:20px;color:var(--dark);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.img-upload{
+  border:2.5px dashed #f0d0c0;border-radius:14px;padding:28px;text-align:center;
+  cursor:pointer;color:var(--muted);transition:border .2s;
+}
+.img-upload:hover{border-color:var(--orange);}
+.img-upload input{display:none;}
+.img-preview{max-width:100%;max-height:140px;border-radius:10px;object-fit:cover;display:none;margin-top:10px;}
+.badge{
+  display:inline-block;padding:4px 12px;border-radius:50px;font-size:.78rem;font-weight:700;
+}
+.badge-green{background:#dcfce7;color:#16a34a;}
+.badge-orange{background:#fff3e0;color:#e65100;}
+.badge-red{background:#fee2e2;color:#dc2626;}
+.badge-blue{background:#dbeafe;color:#1d4ed8;}
+
+/* ── ORDERS TABLE ── */
+.orders-table{width:100%;border-collapse:collapse;background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);}
+.orders-table th{background:linear-gradient(135deg,var(--red),var(--orange));color:#fff;padding:14px 16px;text-align:left;font-size:.85rem;}
+.orders-table td{padding:13px 16px;border-bottom:1px solid #f5e8e0;font-size:.9rem;vertical-align:middle;}
+.orders-table tr:last-child td{border-bottom:none;}
+.orders-table tr:hover td{background:#fff8f5;}
+select.assign-select{border:2px solid #f0d0c0;border-radius:8px;padding:5px 10px;font-family:'Nunito',sans-serif;font-size:.85rem;background:#fff8f5;cursor:pointer;}
+select.assign-select:focus{outline:none;border-color:var(--orange);}
+
+/* ── ITEMS GRID ── */
+.items-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px;}
+.item-card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:var(--shadow);transition:transform .2s;}
+.item-card:hover{transform:translateY(-4px);}
+.item-thumb{height:130px;background:linear-gradient(135deg,#ffe0c8,#ffc5a0);display:flex;align-items:center;justify-content:center;font-size:3.5rem;}
+.item-thumb img{width:100%;height:100%;object-fit:cover;}
+.item-info{padding:14px;}
+.item-info h4{font-weight:800;margin-bottom:4px;}
+.item-info .price{color:var(--orange);font-weight:800;font-size:1.1rem;}
+.item-info .desc{color:var(--muted);font-size:.8rem;margin-top:4px;}
+
+/* ── TOAST ── */
+.toast{
+  position:fixed;bottom:28px;right:28px;z-index:5000;
+  background:var(--dark);color:#fff;padding:14px 22px;border-radius:14px;
+  font-weight:700;font-size:.9rem;
+  transform:translateY(80px);opacity:0;transition:all .35s cubic-bezier(.34,1.56,.64,1);
+  display:flex;align-items:center;gap:10px;
+}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast .t-icon{font-size:1.2rem;}
+
+/* ── FOOTER ── */
+footer{background:var(--dark);color:rgba(255,255,255,.5);text-align:center;padding:24px;font-size:.85rem;}
+footer a{color:var(--orange);text-decoration:none;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  nav{padding:0 16px;}
+  .hero{padding:50px 16px 40px;text-align:center;justify-content:center;}
+  .hero-img{width:240px;height:240px;font-size:6rem;}
+  .sidebar{display:none;}
+  .dash-content{padding:20px 16px;}
+  .form-row{grid-template-columns:1fr;}
+  .nav-btns .btn-download{display:none;}
+}
+
+/* ── CUSTOMER DASHBOARD ── */
+.restaurant-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;margin-bottom:32px;}
+.rest-card{background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);cursor:pointer;transition:transform .2s;}
+.rest-card:hover{transform:translateY(-5px);}
+.rest-banner{height:110px;display:flex;align-items:center;justify-content:center;font-size:4rem;}
+.rest-info{padding:16px;}
+.rest-info h3{font-weight:800;margin-bottom:4px;}
+.rest-info .meta{color:var(--muted);font-size:.83rem;display:flex;gap:10px;}
+.cart-float{
+  position:fixed;bottom:28px;right:28px;z-index:900;
+  background:linear-gradient(135deg,var(--red),var(--orange));
+  color:#fff;border:none;border-radius:50px;padding:14px 24px;
+  font-family:'Nunito',sans-serif;font-weight:800;font-size:.95rem;
+  cursor:pointer;box-shadow:0 8px 28px rgba(232,35,10,0.4);
+  display:none;align-items:center;gap:8px;transition:all .2s;
+}
+.cart-float.visible{display:flex;}
+.cart-float:hover{transform:translateY(-3px);}
+.cart-badge{background:#fff;color:var(--red);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.8rem;}
+
+/* ── COURIER DASHBOARD ── */
+.courier-order{background:#fff;border-radius:16px;padding:20px;box-shadow:var(--shadow);margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.courier-order h4{font-weight:800;}
+.courier-order .addr{color:var(--muted);font-size:.88rem;margin-top:4px;}
+
+.accept-btn{background:linear-gradient(135deg,var(--green),#16a34a);color:#fff;border:none;border-radius:50px;padding:9px 20px;font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;transition:all .2s;}
+.accept-btn:hover{transform:translateY(-2px);}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="logo" onclick="goHome()">🍔 Foo<span>Dash</span></div>
+  <div class="nav-btns" id="nav-btns">
+    <button class="btn btn-download" onclick="showDownloadModal()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 16L7 11m5 5l5-5M12 16V4M4 20h16"/></svg>
+      Uygulamayı İndir
+    </button>
+    <button class="btn btn-outline" onclick="openLogin()">Giriş Yap</button>
+    <button class="btn btn-fill" onclick="openRegister()">Üye Ol</button>
+  </div>
+  <div id="nav-user" style="display:none;align-items:center;gap:12px;">
+    <span id="nav-username" style="font-weight:800;color:var(--dark);">👋 Merhaba!</span>
+    <button class="btn btn-outline" onclick="logout()">Çıkış</button>
+  </div>
+</nav>
+
+<!-- ═══════════════ HOME PAGE ═══════════════ -->
+<div id="page-home" class="page active">
+  <div class="hero">
+    <div class="hero-text">
+      <h1>Lezzetler <em>Kapında</em><br>Hızla Gelsin 🚀</h1>
+      <p>En sevdiğin restoranlardan dakikalar içinde sipariş ver. Taze, sıcak, hızlı!</p>
+      <div class="hero-ctas">
+        <button class="btn btn-fill" style="font-size:1rem;padding:13px 32px;" onclick="openLogin()">Sipariş Ver</button>
+        <button class="btn btn-outline" style="font-size:1rem;padding:12px 28px;" onclick="showDownloadModal()">📱 Uygulamayı İndir</button>
+      </div>
+    </div>
+    <div class="hero-img">🍕</div>
+  </div>
+
+  <!-- Download Section -->
+  <div class="download-section" id="download-section-home">
+    <h2>📱 FooDash Uygulaması</h2>
+    <p>Her platformda yanında – hızlı, kolay, lezzetli.</p>
+    <div class="download-cards">
+      <div class="dl-card" onclick="downloadApp('windows')">
+        <div class="dl-card-icon">🪟</div>
+        <div class="dl-card-text">
+          <small>İndir –</small>
+          <strong>Windows PC</strong>
+        </div>
+      </div>
+      <div class="dl-card" onclick="downloadApp('mac')">
+        <div class="dl-card-icon">🍎</div>
+        <div class="dl-card-text">
+          <small>İndir –</small>
+          <strong>macOS</strong>
+        </div>
+      </div>
+      <div class="dl-card" onclick="downloadApp('android')">
+        <div class="dl-card-icon">🤖</div>
+        <div class="dl-card-text">
+          <small>İndir –</small>
+          <strong>Android</strong>
+        </div>
+      </div>
+      <div class="dl-card" onclick="downloadApp('ios')">
+        <div class="dl-card-icon">📱</div>
+        <div class="dl-card-text">
+          <small>İndir –</small>
+          <strong>iOS / iPhone</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features -->
+  <div class="features">
+    <div class="section-title">Neden FooDash?</div>
+    <div class="features-grid">
+      <div class="feat-card"><div class="feat-icon">⚡</div><h3>Süper Hızlı</h3><p>Ortalama teslimat süresi sadece 28 dakika.</p></div>
+      <div class="feat-card"><div class="feat-icon">🍳</div><h3>Taze Malzeme</h3><p>Her sipariş hazırlanınca kuryeye verilir.</p></div>
+      <div class="feat-card"><div class="feat-icon">📍</div><h3>Canlı Takip</h3><p>Siparişini haritada anlık olarak takip et.</p></div>
+      <div class="feat-card"><div class="feat-icon">💳</div><h3>Güvenli Ödeme</h3><p>256-bit SSL şifreleme ile korumalı ödeme.</p></div>
+    </div>
+  </div>
+
+  <footer>© 2025 FooDash. Tüm hakları saklıdır. | <a href="#">Gizlilik</a> | <a href="#">KVKK</a></footer>
+</div>
+
+<!-- ═══════════════ DASHBOARD ═══════════════ -->
+<div id="page-dashboard" class="page">
+  <div class="dash-layout">
+    <aside class="sidebar">
+      <div class="sidebar-logo">🍔 Foo<span>Dash</span></div>
+      <ul class="sb-menu" id="sb-menu"></ul>
+    </aside>
+    <main class="dash-content" id="dash-content"></main>
+  </div>
+</div>
+
+<!-- ═══════════════ MODALS ═══════════════ -->
+
+<!-- LOGIN -->
+<div class="overlay" id="overlay-login">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('overlay-login')">✕</button>
+    <div class="modal-title">Hoş Geldin! 👋</div>
+    <div class="modal-sub">Hesabına giriş yap, lezzetler seni bekliyor.</div>
+    <div class="form-group"><label>Kullanıcı Adı</label><input type="text" id="l-user" placeholder="kullanici_adi"></div>
+    <div class="form-group"><label>Şifre</label><input type="password" id="l-pass" placeholder="••••••••"></div>
+    <button class="form-btn" onclick="doLogin()">Giriş Yap 🚀</button>
+    <div class="modal-footer">Hesabın yok mu? <button class="link-btn" onclick="switchToRegister()">Üye Ol</button></div>
+  </div>
+</div>
+
+<!-- REGISTER STEP 1: ROLE -->
+<div class="overlay" id="overlay-register">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('overlay-register')">✕</button>
+    <div class="modal-title">Üye Ol 🎉</div>
+    <div class="modal-sub">Nasıl kullanmak istiyorsun?</div>
+    <div class="role-grid">
+      <div class="role-card" onclick="selectRole('customer',this)"><div class="ri">🧑</div><span>Müşteri</span></div>
+      <div class="role-card" onclick="selectRole('business',this)"><div class="ri">🏪</div><span>İşletme</span></div>
+      <div class="role-card" onclick="selectRole('courier',this)"><div class="ri">🛵</div><span>Kurye</span></div>
+    </div>
+    <div id="reg-form-container"></div>
+  </div>
+</div>
+
+<!-- DOWNLOAD MODAL -->
+<div class="overlay" id="overlay-download">
+  <div class="modal" style="max-width:500px;">
+    <button class="modal-close" onclick="closeModal('overlay-download')">✕</button>
+    <div class="modal-title">📥 Uygulamayı İndir</div>
+    <div class="modal-sub">FooDash'i tüm cihazlarında kullan!</div>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px;">
+      <div class="dl-card" onclick="confirmDownload('Windows PC (.exe)',this)" style="background:#f7f0ea;border-color:#f0d0c0;">
+        <div class="dl-card-icon">🪟</div>
+        <div class="dl-card-text"><small style="color:var(--muted)">Masaüstü uygulaması</small><strong style="color:var(--dark)">Windows PC – FooDash.exe</strong></div>
+      </div>
+      <div class="dl-card" onclick="confirmDownload('macOS (.dmg)',this)" style="background:#f7f0ea;border-color:#f0d0c0;">
+        <div class="dl-card-icon">🍎</div>
+        <div class="dl-card-text"><small style="color:var(--muted)">Masaüstü uygulaması</small><strong style="color:var(--dark)">macOS – FooDash.dmg</strong></div>
+      </div>
+      <div class="dl-card" onclick="confirmDownload('Android (.apk)',this)" style="background:#f7f0ea;border-color:#f0d0c0;">
+        <div class="dl-card-icon">🤖</div>
+        <div class="dl-card-text"><small style="color:var(--muted)">Google Play / APK</small><strong style="color:var(--dark)">Android – FooDash.apk</strong></div>
+      </div>
+      <div class="dl-card" onclick="confirmDownload('iOS (App Store)',this)" style="background:#f7f0ea;border-color:#f0d0c0;">
+        <div class="dl-card-icon">📱</div>
+        <div class="dl-card-text"><small style="color:var(--muted)">App Store</small><strong style="color:var(--dark)">iOS – iPhone / iPad</strong></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><span class="t-icon">✅</span><span id="toast-msg">İşlem başarılı!</span></div>
+
+<!-- CART FLOAT -->
+<button class="cart-float" id="cart-float" onclick="openCart()">
+  🛒 Sepetim <span class="cart-badge" id="cart-count">0</span>
+</button>
+
+<script>
+// ── STATE ──
+let currentUser = null;
+let selectedRole = null;
+let cart = [];
+let menuItems = JSON.parse(localStorage.getItem('fd_menu')||'[]');
+let orders = JSON.parse(localStorage.getItem('fd_orders')||'[]');
+let users = JSON.parse(localStorage.getItem('fd_users')||'[]');
+let couriers = JSON.parse(localStorage.getItem('fd_couriers')||'[]');
+
+function save(){
+  localStorage.setItem('fd_menu', JSON.stringify(menuItems));
+  localStorage.setItem('fd_orders', JSON.stringify(orders));
+  localStorage.setItem('fd_users', JSON.stringify(users));
+}
+
+// ── NAV ──
+function goHome(){showPage('page-home');}
+
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ── AUTH ──
+function openLogin(){document.getElementById('overlay-login').classList.add('active');}
+function openRegister(){document.getElementById('overlay-register').classList.add('active');}
+function closeModal(id){document.getElementById(id).classList.remove('active');}
+function switchToRegister(){closeModal('overlay-login');openRegister();}
+
+function doLogin(){
+  const u = document.getElementById('l-user').value.trim();
+  const p = document.getElementById('l-pass').value;
+  if(!u||!p){showToast('Lütfen tüm alanları doldur!','⚠️');return;}
+  const usr = users.find(x=>x.username===u && x.password===p);
+  if(!usr){showToast('Kullanıcı adı veya şifre yanlış!','❌');return;}
+  currentUser = usr;
+  closeModal('overlay-login');
+  afterLogin();
+}
+
+function afterLogin(){
+  document.getElementById('nav-btns').style.display='none';
+  const nu = document.getElementById('nav-user');
+  nu.style.display='flex';
+  document.getElementById('nav-username').textContent = '👋 ' + currentUser.name;
+  buildDashboard();
+  showPage('page-dashboard');
+  showToast('Giriş başarılı! Hoş geldin 🎉','✅');
+}
+
+function logout(){
+  currentUser=null;cart=[];
+  document.getElementById('nav-btns').style.display='flex';
+  document.getElementById('nav-user').style.display='none';
+  document.getElementById('cart-float').classList.remove('visible');
+  showPage('page-home');
+  showToast('Çıkış yapıldı. Görüşürüz! 👋','👋');
+}
+
+// ── REGISTER ──
+function selectRole(role, el){
+  selectedRole = role;
+  document.querySelectorAll('.role-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  renderRegForm(role);
+}
+
+function renderRegForm(role){
+  const c = document.getElementById('reg-form-container');
+  const fields = {
+    customer: `
+      <div class="form-group"><label>Ad Soyad</label><input type="text" id="r-name" placeholder="Ad Soyad"></div>
+      <div class="form-group"><label>Kullanıcı Adı</label><input type="text" id="r-user" placeholder="kullanici_adi"></div>
+      <div class="form-group"><label>Şifre</label><input type="password" id="r-pass" placeholder="••••••••"></div>
+      <div class="form-group"><label>Adres</label><input type="text" id="r-addr" placeholder="Mahalle, Sokak, No"></div>
+      <div class="form-group"><label>Telefon</label><input type="tel" id="r-phone" placeholder="05XX XXX XX XX"></div>`,
+    business: `
+      <div class="form-group"><label>İşletme Adı</label><input type="text" id="r-name" placeholder="Restoran adı"></div>
+      <div class="form-group"><label>Kullanıcı Adı</label><input type="text" id="r-user" placeholder="kullanici_adi"></div>
+      <div class="form-group"><label>Şifre</label><input type="password" id="r-pass" placeholder="••••••••"></div>
+      <div class="form-group"><label>Adres</label><input type="text" id="r-addr" placeholder="İşletme adresi"></div>
+      <div class="form-group"><label>Telefon</label><input type="tel" id="r-phone" placeholder="05XX XXX XX XX"></div>
+      <div class="form-group"><label>İşletme Türü</label>
+        <select id="r-btype"><option>Restoran</option><option>Kafe</option><option>Fast Food</option><option>Pastane</option><option>Pizza</option><option>Doner</option></select>
+      </div>`,
+    courier: `
+      <div class="form-group"><label>Ad Soyad</label><input type="text" id="r-name" placeholder="Ad Soyad"></div>
+      <div class="form-group"><label>Kullanıcı Adı</label><input type="text" id="r-user" placeholder="kullanici_adi"></div>
+      <div class="form-group"><label>Şifre</label><input type="password" id="r-pass" placeholder="••••••••"></div>
+      <div class="form-group"><label>Telefon</label><input type="tel" id="r-phone" placeholder="05XX XXX XX XX"></div>
+      <div class="form-group"><label>Araç Türü</label>
+        <select id="r-vehicle"><option>Motosiklet</option><option>Bisiklet</option><option>Elektrikli Bisiklet</option><option>Scooter</option></select>
+      </div>`
+  };
+  c.innerHTML = fields[role] + '<button class="form-btn" onclick="doRegister()">Kayıt Ol 🎉</button><div class="modal-footer">Zaten hesabın var mı? <button class="link-btn" onclick="switchToLogin()">Giriş Yap</button></div>';
+}
+
+function switchToLogin(){closeModal('overlay-register');openLogin();}
+
+function doRegister(){
+  const name = document.getElementById('r-name')?.value.trim();
+  const user = document.getElementById('r-user')?.value.trim();
+  const pass = document.getElementById('r-pass')?.value;
+  const phone= document.getElementById('r-phone')?.value.trim();
+  if(!name||!user||!pass){showToast('Lütfen zorunlu alanları doldur!','⚠️');return;}
+  if(users.find(u=>u.username===user)){showToast('Bu kullanıcı adı alınmış!','❌');return;}
+  const u={name,username:user,password:pass,phone,role:selectedRole};
+  if(selectedRole==='business'){u.btype=document.getElementById('r-btype')?.value;u.addr=document.getElementById('r-addr')?.value;}
+  if(selectedRole==='customer'){u.addr=document.getElementById('r-addr')?.value;}
+  if(selectedRole==='courier'){u.vehicle=document.getElementById('r-vehicle')?.value;}
+  users.push(u); save();
+  closeModal('overlay-register');
+  currentUser=u;
+  afterLogin();
+}
+
+// ── DOWNLOAD ──
+function showDownloadModal(){document.getElementById('overlay-download').classList.add('active');}
+function downloadApp(platform){showDownloadModal();}
+function confirmDownload(label, el){
+  el.style.borderColor='var(--green)';
+  el.style.background='rgba(34,197,94,0.1)';
+  setTimeout(()=>{
+    closeModal('overlay-download');
+    showToast(label + ' indiriliyor...','📥');
+  },600);
+}
+
+// ── DASHBOARD BUILDER ──
+function buildDashboard(){
+  const role = currentUser.role;
+  const menu = document.getElementById('sb-menu');
+  const content = document.getElementById('dash-content');
+
+  if(role==='business'){
+    menu.innerHTML=`
+      <li><a href="#" class="active" onclick="dsShow('ds-home',this)"><span class="icon">🏠</span>Ana Sayfa</a></li>
+      <li><a href="#" onclick="dsShow('ds-add-food',this)"><span class="icon">🍔</span>Yemek Ekle</a></li>
+      <li><a href="#" onclick="dsShow('ds-add-drink',this)"><span class="icon">🥤</span>İçecek Ekle</a></li>
+      <li><a href="#" onclick="dsShow('ds-items',this)"><span class="icon">📋</span>Menüm</a></li>
+      <li><a href="#" onclick="dsShow('ds-orders',this)"><span class="icon">📦</span>Siparişler</a></li>`;
+    content.innerHTML = businessDash();
+  } else if(role==='customer'){
+    menu.innerHTML=`
+      <li><a href="#" class="active" onclick="dsShow('ds-home',this)"><span class="icon">🏠</span>Ana Sayfa</a></li>
+      <li><a href="#" onclick="dsShow('ds-restaurants',this)"><span class="icon">🍽️</span>Restoranlar</a></li>
+      <li><a href="#" onclick="dsShow('ds-my-orders',this)"><span class="icon">📦</span>Siparişlerim</a></li>`;
+    content.innerHTML = customerDash();
+    updateCartFloat();
+  } else if(role==='courier'){
+    menu.innerHTML=`
+      <li><a href="#" class="active" onclick="dsShow('ds-home',this)"><span class="icon">🏠</span>Ana Sayfa</a></li>
+      <li><a href="#" onclick="dsShow('ds-pending',this)"><span class="icon">🛵</span>Bekleyen Siparişler</a></li>
+      <li><a href="#" onclick="dsShow('ds-delivering',this)"><span class="icon">📍</span>Teslimatta</a></li>`;
+    content.innerHTML = courierDash();
+  }
+  setTimeout(()=>document.querySelector('.dash-section').classList.add('active'),50);
+}
+
+function dsShow(id, el){
+  document.querySelectorAll('.dash-section').forEach(s=>s.classList.remove('active'));
+  const sec = document.getElementById(id);
+  if(sec){sec.classList.add('active'); refreshSection(id);}
+  document.querySelectorAll('.sb-menu a').forEach(a=>a.classList.remove('active'));
+  if(el){el.classList.add('active');}
+  return false;
+}
+
+function refreshSection(id){
+  if(id==='ds-items') renderItemsList();
+  if(id==='ds-orders') renderOrdersTable();
+  if(id==='ds-restaurants') renderRestaurants();
+  if(id==='ds-my-orders') renderMyOrders();
+  if(id==='ds-pending') renderCourierPending();
+  if(id==='ds-delivering') renderCourierDelivering();
+}
+
+// ── BUSINESS DASHBOARD ──
+function businessDash(){
+  return `
+  <div class="dash-section active" id="ds-home">
+    <div class="dash-header"><h2>Merhaba, ${currentUser.name} 👋</h2><p>İşletme panelinize hoş geldiniz.</p></div>
+    <div class="stats-row">
+      <div class="stat-card"><div class="num" id="st-menu">0</div><div class="lbl">Menü Ürünü</div></div>
+      <div class="stat-card"><div class="num" id="st-orders">0</div><div class="lbl">Toplam Sipariş</div></div>
+      <div class="stat-card"><div class="num" id="st-pending">0</div><div class="lbl">Bekleyen</div></div>
+      <div class="stat-card"><div class="num" id="st-done">0</div><div class="lbl">Tamamlanan</div></div>
+    </div>
+    <p style="color:var(--muted);font-size:.9rem;">Sol menüden yemek/içecek ekleyebilir, siparişleri yönetebilirsiniz.</p>
+  </div>
+  ${addItemForm('food')}
+  ${addItemForm('drink')}
+  <div class="dash-section" id="ds-items">
+    <div class="dash-header"><h2>Menüm 📋</h2><p>Eklenmiş ürünler</p></div>
+    <div class="items-grid" id="items-list"></div>
+  </div>
+  <div class="dash-section" id="ds-orders">
+    <div class="dash-header"><h2>Siparişler 📦</h2><p>Gelen siparişleri buradan yönetin.</p></div>
+    <div style="overflow-x:auto;"><table class="orders-table" id="orders-tbl">
+      <thead><tr><th>#</th><th>Müşteri</th><th>Ürünler</th><th>Toplam</th><th>Durum</th><th>Kurye Ata</th></tr></thead>
+      <tbody id="orders-body"></tbody>
+    </table></div>
+  </div>`;
+}
+
+function addItemForm(type){
+  const T = type==='food'?'Yemek':'İçecek';
+  const emoji = type==='food'?'🍔':'🥤';
+  const id = 'ds-add-'+type;
+  return `
+  <div class="dash-section" id="${id}">
+    <div class="dash-header"><h2>${emoji} ${T} Ekle</h2><p>Menüne yeni bir ürün ekle.</p></div>
+    <div class="item-form">
+      <h3>${emoji} Yeni ${T}</h3>
+      <div class="form-group"><label>İsim</label><input type="text" id="${type}-name" placeholder="${T} adı"></div>
+      <div class="form-row">
+        <div class="form-group"><label>Fiyat (₺)</label><input type="number" id="${type}-price" placeholder="0.00"></div>
+        <div class="form-group"><label>Kategori</label>
+          <select id="${type}-cat">${type==='food'?'<option>Ana Yemek</option><option>Başlangıç</option><option>Salata</option><option>Tatlı</option><option>Atıştırmalık</option>':'<option>Soğuk İçecek</option><option>Sıcak İçecek</option><option>Meyve Suyu</option><option>Kahve</option><option>Çay</option>'}</select>
+        </div>
+      </div>
+      <div class="form-group"><label>Açıklama</label><textarea id="${type}-desc" placeholder="Ürün hakkında kısa bilgi..."></textarea></div>
+      <div class="form-group"><label>Görsel</label>
+        <div class="img-upload" onclick="document.getElementById('${type}-img').click()">
+          <input type="file" id="${type}-img" accept="image/*" onchange="previewImg(this,'${type}-preview')">
+          📷 Görsel yükle veya tıkla
+          <img id="${type}-preview" class="img-preview">
+        </div>
+      </div>
+      <button class="form-btn" onclick="addItem('${type}')">Ürünü Ekle ${emoji}</button>
+    </div>
+  </div>`;
+}
+
+function previewImg(input, previewId){
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e=>{
+    const img = document.getElementById(previewId);
+    img.src = e.target.result;
+    img.style.display='block';
+  };
+  reader.readAsDataURL(file);
+}
+
+function addItem(type){
+  const name = document.getElementById(type+'-name').value.trim();
+  const price= document.getElementById(type+'-price').value;
+  const cat  = document.getElementById(type+'-cat').value;
+  const desc = document.getElementById(type+'-desc').value.trim();
+  const img  = document.getElementById(type+'-preview').src;
+  if(!name||!price){showToast('İsim ve fiyat zorunlu!','⚠️');return;}
+  const item={id:Date.now(),name,price:parseFloat(price),cat,desc,type,img:img.startsWith('data:')?img:'',owner:currentUser.username,emoji:type==='food'?'🍔':'🥤'};
+  menuItems.push(item); save();
+  showToast(name+' menüye eklendi!','✅');
+  document.getElementById(type+'-name').value='';
+  document.getElementById(type+'-price').value='';
+  document.getElementById(type+'-desc').value='';
+  document.getElementById(type+'-preview').style.display='none';
+  updateStats();
+}
+
+function renderItemsList(){
+  const list = document.getElementById('items-list');
+  if(!list) return;
+  const myItems = menuItems.filter(i=>i.owner===currentUser.username);
+  if(!myItems.length){list.innerHTML='<p style="color:var(--muted)">Henüz ürün yok. Sol menüden ekleyebilirsin.</p>';return;}
+  list.innerHTML = myItems.map(i=>`
+    <div class="item-card">
+      <div class="item-thumb">${i.img?`<img src="${i.img}" alt="${i.name}">`:i.emoji}</div>
+      <div class="item-info">
+        <h4>${i.name}</h4>
+        <div class="price">₺${i.price.toFixed(2)}</div>
+        <div class="desc">${i.desc||'Açıklama yok'}</div>
+        <div style="margin-top:8px;"><span class="badge badge-blue">${i.cat}</span></div>
+        <button onclick="removeItem(${i.id})" style="margin-top:8px;background:none;border:1px solid #fca5a5;color:#dc2626;border-radius:8px;padding:4px 10px;cursor:pointer;font-size:.8rem;font-family:'Nunito',sans-serif;">Kaldır</button>
+      </div>
+    </div>`).join('');
+}
+
+function removeItem(id){
+  menuItems = menuItems.filter(i=>i.id!==id); save(); renderItemsList(); showToast('Ürün kaldırıldı','🗑️');
+}
+
+function renderOrdersTable(){
+  const tbody = document.getElementById('orders-body');
+  if(!tbody) return;
+  const myOrders = orders.filter(o=>o.restaurantOwner===currentUser.username);
+  const myCouriers = users.filter(u=>u.role==='courier');
+  if(!myOrders.length){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:32px;">Henüz sipariş yok.</td></tr>';return;}
+  tbody.innerHTML = myOrders.map((o,i)=>`
+    <tr>
+      <td><strong>#${o.id}</strong></td>
+      <td>${o.customerName}<br><small style="color:var(--muted)">${o.customerPhone||''}</small></td>
+      <td>${o.items.map(x=>x.name).join(', ')}</td>
+      <td><strong>₺${o.total.toFixed(2)}</strong></td>
+      <td>${statusBadge(o.status)}</td>
+      <td>
+        <select class="assign-select" onchange="assignCourier(${o.id},this.value)">
+          <option value="">-- Kurye Seç --</option>
+          ${myCouriers.map(c=>`<option value="${c.username}" ${o.courierId===c.username?'selected':''}>${c.name} (${c.vehicle||''})</option>`).join('')}
+        </select>
+      </td>
+    </tr>`).join('');
+}
+
+function statusBadge(s){
+  const map={pending:'badge-orange',assigned:'badge-blue',delivering:'badge-blue',delivered:'badge-green',cancelled:'badge-red'};
+  const txt={pending:'Bekliyor',assigned:'Kurye Atandı',delivering:'Yolda',delivered:'Teslim Edildi',cancelled:'İptal'};
+  return `<span class="badge ${map[s]||'badge-orange'}">${txt[s]||s}</span>`;
+}
+
+function assignCourier(orderId, courierId){
+  const o = orders.find(x=>x.id===orderId);
+  if(o){o.courierId=courierId;o.status=courierId?'assigned':'pending';save();showToast('Kurye atandı!','🛵');}
+}
+
+function updateStats(){
+  const el1=document.getElementById('st-menu');
+  const el2=document.getElementById('st-orders');
+  const el3=document.getElementById('st-pending');
+  const el4=document.getElementById('st-done');
+  if(!el1) return;
+  const myItems=menuItems.filter(i=>i.owner===currentUser.username);
+  const myOrders=orders.filter(o=>o.restaurantOwner===currentUser.username);
+  el1.textContent=myItems.length;
+  el2.textContent=myOrders.length;
+  el3.textContent=myOrders.filter(o=>o.status==='pending').length;
+  el4.textContent=myOrders.filter(o=>o.status==='delivered').length;
+}
+
+// ── CUSTOMER DASHBOARD ──
+function customerDash(){
+  return `
+  <div class="dash-section active" id="ds-home">
+    <div class="dash-header"><h2>Merhaba, ${currentUser.name} 🎉</h2><p>Ne yemek istersin bugün?</p></div>
+    <div class="stats-row">
+      <div class="stat-card"><div class="num" id="cst-orders">0</div><div class="lbl">Siparişlerim</div></div>
+      <div class="stat-card"><div class="num" id="cst-rest">0</div><div class="lbl">Restoran</div></div>
+    </div>
+    <p style="color:var(--muted);">Sol menüden restoranlara göz atabilirsin.</p>
+  </div>
+  <div class="dash-section" id="ds-restaurants">
+    <div class="dash-header"><h2>Restoranlar 🍽️</h2><p>Lezzetli seçenekler sizi bekliyor!</p></div>
+    <div class="restaurant-grid" id="rest-grid"></div>
+  </div>
+  <div class="dash-section" id="ds-my-orders">
+    <div class="dash-header"><h2>Siparişlerim 📦</h2></div>
+    <div id="my-orders-list"></div>
+  </div>`;
+}
+
+function renderRestaurants(){
+  const grid=document.getElementById('rest-grid');
+  if(!grid) return;
+  const businesses = users.filter(u=>u.role==='business');
+  const el=document.getElementById('cst-rest');if(el)el.textContent=businesses.length;
+  if(!businesses.length){grid.innerHTML='<p style="color:var(--muted);">Henüz kayıtlı restoran yok.</p>';return;}
+  const emojis=['🍕','🍔','🌮','🍜','🥗','🍣','🥩','🍝'];
+  grid.innerHTML=businesses.map((b,i)=>`
+    <div class="rest-card" onclick="openRestaurantMenu('${b.username}')">
+      <div class="rest-banner" style="background:linear-gradient(135deg,hsl(${i*40},80%,85%),hsl(${i*40+30},80%,75%));">${emojis[i%emojis.length]}</div>
+      <div class="rest-info">
+        <h3>${b.name}</h3>
+        <div class="meta"><span>⭐ 4.${3+i%7}</span><span>${b.btype||'Restoran'}</span></div>
+        <div style="margin-top:6px;">${b.addr||''}</div>
+      </div>
+    </div>`).join('');
+}
+
+function openRestaurantMenu(ownerUsername){
+  const biz = users.find(u=>u.username===ownerUsername);
+  const items = menuItems.filter(i=>i.owner===ownerUsername);
+  const overlay = document.createElement('div');
+  overlay.className='overlay active';
+  overlay.id='menu-overlay';
+  const foods = items.filter(i=>i.type==='food');
+  const drinks = items.filter(i=>i.type==='drink');
+  overlay.innerHTML=`
+    <div class="modal" style="max-width:580px;">
+      <button class="modal-close" onclick="document.getElementById('menu-overlay').remove()">✕</button>
+      <div class="modal-title">${biz?.name||'Restoran'} 🍽️</div>
+      <div class="modal-sub">${biz?.btype||''} · ${biz?.addr||''}</div>
+      ${foods.length?`<h4 style="font-weight:800;margin:16px 0 10px;">🍔 Yemekler</h4><div style="display:flex;flex-direction:column;gap:10px;">${foods.map(f=>menuItemRow(f,ownerUsername)).join('')}</div>`:``}
+      ${drinks.length?`<h4 style="font-weight:800;margin:16px 0 10px;">🥤 İçecekler</h4><div style="display:flex;flex-direction:column;gap:10px;">${drinks.map(f=>menuItemRow(f,ownerUsername)).join('')}</div>`:``}
+      ${!items.length?`<p style="color:var(--muted);text-align:center;padding:32px 0;">Bu restoran henüz menü eklememiş.</p>`:''}
+    </div>`;
+  document.body.appendChild(overlay);
+}
+
+function menuItemRow(item, ownerUsername){
+  return `<div style="display:flex;align-items:center;justify-content:space-between;background:#fff8f5;border-radius:12px;padding:12px 16px;gap:12px;">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div style="font-size:2rem;">${item.img?`<img src="${item.img}" style="width:44px;height:44px;border-radius:8px;object-fit:cover;">`:item.emoji}</div>
+      <div><div style="font-weight:800;">${item.name}</div><div style="color:var(--muted);font-size:.82rem;">${item.desc||''}</div></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="font-weight:800;color:var(--orange);">₺${item.price.toFixed(2)}</span>
+      <button onclick="addToCart(${JSON.stringify(item).replace(/"/g,'&quot;')}, '${ownerUsername}')" style="background:linear-gradient(135deg,var(--red),var(--orange));color:#fff;border:none;border-radius:50px;padding:7px 16px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;font-size:.85rem;">+ Ekle</button>
+    </div>
+  </div>`;
+}
+
+function addToCart(item, ownerUsername){
+  if(cart.length && cart[0].owner!==ownerUsername){
+    if(!confirm('Farklı bir restorandan ürün var. Sepeti temizleyip devam et?')) return;
+    cart=[];
+  }
+  const existing = cart.find(c=>c.id===item.id);
+  if(existing) existing.qty++;
+  else cart.push({...item,qty:1,owner:ownerUsername,restaurantOwner:ownerUsername});
+  updateCartFloat();
+  showToast(item.name+' sepete eklendi 🛒','✅');
+}
+
+function updateCartFloat(){
+  const total = cart.reduce((s,i)=>s+i.qty,0);
+  const btn = document.getElementById('cart-float');
+  const badge = document.getElementById('cart-count');
+  if(total>0){btn.classList.add('visible');}else{btn.classList.remove('visible');}
+  badge.textContent=total;
+}
+
+function openCart(){
+  const total=cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const overlay=document.createElement('div');
+  overlay.className='overlay active';overlay.id='cart-overlay';
+  overlay.innerHTML=`
+    <div class="modal" style="max-width:480px;">
+      <button class="modal-close" onclick="document.getElementById('cart-overlay').remove()">✕</button>
+      <div class="modal-title">🛒 Sepetim</div>
+      ${cart.length?`
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;">
+          ${cart.map(i=>`
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:#fff8f5;border-radius:10px;">
+            <span>${i.emoji} ${i.name} x${i.qty}</span>
+            <span style="font-weight:800;color:var(--orange);">₺${(i.price*i.qty).toFixed(2)}</span>
+          </div>`).join('')}
+        </div>
+        <div style="text-align:right;font-size:1.1rem;font-weight:800;margin-bottom:16px;">Toplam: ₺${total.toFixed(2)}</div>
+        <button class="form-btn" onclick="placeOrder()">Siparişi Onayla 🚀</button>`
+      :`<p style="text-align:center;color:var(--muted);padding:32px 0;">Sepetiniz boş.</p>`}
+    </div>`;
+  document.body.appendChild(overlay);
+}
+
+function placeOrder(){
+  const ownerUsername = cart[0]?.restaurantOwner||cart[0]?.owner;
+  const order={
+    id:Date.now(),
+    customerId:currentUser.username,
+    customerName:currentUser.name,
+    customerPhone:currentUser.phone||'',
+    restaurantOwner:ownerUsername,
+    items:cart.map(i=>({name:i.name,qty:i.qty,price:i.price})),
+    total:cart.reduce((s,i)=>s+i.price*i.qty,0),
+    status:'pending',
+    courierId:null,
+    date:new Date().toLocaleString('tr-TR')
+  };
+  orders.push(order);save();
+  cart=[];updateCartFloat();
+  document.getElementById('cart-overlay')?.remove();
+  showToast('Siparişin alındı! 🎉 Restoran onaylıyor.','✅');
+  const el=document.getElementById('cst-orders');if(el)el.textContent=orders.filter(o=>o.customerId===currentUser.username).length;
+}
+
+function renderMyOrders(){
+  const list=document.getElementById('my-orders-list');
+  if(!list)return;
+  const myO=orders.filter(o=>o.customerId===currentUser.username).reverse();
+  if(!myO.length){list.innerHTML='<p style="color:var(--muted);">Henüz sipariş vermediniz.</p>';return;}
+  list.innerHTML=myO.map(o=>`
+    <div style="background:#fff;border-radius:16px;padding:20px;margin-bottom:14px;box-shadow:var(--shadow);">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+        <div><strong>#${o.id}</strong> · ${o.date}</div>
+        ${statusBadge(o.status)}
+      </div>
+      <div style="margin-top:8px;color:var(--muted);font-size:.9rem;">${o.items.map(i=>i.name+' x'+i.qty).join(', ')}</div>
+      <div style="margin-top:8px;font-weight:800;">Toplam: ₺${o.total.toFixed(2)}</div>
+      ${o.courierId?`<div style="margin-top:6px;font-size:.85rem;color:var(--muted);">🛵 Kurye: ${users.find(u=>u.username===o.courierId)?.name||o.courierId}</div>`:''}
+    </div>`).join('');
+}
+
+// ── COURIER DASHBOARD ──
+function courierDash(){
+  return `
+  <div class="dash-section active" id="ds-home">
+    <div class="dash-header"><h2>Merhaba, ${currentUser.name} 🛵</h2><p>Bugün harika bir gün olsun!</p></div>
+    <div class="stats-row">
+      <div class="stat-card"><div class="num" id="cr-pending">0</div><div class="lbl">Bekleyen</div></div>
+      <div class="stat-card"><div class="num" id="cr-done">0</div><div class="lbl">Teslim Ettiğim</div></div>
+    </div>
+  </div>
+  <div class="dash-section" id="ds-pending">
+    <div class="dash-header"><h2>Bekleyen Siparişler 📦</h2><p>Sana atanan siparişler</p></div>
+    <div id="courier-pending-list"></div>
+  </div>
+  <div class="dash-section" id="ds-delivering">
+    <div class="dash-header"><h2>Teslimatta 📍</h2><p>Aktif teslimatlar</p></div>
+    <div id="courier-delivering-list"></div>
+  </div>`;
+}
+
+function renderCourierPending(){
+  const el=document.getElementById('courier-pending-list');
+  if(!el)return;
+  const mine=orders.filter(o=>o.courierId===currentUser.username&&o.status==='assigned');
+  if(!mine.length){el.innerHTML='<p style="color:var(--muted);">Sana atanmış sipariş yok.</p>';return;}
+  el.innerHTML=mine.map(o=>`
+    <div class="courier-order">
+      <div>
+        <h4>#${o.id} · ${o.customerName}</h4>
+        <div class="addr">📍 ${users.find(u=>u.username===o.customerId)?.addr||'Adres yok'}</div>
+        <div style="margin-top:6px;">${o.items.map(i=>i.name).join(', ')}</div>
+      </div>
+      <div>
+        <div style="font-weight:800;color:var(--orange);margin-bottom:8px;">₺${o.total.toFixed(2)}</div>
+        <button class="accept-btn" onclick="startDelivery(${o.id})">Teslimata Başla 🛵</button>
+      </div>
+    </div>`).join('');
+  const el2=document.getElementById('cr-pending');if(el2)el2.textContent=mine.length;
+}
+
+function renderCourierDelivering(){
+  const el=document.getElementById('courier-delivering-list');
+  if(!el)return;
+  const mine=orders.filter(o=>o.courierId===currentUser.username&&o.status==='delivering');
+  if(!mine.length){el.innerHTML='<p style="color:var(--muted);">Aktif teslimat yok.</p>';return;}
+  el.innerHTML=mine.map(o=>`
+    <div class="courier-order">
+      <div>
+        <h4>#${o.id} · ${o.customerName}</h4>
+        <div class="addr">📍 ${users.find(u=>u.username===o.customerId)?.addr||'Adres yok'}</div>
+      </div>
+      <div>
+        <button class="accept-btn" onclick="completeDelivery(${o.id})">Teslim Edildi ✅</button>
+      </div>
+    </div>`).join('');
+}
+
+function startDelivery(orderId){
+  const o=orders.find(x=>x.id===orderId);
+  if(o){o.status='delivering';save();renderCourierPending();renderCourierDelivering();showToast('Teslimata çıkıldı!','🛵');}
+}
+
+function completeDelivery(orderId){
+  const o=orders.find(x=>x.id===orderId);
+  if(o){o.status='delivered';save();renderCourierDelivering();showToast('Sipariş teslim edildi!','✅');
+  const el=document.getElementById('cr-done');if(el)el.textContent=orders.filter(x=>x.courierId===currentUser.username&&x.status==='delivered').length;}
+}
+
+// ── TOAST ──
+function showToast(msg, icon='✅'){
+  const t=document.getElementById('toast');
+  document.getElementById('toast-msg').textContent=msg;
+  t.querySelector('.t-icon').textContent=icon;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// ── SEED demo data (remove in production) ──
+(function seed(){
+  if(!users.length){
+    users=[
+      {name:'Demo İşletme',username:'biz1',password:'123',role:'business',btype:'Fast Food',addr:'Bağlar Mah. No:5',phone:'05001112233'},
+      {name:'Ali Yılmaz',username:'ali',password:'123',role:'customer',addr:'Çankaya, Ankara',phone:'05331234567'},
+      {name:'Mert Kurye',username:'mert',password:'123',role:'courier',phone:'05441234567',vehicle:'Motosiklet'},
+    ];
+    menuItems=[
+      {id:1,name:'Klasik Burger',price:89.90,cat:'Ana Yemek',desc:'200g dana eti, domates, marul, özel sos',type:'food',owner:'biz1',emoji:'🍔',img:''},
+      {id:2,name:'Çıtır Tavuk',price:74.90,cat:'Ana Yemek',desc:'Özel baharatlı çıtır tavuk',type:'food',owner:'biz1',emoji:'🍗',img:''},
+      {id:3,name:'Ayran',price:18.90,cat:'Soğuk İçecek',desc:'Taze yapılmış ayran',type:'drink',owner:'biz1',emoji:'🥛',img:''},
+    ];
+    save();
+  }
+})();
+</script>
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyB4SOHzkQ_RPbHqbWlVWIxxdTq3QhqWng0",
+    authDomain: "foo-dash-b6bb9.firebaseapp.com",
+    projectId: "foo-dash-b6bb9",
+    storageBucket: "foo-dash-b6bb9.firebasestorage.app",
+    messagingSenderId: "137063973696",
+    appId: "1:137063973696:web:df1f30eed2f2ef708b30a5",
+    measurementId: "G-PNGTT1Q2JQ"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
+</body>
+</html>

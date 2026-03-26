@@ -372,11 +372,11 @@ const $=id=>document.getElementById(id);
 
 // ── SESSION PERSISTENCE ──
 function saveSession(){
-  if(CU) sessionStorage.setItem(SESSION_KEY,JSON.stringify({id:CU.id,username:CU.username,role:CU.role}));
+  if(CU) localStorage.setItem(SESSION_KEY,JSON.stringify({id:CU.id,username:CU.username,role:CU.role}));
 }
-function clearSession(){sessionStorage.removeItem(SESSION_KEY);}
+function clearSession(){localStorage.removeItem(SESSION_KEY);localStorage.removeItem('fd_last_sec');}
 async function restoreSession(){
-  const raw=sessionStorage.getItem(SESSION_KEY);
+  const raw=localStorage.getItem(SESSION_KEY);
   if(!raw)return false;
   try{
     const s=JSON.parse(raw);
@@ -392,7 +392,14 @@ async function init(){
   try{
     await loadAll();
     const restored=await restoreSession();
-    if(restored){setNavUser();buildDash();showPage('dash');}
+    if(restored){
+      setNavUser();buildDash();showPage('dash');
+      // Restore last active section
+      const lastSec=localStorage.getItem('fd_last_sec');
+      if(lastSec&&document.getElementById(lastSec)){
+        setTimeout(()=>dsShow(lastSec,null),100);
+      }
+    }
   }catch(e){console.error(e);}
   $('loader').style.display='none';
 }
@@ -536,6 +543,7 @@ window.dsShow=(id,el)=>{
   document.querySelectorAll('.mbi').forEach(b=>b.classList.remove('act'));
   if(el)el.classList.add('act');
   const mb=$(`mb-${id}`);if(mb)mb.classList.add('act');
+  localStorage.setItem('fd_last_sec',id);
   return false;
 };
 
@@ -737,10 +745,14 @@ function custContent(){
   <div class="ds" id="ds-home">
     <div class="dh"><h2>Merhaba, ${CU.name.split(' ')[0]} 🎉</h2><p>Ne yemek istersin bugün?</p></div>
     <div class="stats">
-      <div class="sc"><div class="n" id="cso">0</div><div class="l">Siparişlerim</div></div>
+      <div class="sc" onclick="dsShow('ds-my-orders',null)" style="cursor:pointer;border:2px solid transparent;transition:border .2s;" onmouseover="this.style.borderColor='#FF6B00'" onmouseout="this.style.borderColor='transparent'">
+        <div class="n" id="cso">0</div><div class="l">Siparişlerim</div>
+        <div style="color:#FF6B00;font-size:.72rem;font-weight:700;margin-top:4px;">Takip Et →</div>
+      </div>
       <div class="sc"><div class="n" id="csr">0</div><div class="l">Restoran</div></div>
     </div>
-    <div class="dh"><h2 style="font-size:clamp(1.1rem,2.5vw,1.4rem);">🍽️ Restoranlar</h2></div>
+    <div id="active-order-banner"></div>
+    <div class="dh" style="margin-top:8px;"><h2 style="font-size:clamp(1.1rem,2.5vw,1.4rem);">🍽️ Restoranlar</h2><p>Tıkla, sipariş ver!</p></div>
     <div class="rgrid2" id="rhome"></div>
   </div>
   <div class="ds" id="ds-restaurants">
@@ -748,7 +760,10 @@ function custContent(){
     <div class="rgrid2" id="rgrid"></div>
   </div>
   <div class="ds" id="ds-my-orders">
-    <div class="dh"><h2>Siparişlerim 📦</h2></div>
+    <div class="dh" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+      <div><h2>Siparişlerim 📦</h2><p id="myol-count">Siparişlerini takip et</p></div>
+      <button onclick="renderMyOrders()" style="background:linear-gradient(135deg,#E8230A,#FF6B00);color:#fff;border:none;border-radius:50px;padding:8px 16px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;display:flex;align-items:center;gap:5px;">🔄 Yenile</button>
+    </div>
     <div id="myol"></div>
   </div>
   ${profHTML()}`;
@@ -770,6 +785,31 @@ window.renderRests=async()=>{
   const cards=restCards(biz);
   const g=$('rgrid');if(g)g.innerHTML=cards;
   const h=$('rhome');if(h)h.innerHTML=cards;
+
+  // Show active order banner on home
+  const banner=$('active-order-banner');
+  if(banner){
+    const myOrders=orders.filter(o=>o.customerId===CU.username);
+    const cso=$('cso');if(cso)cso.textContent=myOrders.length;
+    const active=myOrders.find(o=>['pending','assigned','delivering'].includes(o.status));
+    if(active){
+      const statusMap={pending:'Restoran onaylıyor...',assigned:'Kurye yolda geliyor...',delivering:'Siparişin yolda! 🚀'};
+      const colorMap={pending:'#fff3e0',assigned:'#dbeafe',delivering:'#dcfce7'};
+      const iconMap={pending:'⏳',assigned:'🛵',delivering:'🚀'};
+      banner.innerHTML=`<div onclick="dsShow('ds-my-orders',null)" style="background:${colorMap[active.status]};border-radius:12px;padding:12px 16px;margin-bottom:14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;border:1.5px solid rgba(0,0,0,.07);">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:1.5rem;">${iconMap[active.status]}</span>
+          <div>
+            <div style="font-weight:800;font-size:.88rem;">Aktif Sipariş #${String(active.id).slice(-5)}</div>
+            <div style="font-size:.78rem;color:#555;margin-top:2px;">${statusMap[active.status]}</div>
+          </div>
+        </div>
+        <span style="color:#FF6B00;font-weight:800;font-size:.82rem;white-space:nowrap;">Takip Et →</span>
+      </div>`;
+    } else {
+      banner.innerHTML='';
+    }
+  }
 };
 
 window.openRest=(owner)=>{
@@ -844,33 +884,67 @@ window.placeOrder=async()=>{
     orders.push({id:ref.id,...order});
     cart=[];updateCartUI();
     $('ov-cart')?.remove();$('ov-rest')?.remove();
-    showToast('Siparişin alındı! 🎉','✅');
-    const el=$('cso');if(el)el.textContent=orders.filter(o=>o.customerId===CU.username).length;
+    showToast('Siparişin alındı! 🎉 Takip için Siparişlerim'e bakabilirsin.','✅');
+    // Navigate to my orders tab
+    setTimeout(()=>dsShow('ds-my-orders',null),400);
   }catch(e){showToast('Hata: '+e.message,'❌');}
 };
 
 window.renderMyOrders=async()=>{
   const list=$('myol');if(!list)return;
   await loadAll();
-  const my=orders.filter(o=>o.customerId===CU.username).sort((a,b)=>b.createdAt?.seconds-a.createdAt?.seconds);
+  const my=orders.filter(o=>o.customerId===CU.username).sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
   const cso=$('cso');if(cso)cso.textContent=my.length;
-  if(!my.length){list.innerHTML='<p style="color:#8A6A5A;">Henüz sipariş vermediniz.</p>';return;}
-  list.innerHTML=my.map(o=>`<div class="ocard">
-    <div class="ocard-top">
-      <div>
-        <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;">
-          <strong>#${String(o.id).slice(-5)}</strong>${sbadge(o.status)}
+  const cnt=$('myol-count');if(cnt)cnt.textContent=my.length?`Toplam ${my.length} sipariş`:'Henüz sipariş vermediniz.';
+  if(!my.length){list.innerHTML='<p style="color:#8A6A5A;padding:20px 0;">Henüz sipariş vermediniz.<br><br><button onclick="dsShow('ds-restaurants',null)" style="background:linear-gradient(135deg,#E8230A,#FF6B00);color:#fff;border:none;border-radius:50px;padding:10px 22px;font-family:Nunito,sans-serif;font-weight:700;cursor:pointer;">🍽️ Restoranları Gez</button></p>';return;}
+
+  function trackSteps(status){
+    const steps=[
+      {key:'pending',icon:'📋',label:'Sipariş Alındı'},
+      {key:'assigned',icon:'🛵',label:'Kurye Atandı'},
+      {key:'delivering',icon:'🚀',label:'Yolda'},
+      {key:'delivered',icon:'✅',label:'Teslim Edildi'},
+    ];
+    if(status==='cancelled')return`<div style="display:flex;align-items:center;gap:6px;margin-top:10px;padding:8px 10px;background:#fee2e2;border-radius:9px;"><span>❌</span><span style="font-size:.8rem;font-weight:700;color:#dc2626;">Sipariş İptal Edildi</span></div>`;
+    const idx=steps.findIndex(s=>s.key===status);
+    return`<div style="margin-top:12px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;position:relative;padding:0 4px;">
+        <div style="position:absolute;top:16px;left:20px;right:20px;height:3px;background:#f0e0d6;z-index:0;border-radius:2px;"></div>
+        <div style="position:absolute;top:16px;left:20px;height:3px;background:linear-gradient(90deg,#E8230A,#FF6B00);z-index:1;border-radius:2px;width:${idx===0?'0%':idx===1?'33%':idx===2?'66%':'100%'};transition:width .4s;"></div>
+        ${steps.map((s,i)=>`<div style="display:flex;flex-direction:column;align-items:center;gap:4px;position:relative;z-index:2;">
+          <div style="width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.95rem;background:${i<=idx?'linear-gradient(135deg,#E8230A,#FF6B00)':'#f0e0d6'};box-shadow:${i<=idx?'0 2px 8px rgba(232,35,10,.3)':'none'};transition:all .3s;">${s.icon}</div>
+          <span style="font-size:.62rem;font-weight:700;color:${i<=idx?'#E8230A':'#8A6A5A'};text-align:center;max-width:60px;line-height:1.2;">${s.label}</span>
+        </div>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  list.innerHTML=my.map(o=>{
+    const courier=o.courierId?users.find(u=>u.username===o.courierId):null;
+    return`<div class="ocard">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
+        <div>
+          <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;">
+            <strong style="font-size:.95rem;">#${String(o.id).slice(-5)}</strong>${sbadge(o.status)}
+          </div>
+          <div style="color:#8A6A5A;font-size:.77rem;margin-top:2px;">${o.date}</div>
         </div>
-        <div style="color:#8A6A5A;font-size:.78rem;margin-top:2px;">${o.date}</div>
-        <div style="font-size:.83rem;margin-top:5px;color:#8A6A5A;">${(o.items||[]).map(i=>i.name+' x'+i.qty).join(', ')}</div>
-        <div style="font-weight:800;margin-top:4px;">₺${parseFloat(o.total).toFixed(2)}</div>
-        ${o.courierId?`<div style="font-size:.78rem;color:#8A6A5A;margin-top:3px;">🛵 ${users.find(u=>u.username===o.courierId)?.name||o.courierId}</div>`:''}
+        <div style="display:flex;gap:6px;align-items:center;">
+          ${o.status==='pending'||o.status==='assigned'?`<button class="abtn abtn-c" onclick="cancelCust('${o.id}')">❌ İptal</button>`:''}
+        </div>
       </div>
-      <div class="ocard-acts">
-        ${o.status==='pending'||o.status==='assigned'?`<button class="abtn abtn-c" onclick="cancelCust('${o.id}')">❌ İptal Et</button>`:''}
-      </div>
-    </div>
-  </div>`).join('');
+      <div style="font-size:.82rem;margin-top:7px;color:#8A6A5A;line-height:1.5;">${(o.items||[]).map(i=>i.name+' x'+i.qty).join(' · ')}</div>
+      <div style="font-weight:800;margin-top:4px;color:#1A0A00;">₺${parseFloat(o.total).toFixed(2)}</div>
+      ${courier?`<div style="margin-top:5px;font-size:.79rem;color:#8A6A5A;display:flex;align-items:center;gap:5px;">🛵 <strong>${courier.name}</strong>${courier.phone?` · ${courier.phone}`:''}</div>`:''}
+      ${trackSteps(o.status)}
+    </div>`;
+  }).join('');
+
+  // Auto-refresh every 15 seconds if on this section
+  clearTimeout(window._orderRefreshTimer);
+  window._orderRefreshTimer=setTimeout(()=>{
+    if($('ds-my-orders')?.classList.contains('active'))renderMyOrders();
+  },15000);
 };
 
 window.cancelCust=async(id)=>{

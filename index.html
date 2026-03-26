@@ -2,549 +2,936 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <title>FooDash – Lezzet Kapında</title>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-:root{--red:#E8230A;--orange:#FF6B00;--yellow:#FFB800;--cream:#FFF8F0;--dark:#1A0A00;--card:#FFFFFF;--muted:#8A6A5A;--green:#22C55E;--blue:#3B82F6;--radius:18px;--shadow:0 8px 32px rgba(232,35,10,0.13);}
+/* ─── RESET ─── */
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--dark);min-height:100vh;}
-::-webkit-scrollbar{width:7px;}::-webkit-scrollbar-track{background:#fff3ea;}::-webkit-scrollbar-thumb{background:var(--orange);border-radius:8px;}
-nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:68px;background:rgba(255,248,240,0.92);backdrop-filter:blur(12px);border-bottom:2px solid rgba(255,107,0,0.12);}
-.logo{font-family:'Fredoka One',cursive;font-size:1.8rem;color:var(--red);letter-spacing:1px;display:flex;align-items:center;gap:6px;cursor:pointer;}.logo span{color:var(--orange);}
-.nav-btns{display:flex;gap:10px;align-items:center;}
-.btn{cursor:pointer;border:none;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.93rem;transition:all .2s;}
-.btn-outline{background:transparent;border:2.5px solid var(--orange);color:var(--orange);padding:8px 22px;}.btn-outline:hover{background:var(--orange);color:#fff;}
-.btn-fill{background:linear-gradient(135deg,var(--red),var(--orange));color:#fff;padding:9px 26px;box-shadow:0 4px 16px rgba(232,35,10,0.25);}.btn-fill:hover{transform:translateY(-2px);}
-.btn-download{background:linear-gradient(135deg,#1A0A00,#3d1a00);color:#fff;padding:9px 22px;display:flex;align-items:center;gap:7px;font-size:.88rem;}.btn-download:hover{transform:translateY(-2px);}
-.btn-download svg{width:16px;height:16px;}
-.page{display:none;padding-top:68px;min-height:100vh;}.page.active{display:block;}
-#page-home{background:radial-gradient(ellipse at 80% 10%,rgba(255,107,0,.18) 0%,transparent 55%),radial-gradient(ellipse at 10% 80%,rgba(232,35,10,.13) 0%,transparent 55%),var(--cream);}
-.hero{display:flex;align-items:center;justify-content:space-between;max-width:1100px;margin:0 auto;padding:70px 32px 50px;gap:40px;flex-wrap:wrap;}
-.hero-text h1{font-family:'Fredoka One',cursive;font-size:clamp(2.4rem,5vw,4rem);line-height:1.1;color:var(--dark);}
-.hero-text h1 em{font-style:normal;background:linear-gradient(135deg,var(--red),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.hero-text p{margin:16px 0 28px;color:var(--muted);font-size:1.1rem;line-height:1.6;max-width:440px;}
-.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
-.hero-img{width:340px;height:340px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--orange));display:flex;align-items:center;justify-content:center;font-size:9rem;box-shadow:0 20px 60px rgba(232,35,10,0.3);animation:float 3s ease-in-out infinite;flex-shrink:0;}
-@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-18px);}}
-.download-section{background:linear-gradient(135deg,var(--dark) 0%,#3d1a00 100%);padding:60px 32px;text-align:center;}
-.download-section h2{font-family:'Fredoka One',cursive;font-size:2rem;color:#fff;margin-bottom:10px;}
-.download-section p{color:#d4a896;margin-bottom:30px;}
-.download-cards{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
-.dl-card{background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.15);border-radius:16px;padding:20px 32px;color:#fff;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .25s;text-align:left;}
-.dl-card:hover{background:rgba(255,107,0,0.2);border-color:var(--orange);transform:translateY(-3px);}
-.dl-card-icon{font-size:2.4rem;}.dl-card-text small{display:block;font-size:.75rem;opacity:.7;margin-bottom:2px;}.dl-card-text strong{font-size:1.1rem;}
-.features{max-width:1100px;margin:0 auto;padding:60px 32px;}
-.section-title{text-align:center;font-family:'Fredoka One',cursive;font-size:2rem;margin-bottom:36px;color:var(--dark);}
-.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;}
-.feat-card{background:#fff;border-radius:var(--radius);padding:28px 22px;box-shadow:var(--shadow);text-align:center;transition:transform .25s;}.feat-card:hover{transform:translateY(-6px);}
-.feat-icon{font-size:2.8rem;margin-bottom:12px;}.feat-card h3{font-weight:800;margin-bottom:6px;}.feat-card p{color:var(--muted);font-size:.9rem;}
-.overlay{display:none;position:fixed;inset:0;z-index:2000;background:rgba(26,10,0,0.6);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:20px;}.overlay.active{display:flex;}
-.modal{background:#fff;border-radius:24px;padding:36px 32px;width:100%;max-width:460px;max-height:88vh;overflow-y:auto;box-shadow:0 24px 80px rgba(232,35,10,0.2);animation:popIn .3s cubic-bezier(.34,1.56,.64,1);}
-@keyframes popIn{from{transform:scale(.85);opacity:0;}to{transform:scale(1);opacity:1;}}
-.modal-title{font-family:'Fredoka One',cursive;font-size:1.7rem;color:var(--red);margin-bottom:4px;}
-.modal-sub{color:var(--muted);font-size:.9rem;margin-bottom:24px;}
-.form-group{margin-bottom:16px;}.form-group label{display:block;font-weight:700;font-size:.85rem;margin-bottom:6px;color:var(--dark);}
-.form-group input,.form-group select,.form-group textarea{width:100%;padding:11px 16px;border:2px solid #f0e0d6;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.95rem;color:var(--dark);background:#fff8f5;outline:none;transition:border .2s;}
-.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--orange);}
-.form-group textarea{min-height:80px;resize:vertical;}
-.role-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
-.role-card{border:2.5px solid #f0e0d6;border-radius:14px;padding:16px 8px;text-align:center;cursor:pointer;transition:all .2s;}
-.role-card:hover,.role-card.selected{border-color:var(--orange);background:#fff5ee;}
-.role-card .ri{font-size:2rem;margin-bottom:6px;}.role-card span{font-size:.8rem;font-weight:700;}
-.form-btn{width:100%;padding:13px;border:none;border-radius:50px;background:linear-gradient(135deg,var(--red),var(--orange));color:#fff;font-family:'Nunito',sans-serif;font-weight:800;font-size:1rem;cursor:pointer;box-shadow:0 6px 20px rgba(232,35,10,0.3);transition:all .2s;margin-top:8px;}
-.form-btn:hover{transform:translateY(-2px);}
-.link-btn{background:none;border:none;color:var(--orange);font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;}
-.modal-footer{text-align:center;margin-top:16px;font-size:.9rem;color:var(--muted);}
-.modal-close{float:right;background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--muted);line-height:1;}
-#page-dashboard{background:#f7f0ea;}
-.dash-layout{display:flex;min-height:calc(100vh - 68px);}
-.sidebar{width:230px;flex-shrink:0;background:linear-gradient(180deg,var(--dark) 0%,#3d1a00 100%);padding:28px 0;position:sticky;top:68px;height:calc(100vh - 68px);overflow-y:auto;}
-.sidebar-logo{font-family:'Fredoka One',cursive;font-size:1.3rem;color:#fff;padding:0 24px 24px;border-bottom:1px solid rgba(255,255,255,.1);}.sidebar-logo span{color:var(--orange);}
-.sb-menu{list-style:none;padding:16px 0;}
-.sb-menu li a,.sb-menu li button{display:flex;align-items:center;gap:10px;padding:12px 24px;color:rgba(255,255,255,.7);text-decoration:none;font-weight:700;font-size:.9rem;background:none;border:none;width:100%;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s;border-left:3px solid transparent;}
-.sb-menu li a:hover,.sb-menu li a.active,.sb-menu li button:hover{color:#fff;background:rgba(255,107,0,.15);border-left-color:var(--orange);}
-.sb-menu .icon{font-size:1.1rem;}
-.dash-content{flex:1;padding:32px;overflow-x:hidden;}
-.dash-section{display:none;}.dash-section.active{display:block;}
-.dash-header{margin-bottom:28px;}.dash-header h2{font-family:'Fredoka One',cursive;font-size:1.8rem;color:var(--dark);}.dash-header p{color:var(--muted);}
-.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:28px;}
-.stat-card{background:#fff;border-radius:16px;padding:20px;box-shadow:var(--shadow);}
-.stat-card .num{font-family:'Fredoka One',cursive;font-size:2rem;color:var(--red);}.stat-card .lbl{font-size:.82rem;color:var(--muted);font-weight:700;}
-.item-form{background:#fff;border-radius:var(--radius);padding:28px;box-shadow:var(--shadow);max-width:600px;}
-.item-form h3{font-family:'Fredoka One',cursive;font-size:1.3rem;margin-bottom:20px;color:var(--dark);}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-.badge{display:inline-block;padding:4px 12px;border-radius:50px;font-size:.78rem;font-weight:700;}
-.badge-green{background:#dcfce7;color:#16a34a;}.badge-orange{background:#fff3e0;color:#e65100;}.badge-red{background:#fee2e2;color:#dc2626;}.badge-blue{background:#dbeafe;color:#1d4ed8;}
-.orders-table{width:100%;border-collapse:collapse;background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);}
-.orders-table th{background:linear-gradient(135deg,var(--red),var(--orange));color:#fff;padding:14px 16px;text-align:left;font-size:.85rem;}
-.orders-table td{padding:13px 16px;border-bottom:1px solid #f5e8e0;font-size:.9rem;vertical-align:middle;}
-.orders-table tr:last-child td{border-bottom:none;}.orders-table tr:hover td{background:#fff8f5;}
-select.assign-select{border:2px solid #f0d0c0;border-radius:8px;padding:5px 10px;font-family:'Nunito',sans-serif;font-size:.85rem;background:#fff8f5;cursor:pointer;}
-.items-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px;}
-.item-card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:var(--shadow);transition:transform .2s;}.item-card:hover{transform:translateY(-4px);}
-.item-thumb{height:130px;background:linear-gradient(135deg,#ffe0c8,#ffc5a0);display:flex;align-items:center;justify-content:center;font-size:3.5rem;}
-.item-info{padding:14px;}.item-info h4{font-weight:800;margin-bottom:4px;}.item-info .price{color:var(--orange);font-weight:800;font-size:1.1rem;}.item-info .desc{color:var(--muted);font-size:.8rem;margin-top:4px;}
-.toast{position:fixed;bottom:28px;right:28px;z-index:5000;background:var(--dark);color:#fff;padding:14px 22px;border-radius:14px;font-weight:700;font-size:.9rem;transform:translateY(80px);opacity:0;transition:all .35s cubic-bezier(.34,1.56,.64,1);display:flex;align-items:center;gap:10px;}
-.toast.show{transform:translateY(0);opacity:1;}.toast .t-icon{font-size:1.2rem;}
-footer{background:var(--dark);color:rgba(255,255,255,.5);text-align:center;padding:24px;font-size:.85rem;}footer a{color:var(--orange);text-decoration:none;}
-@media(max-width:768px){nav{padding:0 16px;}.hero{padding:50px 16px 40px;text-align:center;justify-content:center;}.hero-img{width:240px;height:240px;font-size:6rem;}.sidebar{display:none;}.dash-content{padding:20px 16px;}.form-row{grid-template-columns:1fr;}.nav-btns .btn-download{display:none;}}
-.restaurant-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;margin-bottom:32px;}
-.rest-card{background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);cursor:pointer;transition:transform .2s;}.rest-card:hover{transform:translateY(-5px);}
-.rest-banner{height:110px;display:flex;align-items:center;justify-content:center;font-size:4rem;}
-.rest-info{padding:16px;}.rest-info h3{font-weight:800;margin-bottom:4px;}.rest-info .meta{color:var(--muted);font-size:.83rem;display:flex;gap:10px;}
-.cart-float{position:fixed;bottom:28px;right:28px;z-index:900;background:linear-gradient(135deg,var(--red),var(--orange));color:#fff;border:none;border-radius:50px;padding:14px 24px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.95rem;cursor:pointer;box-shadow:0 8px 28px rgba(232,35,10,0.4);display:none;align-items:center;gap:8px;transition:all .2s;}
-.cart-float.visible{display:flex;}.cart-float:hover{transform:translateY(-3px);}
-.cart-badge{background:#fff;color:var(--red);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.8rem;}
-.courier-order{background:#fff;border-radius:16px;padding:20px;box-shadow:var(--shadow);margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
-.courier-order h4{font-weight:800;}.courier-order .addr{color:var(--muted);font-size:.88rem;margin-top:4px;}
-.accept-btn{background:linear-gradient(135deg,var(--green),#16a34a);color:#fff;border:none;border-radius:50px;padding:9px 20px;font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;transition:all .2s;}.accept-btn:hover{transform:translateY(-2px);}
-.loading-screen{position:fixed;inset:0;background:var(--cream);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:16px;}
-.loading-logo{font-family:'Fredoka One',cursive;font-size:3rem;color:var(--red);}.loading-logo span{color:var(--orange);}
-.spinner{width:44px;height:44px;border:4px solid #f0d0c0;border-top-color:var(--orange);border-radius:50%;animation:spin .8s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg);}}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
+body{font-family:'Nunito',sans-serif;background:#FFF8F0;color:#1A0A00;min-height:100vh;overflow-x:hidden;}
+img{max-width:100%;display:block;}
+button{font-family:'Nunito',sans-serif;cursor:pointer;}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:#fff3ea;}::-webkit-scrollbar-thumb{background:#FF6B00;border-radius:5px;}
+
+/* ─── CSS VARS ─── */
+:root{
+  --red:#E8230A;--orange:#FF6B00;--cream:#FFF8F0;--dark:#1A0A00;--muted:#8A6A5A;--green:#22C55E;
+  --radius:16px;--shadow:0 4px 20px rgba(232,35,10,0.11);
+  --nav:64px;
+}
+
+/* ─── NAV ─── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:999;
+  height:var(--nav);display:flex;align-items:center;justify-content:space-between;
+  padding:0 clamp(12px,4vw,40px);
+  background:rgba(255,248,240,0.97);backdrop-filter:blur(14px);
+  border-bottom:2px solid rgba(255,107,0,0.10);
+}
+.logo{font-family:'Fredoka One',cursive;font-size:clamp(1.35rem,3.5vw,1.8rem);color:var(--red);display:flex;align-items:center;gap:4px;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+.logo span{color:var(--orange);}
+
+/* desktop nav buttons */
+.nav-right{display:flex;align-items:center;gap:8px;}
+.btn{border:none;border-radius:50px;font-weight:700;transition:all .2s;white-space:nowrap;font-size:.85rem;padding:8px 18px;}
+.btn-outline{background:transparent;border:2.5px solid var(--orange);color:var(--orange);}
+.btn-outline:hover{background:var(--orange);color:#fff;}
+.btn-fill{background:linear-gradient(135deg,var(--red),var(--orange));color:#fff;box-shadow:0 4px 14px rgba(232,35,10,0.25);}
+.btn-fill:hover{transform:translateY(-2px);}
+.btn-dl{background:linear-gradient(135deg,#1A0A00,#3d1a00);color:#fff;display:flex;align-items:center;gap:5px;font-size:.8rem;}
+.btn-dl svg{width:14px;height:14px;}
+.btn-dl:hover{transform:translateY(-2px);}
+
+/* hamburger */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px;background:none;border:none;flex-shrink:0;}
+.hamburger span{display:block;width:22px;height:2.5px;background:var(--dark);border-radius:2px;transition:all .28s;}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px);}
+
+/* mobile drawer */
+.mobile-nav{
+  display:none;position:fixed;top:var(--nav);left:0;right:0;z-index:998;
+  background:#fff;border-bottom:2px solid rgba(255,107,0,0.12);
+  padding:16px clamp(12px,5vw,32px);flex-direction:column;gap:10px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.08);
+}
+.mobile-nav.open{display:flex;}
+.mobile-nav .btn{width:100%;text-align:center;padding:12px;}
+.mobile-nav .profile-pill{width:100%;justify-content:center;}
+
+/* profile pill */
+.profile-pill{display:flex;align-items:center;gap:8px;cursor:pointer;background:#fff;border:2px solid #f0d0c0;border-radius:50px;padding:5px 14px 5px 6px;transition:border .2s;position:relative;flex-shrink:0;}
+.profile-pill:hover{border-color:var(--orange);}
+.p-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--orange));display:flex;align-items:center;justify-content:center;font-size:.85rem;color:#fff;font-weight:800;flex-shrink:0;}
+.p-name{font-weight:800;font-size:.85rem;color:var(--dark);}
+.p-arrow{font-size:.75rem;color:var(--muted);}
+.p-dropdown{position:absolute;top:calc(100% + 8px);right:0;background:#fff;border-radius:14px;box-shadow:0 10px 36px rgba(0,0,0,0.13);min-width:180px;overflow:hidden;display:none;z-index:600;}
+.p-dropdown.open{display:block;}
+.pd-i{display:flex;align-items:center;gap:9px;padding:11px 16px;font-weight:700;font-size:.88rem;cursor:pointer;transition:background .15s;}
+.pd-i:hover{background:#fff8f5;}
+.pd-i.danger{color:#dc2626;}.pd-i.danger:hover{background:#fee2e2;}
+.pd-divider{height:1px;background:#f0e0d6;margin:3px 0;}
+
+/* ─── PAGES ─── */
+.page{display:none;padding-top:var(--nav);min-height:100vh;}.page.active{display:block;}
+
+/* ─── HOME ─── */
+#home{background:radial-gradient(ellipse at 80% 10%,rgba(255,107,0,.16) 0%,transparent 55%),radial-gradient(ellipse at 10% 85%,rgba(232,35,10,.11) 0%,transparent 55%),#FFF8F0;}
+
+.hero{
+  display:flex;align-items:center;justify-content:space-between;
+  max-width:1080px;margin:0 auto;
+  padding:clamp(40px,8vw,80px) clamp(16px,5vw,40px) clamp(40px,6vw,60px);
+  gap:clamp(24px,4vw,48px);flex-wrap:wrap;
+}
+.hero-txt{flex:1;min-width:260px;}
+.hero-txt h1{font-family:'Fredoka One',cursive;font-size:clamp(2rem,5.5vw,4rem);line-height:1.08;color:var(--dark);}
+.hero-txt h1 em{font-style:normal;background:linear-gradient(135deg,var(--red),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-txt p{margin:clamp(12px,2vw,18px) 0 clamp(20px,3vw,28px);color:var(--muted);font-size:clamp(.95rem,2vw,1.1rem);line-height:1.65;max-width:420px;}
+.hero-ctas{display:flex;gap:10px;flex-wrap:wrap;}
+.hero-img{
+  width:clamp(160px,30vw,320px);height:clamp(160px,30vw,320px);
+  border-radius:50%;background:linear-gradient(135deg,var(--red),var(--orange));
+  display:flex;align-items:center;justify-content:center;
+  font-size:clamp(4rem,10vw,8rem);
+  box-shadow:0 16px 56px rgba(232,35,10,0.28);
+  animation:float 3s ease-in-out infinite;flex-shrink:0;
+}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
+
+/* download strip */
+.dl-strip{background:linear-gradient(135deg,#1A0A00,#3d1a00);padding:clamp(40px,6vw,60px) clamp(16px,5vw,40px);text-align:center;}
+.dl-strip h2{font-family:'Fredoka One',cursive;font-size:clamp(1.5rem,3.5vw,2rem);color:#fff;margin-bottom:8px;}
+.dl-strip p{color:#d4a896;margin-bottom:clamp(20px,3vw,28px);font-size:clamp(.88rem,2vw,1rem);}
+.dl-cards{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.dl-card{background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.15);border-radius:14px;padding:clamp(12px,2vw,18px) clamp(16px,3vw,26px);color:#fff;display:flex;align-items:center;gap:10px;cursor:pointer;transition:all .22s;text-align:left;min-width:130px;}
+.dl-card:hover{background:rgba(255,107,0,.2);border-color:var(--orange);transform:translateY(-3px);}
+.dl-card-icon{font-size:clamp(1.6rem,3vw,2.2rem);flex-shrink:0;}
+.dl-card-text small{display:block;font-size:.7rem;opacity:.7;margin-bottom:1px;}
+.dl-card-text strong{font-size:clamp(.85rem,1.8vw,1rem);}
+
+/* features */
+.features{max-width:1080px;margin:0 auto;padding:clamp(40px,6vw,60px) clamp(16px,5vw,40px);}
+.sec-title{text-align:center;font-family:'Fredoka One',cursive;font-size:clamp(1.5rem,3.5vw,2rem);margin-bottom:clamp(20px,3vw,32px);}
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:clamp(12px,2vw,18px);}
+.feat-card{background:#fff;border-radius:var(--radius);padding:clamp(18px,3vw,26px) clamp(14px,2vw,20px);box-shadow:var(--shadow);text-align:center;transition:transform .22s;}
+.feat-card:hover{transform:translateY(-5px);}
+.feat-icon{font-size:clamp(2rem,3.5vw,2.6rem);margin-bottom:10px;}
+.feat-card h3{font-weight:800;margin-bottom:5px;font-size:clamp(.9rem,1.8vw,1rem);}
+.feat-card p{color:var(--muted);font-size:clamp(.8rem,1.5vw,.9rem);}
+
+footer{background:#1A0A00;color:rgba(255,255,255,.45);text-align:center;padding:clamp(16px,3vw,24px);font-size:.82rem;}
+footer a{color:var(--orange);text-decoration:none;}
+
+/* ─── OVERLAY / MODAL ─── */
+.overlay{display:none;position:fixed;inset:0;z-index:2000;background:rgba(26,10,0,.6);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:clamp(10px,3vw,20px);overscroll-behavior:contain;}
+.overlay.active{display:flex;}
+.modal{background:#fff;border-radius:clamp(16px,3vw,24px);padding:clamp(20px,4vw,34px) clamp(16px,4vw,30px);width:100%;max-width:460px;max-height:92vh;overflow-y:auto;box-shadow:0 20px 80px rgba(232,35,10,0.18);animation:popIn .28s cubic-bezier(.34,1.56,.64,1);}
+@keyframes popIn{from{transform:scale(.86);opacity:0;}to{transform:scale(1);opacity:1;}}
+.modal-title{font-family:'Fredoka One',cursive;font-size:clamp(1.4rem,3vw,1.7rem);color:var(--red);margin-bottom:3px;}
+.modal-sub{color:var(--muted);font-size:.87rem;margin-bottom:clamp(16px,2.5vw,22px);}
+.modal-close{float:right;background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--muted);line-height:1;}
+.fg{margin-bottom:13px;}
+.fg label{display:block;font-weight:700;font-size:.82rem;margin-bottom:5px;}
+.fg input,.fg select,.fg textarea{width:100%;padding:10px 13px;border:2px solid #f0e0d6;border-radius:11px;font-family:'Nunito',sans-serif;font-size:clamp(.88rem,2vw,.95rem);color:#1A0A00;background:#fff8f5;outline:none;transition:border .18s;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--orange);}
+.fg textarea{min-height:70px;resize:vertical;}
+.role-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;}
+.role-card{border:2.5px solid #f0e0d6;border-radius:13px;padding:clamp(10px,2vw,14px) 6px;text-align:center;cursor:pointer;transition:all .18s;}
+.role-card:hover,.role-card.sel{border-color:var(--orange);background:#fff5ee;}
+.role-card .ri{font-size:clamp(1.5rem,3vw,1.9rem);margin-bottom:5px;}
+.role-card span{font-size:.76rem;font-weight:700;}
+.fbtn{width:100%;padding:12px;border:none;border-radius:50px;background:linear-gradient(135deg,var(--red),var(--orange));color:#fff;font-weight:800;font-size:.95rem;box-shadow:0 5px 18px rgba(232,35,10,0.28);transition:all .2s;margin-top:7px;}
+.fbtn:hover{transform:translateY(-2px);}
+.fbtn-sec{width:100%;padding:11px;border:2.5px solid var(--orange);border-radius:50px;background:transparent;color:var(--orange);font-weight:800;font-size:.9rem;transition:all .2s;margin-top:7px;}
+.fbtn-sec:hover{background:var(--orange);color:#fff;}
+.fbtn-danger{width:100%;padding:11px;border:2.5px solid #dc2626;border-radius:50px;background:transparent;color:#dc2626;font-weight:800;font-size:.9rem;transition:all .2s;margin-top:7px;}
+.fbtn-danger:hover{background:#dc2626;color:#fff;}
+.link-btn{background:none;border:none;color:var(--orange);font-weight:700;font-size:.88rem;}
+.mfooter{text-align:center;margin-top:13px;font-size:.87rem;color:var(--muted);}
+
+/* ─── BADGE ─── */
+.badge{display:inline-block;padding:3px 10px;border-radius:50px;font-size:.74rem;font-weight:700;}
+.bg{background:#dcfce7;color:#16a34a;}.bo{background:#fff3e0;color:#e65100;}.br{background:#fee2e2;color:#dc2626;}.bb{background:#dbeafe;color:#1d4ed8;}
+
+/* ─── DASHBOARD ─── */
+#dash{background:#f7f0ea;}
+.dash-wrap{display:flex;min-height:calc(100vh - var(--nav));}
+
+/* sidebar */
+.sidebar{
+  width:clamp(180px,20vw,220px);flex-shrink:0;
+  background:linear-gradient(180deg,#1A0A00,#3d1a00);
+  padding:24px 0;position:sticky;top:var(--nav);height:calc(100vh - var(--nav));overflow-y:auto;
+}
+.sb-logo{font-family:'Fredoka One',cursive;font-size:1.2rem;color:#fff;padding:0 20px 20px;border-bottom:1px solid rgba(255,255,255,.1);}
+.sb-logo span{color:var(--orange);}
+.sb-menu{list-style:none;padding:12px 0;}
+.sb-menu li a{display:flex;align-items:center;gap:9px;padding:11px 20px;color:rgba(255,255,255,.7);text-decoration:none;font-weight:700;font-size:.85rem;transition:all .18s;border-left:3px solid transparent;}
+.sb-menu li a:hover,.sb-menu li a.act{color:#fff;background:rgba(255,107,0,.15);border-left-color:var(--orange);}
+.sb-icon{font-size:.95rem;}
+
+/* mobile bottom nav */
+.mob-bar{
+  display:none;position:fixed;bottom:0;left:0;right:0;z-index:998;
+  background:#fff;border-top:1.5px solid #f0d0c0;
+  padding:6px 0 max(6px,env(safe-area-inset-bottom));
+  justify-content:space-around;
+}
+.mob-bar-item{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:4px 8px;border:none;background:none;flex:1;}
+.mob-bar-item .mbi{font-size:1.3rem;}
+.mob-bar-item .mbl{font-size:.62rem;font-weight:700;color:var(--muted);}
+.mob-bar-item.act .mbl{color:var(--orange);}
+
+.dash-content{flex:1;padding:clamp(16px,3vw,28px);overflow-x:hidden;max-width:100%;}
+.ds{display:none;}.ds.active{display:block;}
+.dh{margin-bottom:clamp(16px,2.5vw,24px);}
+.dh h2{font-family:'Fredoka One',cursive;font-size:clamp(1.4rem,3vw,1.8rem);color:#1A0A00;}
+.dh p{color:var(--muted);font-size:.88rem;}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,130px),1fr));gap:clamp(10px,1.5vw,14px);margin-bottom:clamp(16px,2.5vw,24px);}
+.sc{background:#fff;border-radius:14px;padding:clamp(14px,2vw,18px);box-shadow:var(--shadow);}
+.sc .n{font-family:'Fredoka One',cursive;font-size:clamp(1.6rem,3vw,2rem);color:var(--red);}
+.sc .l{font-size:.78rem;color:var(--muted);font-weight:700;}
+
+/* item form */
+.ifrm{background:#fff;border-radius:var(--radius);padding:clamp(18px,3vw,26px);box-shadow:var(--shadow);max-width:560px;}
+.ifrm h3{font-family:'Fredoka One',cursive;font-size:1.15rem;margin-bottom:16px;}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+/* orders table – scrollable on mobile */
+.tbl-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:var(--radius);box-shadow:var(--shadow);}
+.otbl{width:100%;border-collapse:collapse;background:#fff;min-width:560px;}
+.otbl th{background:linear-gradient(135deg,var(--red),var(--orange));color:#fff;padding:12px 13px;text-align:left;font-size:.8rem;white-space:nowrap;}
+.otbl td{padding:11px 13px;border-bottom:1px solid #f5e8e0;font-size:.85rem;vertical-align:middle;}
+.otbl tr:last-child td{border-bottom:none;}
+.otbl tr:hover td{background:#fff8f5;}
+.asel{border:2px solid #f0d0c0;border-radius:7px;padding:4px 7px;font-family:'Nunito',sans-serif;font-size:.8rem;background:#fff8f5;max-width:130px;}
+
+/* items grid */
+.igrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,180px),1fr));gap:clamp(12px,2vw,16px);}
+.icard{background:#fff;border-radius:14px;overflow:hidden;box-shadow:var(--shadow);transition:transform .2s;}
+.icard:hover{transform:translateY(-3px);}
+.ithumb{height:clamp(90px,15vw,120px);background:linear-gradient(135deg,#ffe0c8,#ffc5a0);display:flex;align-items:center;justify-content:center;font-size:clamp(2.4rem,5vw,3.2rem);}
+.iinfo{padding:clamp(10px,1.5vw,12px);}
+.iinfo h4{font-weight:800;margin-bottom:2px;font-size:clamp(.85rem,1.8vw,.95rem);}
+.iinfo .pr{color:var(--orange);font-weight:800;font-size:clamp(.9rem,2vw,1rem);}
+.iinfo .dc{color:var(--muted);font-size:.76rem;margin-top:2px;}
+.iacts{display:flex;gap:5px;margin-top:7px;}
+.ib{flex:1;border:none;border-radius:7px;padding:5px 0;font-weight:700;font-size:.74rem;transition:all .15s;cursor:pointer;}
+.ib-ed{background:#fff3e0;color:#e65100;border:1px solid #f0d0c0;}.ib-ed:hover{background:#e65100;color:#fff;}
+.ib-dl{background:#fee2e2;color:#dc2626;border:1px solid #fca5a5;}.ib-dl:hover{background:#dc2626;color:#fff;}
+
+/* restaurants */
+.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr));gap:clamp(12px,2vw,18px);margin-bottom:24px;}
+.rcard{background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);cursor:pointer;transition:transform .2s;}
+.rcard:hover{transform:translateY(-4px);}
+.rbnr{height:clamp(80px,12vw,100px);display:flex;align-items:center;justify-content:center;font-size:clamp(2.8rem,5vw,3.5rem);}
+.rinf{padding:clamp(10px,1.5vw,14px);}
+.rinf h3{font-weight:800;margin-bottom:3px;font-size:clamp(.9rem,1.8vw,1rem);}
+.rinf .meta{color:var(--muted);font-size:.8rem;display:flex;gap:8px;flex-wrap:wrap;}
+
+/* order card (my orders / courier) */
+.ocard{background:#fff;border-radius:14px;padding:clamp(14px,2vw,18px);box-shadow:var(--shadow);margin-bottom:clamp(10px,1.5vw,14px);}
+.ocard-row{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;}
+.ocard h4{font-weight:800;font-size:.93rem;}
+.ocard .adr{color:var(--muted);font-size:.83rem;margin-top:3px;}
+.ocard-btns{display:flex;flex-direction:column;gap:6px;align-items:flex-end;}
+
+/* profile */
+.pcard{background:#fff;border-radius:var(--radius);padding:clamp(18px,3vw,26px);box-shadow:var(--shadow);max-width:480px;}
+.pav-big{width:clamp(56px,10vw,70px);height:clamp(56px,10vw,70px);border-radius:50%;background:linear-gradient(135deg,var(--red),var(--orange));display:flex;align-items:center;justify-content:center;font-size:clamp(1.4rem,3vw,1.9rem);color:#fff;font-weight:800;margin-bottom:12px;}
+.rtag{display:inline-block;padding:3px 12px;border-radius:50px;font-size:.77rem;font-weight:700;background:#fff3e0;color:#e65100;margin-bottom:16px;}
+.prow{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #f0e0d6;gap:12px;flex-wrap:wrap;}
+.prow-lbl{color:var(--muted);font-size:.82rem;font-weight:700;flex-shrink:0;}
+.prow-val{font-weight:700;font-size:.9rem;text-align:right;}
+
+/* action buttons */
+.abtn{border:none;border-radius:50px;padding:8px 18px;font-weight:700;font-size:.85rem;transition:all .2s;cursor:pointer;}
+.abtn-green{background:linear-gradient(135deg,var(--green),#16a34a);color:#fff;}
+.abtn-green:hover{transform:translateY(-2px);}
+.abtn-cancel{background:#fee2e2;color:#dc2626;border:1.5px solid #fca5a5;}
+.abtn-cancel:hover{background:#dc2626;color:#fff;}
+
+/* toast */
+.toast{position:fixed;bottom:clamp(16px,3vw,28px);left:50%;transform:translateX(-50%) translateY(100px);z-index:6000;background:#1A0A00;color:#fff;padding:12px 20px;border-radius:13px;font-weight:700;font-size:.87rem;display:flex;align-items:center;gap:9px;opacity:0;transition:all .32s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;max-width:90vw;overflow:hidden;text-overflow:ellipsis;}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+.t-icon{font-size:1.1rem;flex-shrink:0;}
+
+/* cart float */
+.cart-fl{position:fixed;bottom:clamp(70px,10vw,28px);right:clamp(12px,3vw,24px);z-index:900;background:linear-gradient(135deg,var(--red),var(--orange));color:#fff;border:none;border-radius:50px;padding:12px 20px;font-weight:800;font-size:.88rem;cursor:pointer;box-shadow:0 6px 24px rgba(232,35,10,0.38);display:none;align-items:center;gap:7px;transition:all .2s;}
+.cart-fl.on{display:flex;}
+.cart-fl:hover{transform:translateY(-3px);}
+.cbadge{background:#fff;color:var(--red);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:.76rem;}
+
+/* loading */
+.loader{position:fixed;inset:0;background:#FFF8F0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:14px;}
+.l-logo{font-family:'Fredoka One',cursive;font-size:clamp(2rem,5vw,2.8rem);color:var(--red);}
+.l-logo span{color:var(--orange);}
+.spin{width:38px;height:38px;border:4px solid #f0d0c0;border-top-color:var(--orange);border-radius:50%;animation:sp .75s linear infinite;}
+@keyframes sp{to{transform:rotate(360deg);}}
+
+/* ── RESPONSIVE BREAKPOINTS ── */
+
+/* Tablet: 600px – 1023px */
+@media(max-width:1023px){
+  .sidebar{width:clamp(160px,18vw,200px);}
+  .frow{grid-template-columns:1fr;}
+}
+
+/* Mobile: ≤ 767px */
+@media(max-width:767px){
+  :root{--nav:56px;}
+  .nav-right{display:none;}
+  .hamburger{display:flex;}
+  .sidebar{display:none;}
+  .mob-bar{display:flex;}
+  .dash-content{padding:14px 12px calc(70px + env(safe-area-inset-bottom));}
+  .cart-fl{bottom:calc(64px + env(safe-area-inset-bottom) + 8px);}
+  .hero{padding:36px 14px 32px;text-align:center;justify-content:center;}
+  .hero-txt p{margin-left:auto;margin-right:auto;}
+  .hero-ctas{justify-content:center;}
+  .hero-img{width:clamp(140px,45vw,200px);height:clamp(140px,45vw,200px);}
+  .dl-cards{gap:8px;}
+  .dl-card{min-width:calc(50% - 8px);flex:1;}
+  .ifrm{max-width:100%;}
+  .pcard{max-width:100%;}
+  .ocard-row{flex-direction:column;}
+  .ocard-btns{align-items:flex-start;flex-direction:row;flex-wrap:wrap;}
+  .tbl-wrap{border-radius:10px;}
+  .role-grid{gap:6px;}
+  .modal{padding:18px 14px;border-radius:18px 18px 0 0;position:fixed;bottom:0;max-width:100%;max-height:85vh;animation:slideUp .28s ease;}
+  @keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+  .overlay{align-items:flex-end;padding:0;}
+}
+
+/* Very small phones: ≤ 360px */
+@media(max-width:360px){
+  .dl-card{min-width:100%;}
+  .hero-ctas .btn{font-size:.8rem;padding:9px 14px;}
+}
+
+/* Large desktop: ≥ 1280px */
+@media(min-width:1280px){
+  .sidebar{width:230px;}
+  .igrid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr));}
+  .rgrid{grid-template-columns:repeat(auto-fill,minmax(260px,1fr));}
+}
 </style>
 </head>
 <body>
 
-<div class="loading-screen" id="loading-screen">
-  <div class="loading-logo">🍔 Foo<span>Dash</span></div>
-  <div class="spinner"></div>
-  <p style="color:var(--muted);font-size:.95rem;">Firebase'e bağlanıyor...</p>
+<!-- LOADER -->
+<div class="loader" id="loader">
+  <div class="l-logo">🍔 Foo<span>Dash</span></div>
+  <div class="spin"></div>
+  <p style="color:#8A6A5A;font-size:.9rem;">Yükleniyor...</p>
 </div>
 
+<!-- NAV -->
 <nav>
   <div class="logo" onclick="goHome()">🍔 Foo<span>Dash</span></div>
-  <div class="nav-btns" id="nav-btns">
-    <button class="btn btn-download" onclick="showDownloadModal()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 16L7 11m5 5l5-5M12 16V4M4 20h16"/></svg>
-      Uygulamayı İndir
-    </button>
-    <button class="btn btn-outline" onclick="openLogin()">Giriş Yap</button>
-    <button class="btn btn-fill" onclick="openRegister()">Üye Ol</button>
+  <!-- desktop -->
+  <div class="nav-right" id="nav-right">
+    <div id="nav-guest" style="display:flex;gap:8px;align-items:center;">
+      <button class="btn btn-dl" onclick="showDlModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 16L7 11m5 5l5-5M12 16V4M4 20h16"/></svg>İndir</button>
+      <button class="btn btn-outline" onclick="openLogin()">Giriş Yap</button>
+      <button class="btn btn-fill" onclick="openReg()">Üye Ol</button>
+    </div>
+    <div id="nav-user" style="display:none;">
+      <div class="profile-pill" id="pp" onclick="toggleDrop()">
+        <div class="p-avatar" id="pav">?</div>
+        <span class="p-name" id="pname">-</span>
+        <span class="p-arrow">▾</span>
+        <div class="p-dropdown" id="pdrop">
+          <div class="pd-i" onclick="goProfile()">👤 Profilim</div>
+          <div class="pd-divider"></div>
+          <div class="pd-i danger" onclick="doLogout()">🚪 Çıkış Yap</div>
+        </div>
+      </div>
+    </div>
   </div>
-  <div id="nav-user" style="display:none;align-items:center;gap:12px;">
-    <span id="nav-username" style="font-weight:800;color:var(--dark);">👋 Merhaba!</span>
-    <button class="btn btn-outline" onclick="logout()">Çıkış</button>
-  </div>
+  <!-- hamburger -->
+  <button class="hamburger" id="ham" onclick="toggleMobileNav()">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
-<div id="page-home" class="page active">
+<!-- MOBILE DRAWER -->
+<div class="mobile-nav" id="mob-nav">
+  <div id="mob-guest" style="display:flex;flex-direction:column;gap:8px;">
+    <button class="btn btn-fill" onclick="openLogin();closeMobNav()">Giriş Yap</button>
+    <button class="btn btn-outline" onclick="openReg();closeMobNav()">Üye Ol</button>
+    <button class="btn btn-dl" onclick="showDlModal();closeMobNav()">📱 Uygulamayı İndir</button>
+  </div>
+  <div id="mob-user" style="display:none;flex-direction:column;gap:8px;">
+    <div class="profile-pill" style="width:100%;justify-content:center;" onclick="goProfile();closeMobNav()">
+      <div class="p-avatar" id="pav2">?</div>
+      <span class="p-name" id="pname2">-</span>
+    </div>
+    <button class="btn btn-outline" onclick="doLogout()">🚪 Çıkış Yap</button>
+  </div>
+</div>
+
+<!-- HOME -->
+<div id="home" class="page active">
   <div class="hero">
-    <div class="hero-text">
+    <div class="hero-txt">
       <h1>Lezzetler <em>Kapında</em><br>Hızla Gelsin 🚀</h1>
       <p>En sevdiğin restoranlardan dakikalar içinde sipariş ver. Taze, sıcak, hızlı!</p>
       <div class="hero-ctas">
-        <button class="btn btn-fill" style="font-size:1rem;padding:13px 32px;" onclick="openLogin()">Sipariş Ver</button>
-        <button class="btn btn-outline" style="font-size:1rem;padding:12px 28px;" onclick="showDownloadModal()">📱 Uygulamayı İndir</button>
+        <button class="btn btn-fill" style="font-size:clamp(.9rem,2vw,1rem);padding:clamp(10px,2vw,13px) clamp(22px,4vw,30px);" onclick="openLogin()">Sipariş Ver</button>
+        <button class="btn btn-outline" style="font-size:clamp(.88rem,2vw,1rem);padding:clamp(9px,2vw,12px) clamp(18px,3vw,26px);" onclick="showDlModal()">📱 İndir</button>
       </div>
     </div>
     <div class="hero-img">🍕</div>
   </div>
-  <div class="download-section">
+  <div class="dl-strip">
     <h2>📱 FooDash Uygulaması</h2>
     <p>Her platformda yanında – hızlı, kolay, lezzetli.</p>
-    <div class="download-cards">
-      <div class="dl-card" onclick="showDownloadModal()"><div class="dl-card-icon">🪟</div><div class="dl-card-text"><small>İndir –</small><strong>Windows PC</strong></div></div>
-      <div class="dl-card" onclick="showDownloadModal()"><div class="dl-card-icon">🍎</div><div class="dl-card-text"><small>İndir –</small><strong>macOS</strong></div></div>
-      <div class="dl-card" onclick="showDownloadModal()"><div class="dl-card-icon">🤖</div><div class="dl-card-text"><small>İndir –</small><strong>Android</strong></div></div>
-      <div class="dl-card" onclick="showDownloadModal()"><div class="dl-card-icon">📱</div><div class="dl-card-text"><small>İndir –</small><strong>iOS / iPhone</strong></div></div>
+    <div class="dl-cards">
+      <div class="dl-card" onclick="showDlModal()"><div class="dl-card-icon">🪟</div><div class="dl-card-text"><small>İndir –</small><strong>Windows</strong></div></div>
+      <div class="dl-card" onclick="showDlModal()"><div class="dl-card-icon">🍎</div><div class="dl-card-text"><small>İndir –</small><strong>macOS</strong></div></div>
+      <div class="dl-card" onclick="showDlModal()"><div class="dl-card-icon">🤖</div><div class="dl-card-text"><small>İndir –</small><strong>Android</strong></div></div>
+      <div class="dl-card" onclick="showDlModal()"><div class="dl-card-icon">📱</div><div class="dl-card-text"><small>İndir –</small><strong>iOS</strong></div></div>
     </div>
   </div>
   <div class="features">
-    <div class="section-title">Neden FooDash?</div>
-    <div class="features-grid">
-      <div class="feat-card"><div class="feat-icon">⚡</div><h3>Süper Hızlı</h3><p>Ortalama teslimat süresi sadece 28 dakika.</p></div>
-      <div class="feat-card"><div class="feat-icon">🍳</div><h3>Taze Malzeme</h3><p>Her sipariş hazırlanınca kuryeye verilir.</p></div>
-      <div class="feat-card"><div class="feat-icon">📍</div><h3>Canlı Takip</h3><p>Siparişini haritada anlık olarak takip et.</p></div>
-      <div class="feat-card"><div class="feat-icon">💳</div><h3>Güvenli Ödeme</h3><p>256-bit SSL şifreleme ile korumalı ödeme.</p></div>
+    <div class="sec-title">Neden FooDash?</div>
+    <div class="feat-grid">
+      <div class="feat-card"><div class="feat-icon">⚡</div><h3>Süper Hızlı</h3><p>Ortalama teslimat 28 dakika.</p></div>
+      <div class="feat-card"><div class="feat-icon">🍳</div><h3>Taze Malzeme</h3><p>Hazırlanınca kuryeye verilir.</p></div>
+      <div class="feat-card"><div class="feat-icon">📍</div><h3>Canlı Takip</h3><p>Siparişini anlık takip et.</p></div>
+      <div class="feat-card"><div class="feat-icon">💳</div><h3>Güvenli Ödeme</h3><p>256-bit SSL koruması.</p></div>
     </div>
   </div>
   <footer>© 2025 FooDash. Tüm hakları saklıdır. | <a href="#">Gizlilik</a> | <a href="#">KVKK</a></footer>
 </div>
 
-<div id="page-dashboard" class="page">
-  <div class="dash-layout">
-    <aside class="sidebar"><div class="sidebar-logo">🍔 Foo<span>Dash</span></div><ul class="sb-menu" id="sb-menu"></ul></aside>
-    <main class="dash-content" id="dash-content"></main>
+<!-- DASHBOARD -->
+<div id="dash" class="page">
+  <div class="dash-wrap">
+    <aside class="sidebar">
+      <div class="sb-logo">🍔 Foo<span>Dash</span></div>
+      <ul class="sb-menu" id="sbmenu"></ul>
+    </aside>
+    <main class="dash-content" id="dcontent"></main>
   </div>
+  <!-- mobile bottom bar -->
+  <nav class="mob-bar" id="mobbar"></nav>
 </div>
 
-<div class="overlay" id="overlay-login">
+<!-- MODALS -->
+<div class="overlay" id="ov-login">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal('overlay-login')">✕</button>
+    <button class="modal-close" onclick="closeOv('ov-login')">✕</button>
     <div class="modal-title">Hoş Geldin! 👋</div>
-    <div class="modal-sub">Hesabına giriş yap, lezzetler seni bekliyor.</div>
-    <div class="form-group"><label>Kullanıcı Adı</label><input type="text" id="l-user" placeholder="kullanici_adi"></div>
-    <div class="form-group"><label>Şifre</label><input type="password" id="l-pass" placeholder="••••••••"></div>
-    <button class="form-btn" onclick="doLogin()">Giriş Yap 🚀</button>
-    <div class="modal-footer">Hesabın yok mu? <button class="link-btn" onclick="switchToRegister()">Üye Ol</button></div>
+    <div class="modal-sub">Hesabına giriş yap.</div>
+    <div class="fg"><label>Kullanıcı Adı</label><input type="text" id="lu" placeholder="kullanici_adi" autocomplete="username"></div>
+    <div class="fg"><label>Şifre</label><input type="password" id="lp" placeholder="••••••••" autocomplete="current-password"></div>
+    <button class="fbtn" onclick="doLogin()">Giriş Yap 🚀</button>
+    <div class="mfooter">Hesabın yok mu? <button class="link-btn" onclick="closeOv('ov-login');openReg()">Üye Ol</button></div>
   </div>
 </div>
 
-<div class="overlay" id="overlay-register">
+<div class="overlay" id="ov-reg">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal('overlay-register')">✕</button>
+    <button class="modal-close" onclick="closeOv('ov-reg')">✕</button>
     <div class="modal-title">Üye Ol 🎉</div>
     <div class="modal-sub">Nasıl kullanmak istiyorsun?</div>
     <div class="role-grid">
-      <div class="role-card" onclick="selectRole('customer',this)"><div class="ri">🧑</div><span>Müşteri</span></div>
-      <div class="role-card" onclick="selectRole('business',this)"><div class="ri">🏪</div><span>İşletme</span></div>
-      <div class="role-card" onclick="selectRole('courier',this)"><div class="ri">🛵</div><span>Kurye</span></div>
+      <div class="role-card" onclick="pickRole('customer',this)"><div class="ri">🧑</div><span>Müşteri</span></div>
+      <div class="role-card" onclick="pickRole('business',this)"><div class="ri">🏪</div><span>İşletme</span></div>
+      <div class="role-card" onclick="pickRole('courier',this)"><div class="ri">🛵</div><span>Kurye</span></div>
     </div>
-    <div id="reg-form-container"></div>
+    <div id="regfc"></div>
   </div>
 </div>
 
-<div class="overlay" id="overlay-download">
-  <div class="modal" style="max-width:500px;">
-    <button class="modal-close" onclick="closeModal('overlay-download')">✕</button>
-    <div class="modal-title">📥 Uygulamayı İndir</div>
+<div class="overlay" id="ov-dl">
+  <div class="modal" style="max-width:440px;">
+    <button class="modal-close" onclick="closeOv('ov-dl')">✕</button>
+    <div class="modal-title">📥 İndir</div>
     <div class="modal-sub">FooDash'i tüm cihazlarında kullan!</div>
-    <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px;">
-      <div class="dl-card" onclick="confirmDownload('Windows PC (.exe)',this)" style="background:#f7f0ea;border-color:#f0d0c0;"><div class="dl-card-icon">🪟</div><div class="dl-card-text"><small style="color:var(--muted)">Masaüstü uygulaması</small><strong style="color:var(--dark)">Windows PC – FooDash.exe</strong></div></div>
-      <div class="dl-card" onclick="confirmDownload('macOS (.dmg)',this)" style="background:#f7f0ea;border-color:#f0d0c0;"><div class="dl-card-icon">🍎</div><div class="dl-card-text"><small style="color:var(--muted)">Masaüstü uygulaması</small><strong style="color:var(--dark)">macOS – FooDash.dmg</strong></div></div>
-      <div class="dl-card" onclick="confirmDownload('Android (.apk)',this)" style="background:#f7f0ea;border-color:#f0d0c0;"><div class="dl-card-icon">🤖</div><div class="dl-card-text"><small style="color:var(--muted)">Google Play / APK</small><strong style="color:var(--dark)">Android – FooDash.apk</strong></div></div>
-      <div class="dl-card" onclick="confirmDownload('iOS (App Store)',this)" style="background:#f7f0ea;border-color:#f0d0c0;"><div class="dl-card-icon">📱</div><div class="dl-card-text"><small style="color:var(--muted)">App Store</small><strong style="color:var(--dark)">iOS – iPhone / iPad</strong></div></div>
+    <div style="display:flex;flex-direction:column;gap:9px;margin-top:6px;">
+      <div class="dl-card" onclick="doDl('Windows',this)" style="background:#f7f0ea;border-color:#f0d0c0;"><div class="dl-card-icon">🪟</div><div class="dl-card-text"><small style="color:#8A6A5A">Masaüstü</small><strong style="color:#1A0A00">Windows – FooDash.exe</strong></div></div>
+      <div class="dl-card" onclick="doDl('macOS',this)" style="background:#f7f0ea;border-color:#f0d0c0;"><div class="dl-card-icon">🍎</div><div class="dl-card-text"><small style="color:#8A6A5A">Masaüstü</small><strong style="color:#1A0A00">macOS – FooDash.dmg</strong></div></div>
+      <div class="dl-card" onclick="doDl('Android',this)" style="background:#f7f0ea;border-color:#f0d0c0;"><div class="dl-card-icon">🤖</div><div class="dl-card-text"><small style="color:#8A6A5A">Google Play / APK</small><strong style="color:#1A0A00">Android</strong></div></div>
+      <div class="dl-card" onclick="doDl('iOS',this)" style="background:#f7f0ea;border-color:#f0d0c0;"><div class="dl-card-icon">📱</div><div class="dl-card-text"><small style="color:#8A6A5A">App Store</small><strong style="color:#1A0A00">iPhone / iPad</strong></div></div>
     </div>
   </div>
 </div>
 
-<div class="toast" id="toast"><span class="t-icon">✅</span><span id="toast-msg">İşlem başarılı!</span></div>
-<button class="cart-float" id="cart-float" onclick="openCart()">🛒 Sepetim <span class="cart-badge" id="cart-count">0</span></button>
+<div class="toast" id="toast"><span class="t-icon">✅</span><span id="tmsg">Tamam!</span></div>
+<button class="cart-fl" id="cartfl" onclick="openCart()">🛒 Sepetim <span class="cbadge" id="ccount">0</span></button>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, doc, addDoc, getDocs, updateDoc, deleteDoc, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getFirestore,collection,doc,addDoc,getDocs,updateDoc,deleteDoc,query,where,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-const app = initializeApp({
+const db=getFirestore(initializeApp({
   apiKey:"AIzaSyB4SOHzkQ_RPbHqbWlVWIxxdTq3QhqWng0",
   authDomain:"foo-dash-b6bb9.firebaseapp.com",
   projectId:"foo-dash-b6bb9",
   storageBucket:"foo-dash-b6bb9.firebasestorage.app",
   messagingSenderId:"137063973696",
   appId:"1:137063973696:web:df1f30eed2f2ef708b30a5"
-});
-const db = getFirestore(app);
+}));
 
-let currentUser=null, selectedRole=null, cart=[];
-let users=[], menuItems=[], orders=[];
+let CU=null,role=null,cart=[];
+let users=[],menu=[],orders=[];
 
 async function loadAll(){
-  users=[];menuItems=[];orders=[];
-  const [u,m,o]=await Promise.all([getDocs(collection(db,'users')),getDocs(collection(db,'menuItems')),getDocs(collection(db,'orders'))]);
+  users=[];menu=[];orders=[];
+  const[u,m,o]=await Promise.all([getDocs(collection(db,'users')),getDocs(collection(db,'menuItems')),getDocs(collection(db,'orders'))]);
   u.forEach(d=>users.push({id:d.id,...d.data()}));
-  m.forEach(d=>menuItems.push({id:d.id,...d.data()}));
+  m.forEach(d=>menu.push({id:d.id,...d.data()}));
   o.forEach(d=>orders.push({id:d.id,...d.data()}));
 }
+(async()=>{try{await loadAll();}catch(e){console.error(e);}document.getElementById('loader').style.display='none';})();
 
-async function init(){
-  try{ await loadAll(); }catch(e){ console.error(e); }
-  document.getElementById('loading-screen').style.display='none';
-}
-init();
+// ── HELPERS ──
+const $=id=>document.getElementById(id);
+window.goHome=()=>showPage('home');
+window.showPage=(id)=>{document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$(id).classList.add('active');window.scrollTo(0,0);};
+window.showToast=(msg,ic='✅')=>{const t=$('toast');$('tmsg').textContent=msg;t.querySelector('.t-icon').textContent=ic;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);};
+window.closeOv=(id)=>$(id).classList.remove('active');
+window.openLogin=()=>$('ov-login').classList.add('active');
+window.openReg=()=>$('ov-reg').classList.add('active');
+window.showDlModal=()=>$('ov-dl').classList.add('active');
+window.doDl=(label,el)=>{el.style.borderColor='#22C55E';el.style.background='rgba(34,197,94,.1)';setTimeout(()=>{closeOv('ov-dl');showToast(label+' indiriliyor...','📥');},600);};
 
-// ── GLOBALS ──
-window.goHome=()=>showPage('page-home');
-window.showPage=(id)=>{document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);};
-window.showToast=(msg,icon='✅')=>{const t=document.getElementById('toast');document.getElementById('toast-msg').textContent=msg;t.querySelector('.t-icon').textContent=icon;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);};
-window.closeModal=(id)=>document.getElementById(id).classList.remove('active');
-window.openLogin=()=>document.getElementById('overlay-login').classList.add('active');
-window.openRegister=()=>document.getElementById('overlay-register').classList.add('active');
-window.switchToRegister=()=>{closeModal('overlay-login');openRegister();};
-window.switchToLogin=()=>{closeModal('overlay-register');openLogin();};
-window.showDownloadModal=()=>document.getElementById('overlay-download').classList.add('active');
-window.confirmDownload=(label,el)=>{el.style.borderColor='var(--green)';el.style.background='rgba(34,197,94,0.1)';setTimeout(()=>{closeModal('overlay-download');showToast(label+' indiriliyor...','📥');},600);};
+// mobile nav
+window.toggleMobileNav=()=>{$('ham').classList.toggle('open');$('mob-nav').classList.toggle('open');};
+window.closeMobNav=()=>{$('ham').classList.remove('open');$('mob-nav').classList.remove('open');};
+
+// profile dropdown
+window.toggleDrop=()=>$('pdrop').classList.toggle('open');
+document.addEventListener('click',e=>{const pp=$('pp');if(pp&&!pp.contains(e.target))$('pdrop').classList.remove('open');});
+window.goProfile=()=>{$('pdrop').classList.remove('open');showPage('dash');setTimeout(()=>dsShow('ds-profile',null),60);};
 
 // ── LOGIN ──
 window.doLogin=async()=>{
-  const u=document.getElementById('l-user').value.trim();
-  const p=document.getElementById('l-pass').value;
-  if(!u||!p){showToast('Lütfen tüm alanları doldur!','⚠️');return;}
+  const u=$('lu').value.trim(),p=$('lp').value;
+  if(!u||!p){showToast('Tüm alanları doldur!','⚠️');return;}
   showToast('Giriş yapılıyor...','⏳');
   try{
-    const q=query(collection(db,'users'),where('username','==',u),where('password','==',p));
-    const snap=await getDocs(q);
+    const snap=await getDocs(query(collection(db,'users'),where('username','==',u),where('password','==',p)));
     if(snap.empty){showToast('Kullanıcı adı veya şifre yanlış!','❌');return;}
-    currentUser={id:snap.docs[0].id,...snap.docs[0].data()};
-    closeModal('overlay-login');
-    await loadAll();
-    showNavUser();
-    buildDashboard();
-    showPage('page-dashboard');
-    showToast('Giriş başarılı! Hoş geldin 🎉','✅');
+    CU={id:snap.docs[0].id,...snap.docs[0].data()};
+    closeOv('ov-login');closeMobNav();
+    await loadAll();setNavUser();buildDash();showPage('dash');
+    showToast('Hoş geldin, '+CU.name.split(' ')[0]+'! 🎉','✅');
   }catch(e){showToast('Hata: '+e.message,'❌');}
 };
 
-function showNavUser(){
-  document.getElementById('nav-btns').style.display='none';
-  document.getElementById('nav-user').style.display='flex';
-  document.getElementById('nav-username').textContent='👋 '+currentUser.name;
+function setNavUser(){
+  $('nav-guest').style.display='none';$('nav-user').style.display='flex';
+  $('mob-guest').style.display='none';$('mob-user').style.display='flex';
+  const ini=CU.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+  const fn=CU.name.split(' ')[0];
+  $('pav').textContent=ini;$('pname').textContent=fn;
+  $('pav2').textContent=ini;$('pname2').textContent=fn;
 }
 
-window.logout=()=>{
-  currentUser=null;cart=[];
-  document.getElementById('nav-btns').style.display='flex';
-  document.getElementById('nav-user').style.display='none';
-  document.getElementById('cart-float').classList.remove('visible');
-  showPage('page-home');
-  showToast('Çıkış yapıldı. Görüşürüz! 👋','👋');
+window.doLogout=()=>{
+  if(!confirm('Çıkış yapmak istediğine emin misin?'))return;
+  CU=null;cart=[];
+  $('nav-guest').style.display='flex';$('nav-user').style.display='none';
+  $('mob-guest').style.display='flex';$('mob-user').style.display='none';
+  $('cartfl').classList.remove('on');
+  closeMobNav();showPage('home');showToast('Görüşürüz! 👋','👋');
 };
 
 // ── REGISTER ──
-window.selectRole=(role,el)=>{
-  selectedRole=role;
-  document.querySelectorAll('.role-card').forEach(c=>c.classList.remove('selected'));
-  el.classList.add('selected');
-  const fields={
-    customer:`<div class="form-group"><label>Ad Soyad</label><input type="text" id="r-name" placeholder="Ad Soyad"></div><div class="form-group"><label>Kullanıcı Adı</label><input type="text" id="r-user" placeholder="kullanici_adi"></div><div class="form-group"><label>Şifre</label><input type="password" id="r-pass" placeholder="••••••••"></div><div class="form-group"><label>Adres</label><input type="text" id="r-addr" placeholder="Mahalle, Sokak, No"></div><div class="form-group"><label>Telefon</label><input type="tel" id="r-phone" placeholder="05XX XXX XX XX"></div>`,
-    business:`<div class="form-group"><label>İşletme Adı</label><input type="text" id="r-name" placeholder="Restoran adı"></div><div class="form-group"><label>Kullanıcı Adı</label><input type="text" id="r-user" placeholder="kullanici_adi"></div><div class="form-group"><label>Şifre</label><input type="password" id="r-pass" placeholder="••••••••"></div><div class="form-group"><label>Adres</label><input type="text" id="r-addr" placeholder="İşletme adresi"></div><div class="form-group"><label>Telefon</label><input type="tel" id="r-phone" placeholder="05XX XXX XX XX"></div><div class="form-group"><label>İşletme Türü</label><select id="r-btype"><option>Restoran</option><option>Kafe</option><option>Fast Food</option><option>Pastane</option><option>Pizza</option><option>Doner</option></select></div>`,
-    courier:`<div class="form-group"><label>Ad Soyad</label><input type="text" id="r-name" placeholder="Ad Soyad"></div><div class="form-group"><label>Kullanıcı Adı</label><input type="text" id="r-user" placeholder="kullanici_adi"></div><div class="form-group"><label>Şifre</label><input type="password" id="r-pass" placeholder="••••••••"></div><div class="form-group"><label>Telefon</label><input type="tel" id="r-phone" placeholder="05XX XXX XX XX"></div><div class="form-group"><label>Araç Türü</label><select id="r-vehicle"><option>Motosiklet</option><option>Bisiklet</option><option>Elektrikli Bisiklet</option><option>Scooter</option></select></div>`
+window.pickRole=(r,el)=>{
+  role=r;
+  document.querySelectorAll('.role-card').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  const f={
+    customer:`<div class="fg"><label>Ad Soyad</label><input id="rn" placeholder="Ad Soyad" autocomplete="name"></div><div class="fg"><label>Kullanıcı Adı</label><input id="ru" placeholder="kullanici_adi" autocomplete="username"></div><div class="fg"><label>Şifre</label><input type="password" id="rp" placeholder="••••••••"></div><div class="fg"><label>Adres</label><input id="ra" placeholder="Mahalle, Sokak, No"></div><div class="fg"><label>Telefon</label><input type="tel" id="rt" placeholder="05XX XXX XX XX"></div>`,
+    business:`<div class="fg"><label>İşletme Adı</label><input id="rn" placeholder="Restoran adı"></div><div class="fg"><label>Kullanıcı Adı</label><input id="ru" placeholder="kullanici_adi"></div><div class="fg"><label>Şifre</label><input type="password" id="rp" placeholder="••••••••"></div><div class="fg"><label>Adres</label><input id="ra" placeholder="İşletme adresi"></div><div class="fg"><label>Telefon</label><input type="tel" id="rt" placeholder="05XX XXX XX XX"></div><div class="fg"><label>İşletme Türü</label><select id="rb"><option>Restoran</option><option>Kafe</option><option>Fast Food</option><option>Pastane</option><option>Pizza</option><option>Doner</option></select></div>`,
+    courier:`<div class="fg"><label>Ad Soyad</label><input id="rn" placeholder="Ad Soyad"></div><div class="fg"><label>Kullanıcı Adı</label><input id="ru" placeholder="kullanici_adi"></div><div class="fg"><label>Şifre</label><input type="password" id="rp" placeholder="••••••••"></div><div class="fg"><label>Telefon</label><input type="tel" id="rt" placeholder="05XX XXX XX XX"></div><div class="fg"><label>Araç Türü</label><select id="rv"><option>Motosiklet</option><option>Bisiklet</option><option>Elektrikli Bisiklet</option><option>Scooter</option></select></div>`
   };
-  document.getElementById('reg-form-container').innerHTML=fields[role]+'<button class="form-btn" onclick="doRegister()">Kayıt Ol 🎉</button><div class="modal-footer">Zaten hesabın var mı? <button class="link-btn" onclick="switchToLogin()">Giriş Yap</button></div>';
+  $('regfc').innerHTML=f[r]+'<button class="fbtn" onclick="doReg()">Kayıt Ol 🎉</button><div class="mfooter">Hesabın var mı? <button class="link-btn" onclick="closeOv(\'ov-reg\');openLogin()">Giriş Yap</button></div>';
 };
 
-window.doRegister=async()=>{
-  const name=document.getElementById('r-name')?.value.trim();
-  const user=document.getElementById('r-user')?.value.trim();
-  const pass=document.getElementById('r-pass')?.value;
+window.doReg=async()=>{
+  const name=$('rn')?.value.trim(),user=$('ru')?.value.trim(),pass=$('rp')?.value;
   if(!name||!user||!pass){showToast('Zorunlu alanları doldur!','⚠️');return;}
   showToast('Kayıt yapılıyor...','⏳');
   try{
-    const chk=query(collection(db,'users'),where('username','==',user));
-    const ex=await getDocs(chk);
+    const ex=await getDocs(query(collection(db,'users'),where('username','==',user)));
     if(!ex.empty){showToast('Bu kullanıcı adı alınmış!','❌');return;}
-    const u={name,username:user,password:pass,phone:document.getElementById('r-phone')?.value.trim()||'',role:selectedRole,createdAt:serverTimestamp()};
-    if(selectedRole==='business'){u.btype=document.getElementById('r-btype')?.value||'Restoran';u.addr=document.getElementById('r-addr')?.value||'';}
-    if(selectedRole==='customer'){u.addr=document.getElementById('r-addr')?.value||'';}
-    if(selectedRole==='courier'){u.vehicle=document.getElementById('r-vehicle')?.value||'';}
+    const u={name,username:user,password:pass,phone:$('rt')?.value.trim()||'',role,createdAt:serverTimestamp()};
+    if(role==='business'){u.btype=$('rb')?.value||'Restoran';u.addr=$('ra')?.value||'';}
+    if(role==='customer'){u.addr=$('ra')?.value||'';}
+    if(role==='courier'){u.vehicle=$('rv')?.value||'';}
     const ref=await addDoc(collection(db,'users'),u);
-    currentUser={id:ref.id,...u};
-    users.push(currentUser);
-    closeModal('overlay-register');
-    showNavUser();
-    buildDashboard();
-    showPage('page-dashboard');
+    CU={id:ref.id,...u};users.push(CU);
+    closeOv('ov-reg');setNavUser();buildDash();showPage('dash');
     showToast('Kayıt başarılı! Hoş geldin 🎉','✅');
   }catch(e){showToast('Hata: '+e.message,'❌');}
 };
 
-// ── DASHBOARD ──
-function buildDashboard(){
-  const role=currentUser.role;
-  const menu=document.getElementById('sb-menu');
-  const content=document.getElementById('dash-content');
-  if(role==='business'){
-    menu.innerHTML=`<li><a href="#" class="active" onclick="return dsShow('ds-home',this)"><span class="icon">🏠</span>Ana Sayfa</a></li><li><a href="#" onclick="return dsShow('ds-add-food',this)"><span class="icon">🍔</span>Yemek Ekle</a></li><li><a href="#" onclick="return dsShow('ds-add-drink',this)"><span class="icon">🥤</span>İçecek Ekle</a></li><li><a href="#" onclick="return dsShow('ds-items',this)"><span class="icon">📋</span>Menüm</a></li><li><a href="#" onclick="return dsShow('ds-orders',this)"><span class="icon">📦</span>Siparişler</a></li>`;
-    content.innerHTML=bizDash();
-  }else if(role==='customer'){
-    menu.innerHTML=`<li><a href="#" class="active" onclick="return dsShow('ds-home',this)"><span class="icon">🏠</span>Ana Sayfa</a></li><li><a href="#" onclick="return dsShow('ds-restaurants',this)"><span class="icon">🍽️</span>Restoranlar</a></li><li><a href="#" onclick="return dsShow('ds-my-orders',this)"><span class="icon">📦</span>Siparişlerim</a></li>`;
-    content.innerHTML=custDash();
-    updateCartFloat();
-  }else if(role==='courier'){
-    menu.innerHTML=`<li><a href="#" class="active" onclick="return dsShow('ds-home',this)"><span class="icon">🏠</span>Ana Sayfa</a></li><li><a href="#" onclick="return dsShow('ds-pending',this)"><span class="icon">🛵</span>Bekleyen Siparişler</a></li><li><a href="#" onclick="return dsShow('ds-delivering',this)"><span class="icon">📍</span>Teslimatta</a></li>`;
-    content.innerHTML=courierDash();
-  }
-  setTimeout(()=>{const s=document.querySelector('.dash-section');if(s)s.classList.add('active');updateStats();},50);
+// ── DASH BUILDER ──
+const ICONS={business:['ds-home','ds-add-food','ds-add-drink','ds-items','ds-orders','ds-profile'],customer:['ds-home','ds-restaurants','ds-my-orders','ds-profile'],courier:['ds-home','ds-pending','ds-delivering','ds-profile']};
+const LABELS={'ds-home':'🏠 Ana Sayfa','ds-add-food':'🍔 Yemek Ekle','ds-add-drink':'🥤 İçecek Ekle','ds-items':'📋 Menüm','ds-orders':'📦 Siparişler','ds-restaurants':'🍽️ Restoranlar','ds-my-orders':'📦 Siparişlerim','ds-pending':'🛵 Bekleyen','ds-delivering':'📍 Teslimatta','ds-profile':'👤 Profilim'};
+const MOB_ICONS={'ds-home':'🏠','ds-add-food':'🍔','ds-add-drink':'🥤','ds-items':'📋','ds-orders':'📦','ds-restaurants':'🍽️','ds-my-orders':'📦','ds-pending':'🛵','ds-delivering':'📍','ds-profile':'👤'};
+const MOB_LABELS={'ds-home':'Ana','ds-add-food':'Ekle','ds-add-drink':'İçecek','ds-items':'Menü','ds-orders':'Sipariş','ds-restaurants':'Restoranlar','ds-my-orders':'Siparişler','ds-pending':'Bekleyen','ds-delivering':'Yolda','ds-profile':'Profil'};
+
+function buildDash(){
+  const ids=ICONS[CU.role]||[];
+  $('sbmenu').innerHTML=ids.map(id=>`<li><a href="#" class="${id==='ds-home'?'act':''}" onclick="return dsShow('${id}',this)">${LABELS[id]}</a></li>`).join('');
+  $('mobbar').innerHTML=ids.map(id=>`<button class="mob-bar-item${id==='ds-home'?' act':''}" id="mbi-${id}" onclick="dsShow('${id}',null)"><div class="mbi">${MOB_ICONS[id]}</div><div class="mbl">${MOB_LABELS[id]}</div></button>`).join('');
+  const content={'business':bizContent,'customer':custContent,'courier':courierContent};
+  $('dcontent').innerHTML=(content[CU.role]||bizContent)();
+  setTimeout(()=>{const s=document.querySelector('.ds');if(s)s.classList.add('active');updateStats();},40);
 }
 
 window.dsShow=(id,el)=>{
-  document.querySelectorAll('.dash-section').forEach(s=>s.classList.remove('active'));
-  const sec=document.getElementById(id);
-  if(sec){sec.classList.add('active');refreshSection(id);}
-  document.querySelectorAll('.sb-menu a').forEach(a=>a.classList.remove('active'));
-  if(el)el.classList.add('active');
+  document.querySelectorAll('.ds').forEach(s=>s.classList.remove('active'));
+  const sec=$(id);if(sec){sec.classList.add('active');refreshSec(id);}
+  document.querySelectorAll('.sb-menu a').forEach(a=>a.classList.remove('act'));
+  document.querySelectorAll('.mob-bar-item').forEach(b=>b.classList.remove('act'));
+  if(el)el.classList.add('act');
+  const mbi=$(`mbi-${id}`);if(mbi)mbi.classList.add('act');
   return false;
 };
 
-window.refreshSection=(id)=>{
-  if(id==='ds-items')renderItemsList();
-  if(id==='ds-orders')renderOrdersTable();
-  if(id==='ds-restaurants')renderRestaurants();
-  if(id==='ds-my-orders')renderMyOrders();
-  if(id==='ds-pending')renderCourierPending();
-  if(id==='ds-delivering')renderCourierDelivering();
+window.refreshSec=(id)=>{
+  const m={
+    'ds-items':renderItems,'ds-orders':renderOrders,'ds-restaurants':renderRests,
+    'ds-my-orders':renderMyOrders,'ds-pending':renderPending,'ds-delivering':renderDelivering,'ds-profile':renderProfile
+  };
+  if(m[id])m[id]();
 };
 
-// ── BUSINESS DASH ──
-function bizDash(){
-  return `<div class="dash-section" id="ds-home"><div class="dash-header"><h2>Merhaba, ${currentUser.name} 👋</h2><p>İşletme panelinize hoş geldiniz.</p></div><div class="stats-row"><div class="stat-card"><div class="num" id="st-menu">0</div><div class="lbl">Menü Ürünü</div></div><div class="stat-card"><div class="num" id="st-orders">0</div><div class="lbl">Toplam Sipariş</div></div><div class="stat-card"><div class="num" id="st-pending">0</div><div class="lbl">Bekleyen</div></div><div class="stat-card"><div class="num" id="st-done">0</div><div class="lbl">Tamamlanan</div></div></div></div>
-  ${itemForm('food')}${itemForm('drink')}
-  <div class="dash-section" id="ds-items"><div class="dash-header"><h2>Menüm 📋</h2><p>Eklenmiş ürünler</p></div><div class="items-grid" id="items-list"></div></div>
-  <div class="dash-section" id="ds-orders"><div class="dash-header"><h2>Siparişler 📦</h2><p>Gelen siparişleri buradan yönetin.</p></div><div style="overflow-x:auto;"><table class="orders-table"><thead><tr><th>#</th><th>Müşteri</th><th>Ürünler</th><th>Toplam</th><th>Durum</th><th>Kurye Ata</th></tr></thead><tbody id="orders-body"></tbody></table></div></div>`;
+// ── PROFILE ──
+function profileSec(){
+  const rm={customer:'Müşteri 🧑',business:'İşletme 🏪',courier:'Kurye 🛵'};
+  const ini=CU.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+  return `<div class="ds" id="ds-profile"><div class="dh"><h2>Profilim 👤</h2><p>Bilgilerini görüntüle ve düzenle.</p></div>
+  <div class="pcard">
+    <div class="pav-big">${ini}</div>
+    <div class="rtag">${rm[CU.role]||CU.role}</div>
+    <div id="pv">
+      <div class="prow"><span class="prow-lbl">Ad Soyad</span><span class="prow-val">${CU.name}</span></div>
+      <div class="prow"><span class="prow-lbl">Kullanıcı Adı</span><span class="prow-val">@${CU.username}</span></div>
+      <div class="prow"><span class="prow-lbl">Telefon</span><span class="prow-val">${CU.phone||'-'}</span></div>
+      ${CU.addr!==undefined?`<div class="prow"><span class="prow-lbl">Adres</span><span class="prow-val" style="max-width:60%;text-align:right;">${CU.addr||'-'}</span></div>`:''}
+      ${CU.btype?`<div class="prow"><span class="prow-lbl">İşletme Türü</span><span class="prow-val">${CU.btype}</span></div>`:''}
+      ${CU.vehicle?`<div class="prow"><span class="prow-lbl">Araç</span><span class="prow-val">${CU.vehicle}</span></div>`:''}
+      <button class="fbtn" style="margin-top:16px;" onclick="showPEdit()">✏️ Bilgileri Düzenle</button>
+      <button class="fbtn-danger" onclick="delAccount()">🗑️ Hesabı Sil</button>
+    </div>
+    <div id="pe" style="display:none;">
+      <div class="fg"><label>Ad Soyad</label><input id="pen" value="${CU.name}"></div>
+      <div class="fg"><label>Telefon</label><input type="tel" id="pet" value="${CU.phone||''}"></div>
+      ${CU.addr!==undefined?`<div class="fg"><label>Adres</label><input id="pea" value="${CU.addr||''}"></div>`:''}
+      <div class="fg"><label>Yeni Şifre <small style="font-weight:400;color:#8A6A5A;">(boş bırakırsan değişmez)</small></label><input type="password" id="pep" placeholder="Yeni şifre"></div>
+      <button class="fbtn" onclick="saveProfile()">💾 Kaydet</button>
+      <button class="fbtn-sec" onclick="hidePEdit()">İptal</button>
+    </div>
+  </div></div>`;
+}
+window.renderProfile=()=>{const old=$(` ds-profile`);if(old)old.outerHTML=profileSec();};
+window.showPEdit=()=>{$('pv').style.display='none';$('pe').style.display='block';};
+window.hidePEdit=()=>{$('pe').style.display='none';$('pv').style.display='block';};
+window.saveProfile=async()=>{
+  const name=$('pen').value.trim(),phone=$('pet')?.value.trim(),addr=$('pea')?.value.trim(),pass=$('pep')?.value;
+  if(!name){showToast('Ad boş olamaz!','⚠️');return;}
+  showToast('Kaydediliyor...','⏳');
+  try{
+    const upd={name,phone:phone||''};
+    if(addr!==undefined)upd.addr=addr;if(pass)upd.password=pass;
+    await updateDoc(doc(db,'users',CU.id),upd);Object.assign(CU,upd);
+    const ini=CU.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2),fn=CU.name.split(' ')[0];
+    ['pav','pav2'].forEach(id=>{if($(id))$(id).textContent=ini;});
+    ['pname','pname2'].forEach(id=>{if($(id))$(id).textContent=fn;});
+    renderProfile();dsShow('ds-profile',null);showToast('Profil güncellendi! ✅','✅');
+  }catch(e){showToast('Hata: '+e.message,'❌');}
+};
+window.delAccount=async()=>{
+  if(!confirm('Hesabını silmek istediğine emin misin?'))return;
+  if(!confirm('Son onay: Tüm veriler silinecek!'))return;
+  try{await deleteDoc(doc(db,'users',CU.id));doLogout();showToast('Hesap silindi.','🗑️');}
+  catch(e){showToast('Hata: '+e.message,'❌');}
+};
+
+// ── BUSINESS ──
+function bizContent(){
+  return `<div class="ds" id="ds-home">
+    <div class="dh"><h2>Merhaba, ${CU.name.split(' ')[0]} 👋</h2><p>İşletme panelinize hoş geldiniz.</p></div>
+    <div class="stats"><div class="sc"><div class="n" id="st-m">0</div><div class="l">Menü Ürünü</div></div><div class="sc"><div class="n" id="st-o">0</div><div class="l">Toplam Sipariş</div></div><div class="sc"><div class="n" id="st-p">0</div><div class="l">Bekleyen</div></div><div class="sc"><div class="n" id="st-d">0</div><div class="l">Tamamlanan</div></div></div>
+  </div>
+  ${itemFormSec('food')}${itemFormSec('drink')}
+  <div class="ds" id="ds-items"><div class="dh"><h2>Menüm 📋</h2><p>Eklenmiş ürünler</p></div><div class="igrid" id="ilist"></div></div>
+  <div class="ds" id="ds-orders"><div class="dh"><h2>Siparişler 📦</h2><p>Gelen siparişleri yönet.</p></div><div class="tbl-wrap"><table class="otbl"><thead><tr><th>#</th><th>Müşteri</th><th>Ürünler</th><th>Tutar</th><th>Durum</th><th>Kurye</th><th>İşlem</th></tr></thead><tbody id="otbody"></tbody></table></div></div>
+  ${profileSec()}`;
 }
 
-function itemForm(type){
+function itemFormSec(type){
   const T=type==='food'?'Yemek':'İçecek',e=type==='food'?'🍔':'🥤';
   const cats=type==='food'?'<option>Ana Yemek</option><option>Başlangıç</option><option>Salata</option><option>Tatlı</option><option>Atıştırmalık</option>':'<option>Soğuk İçecek</option><option>Sıcak İçecek</option><option>Meyve Suyu</option><option>Kahve</option><option>Çay</option>';
-  return `<div class="dash-section" id="ds-add-${type}"><div class="dash-header"><h2>${e} ${T} Ekle</h2><p>Menüne yeni bir ürün ekle.</p></div><div class="item-form"><h3>${e} Yeni ${T}</h3><div class="form-group"><label>İsim</label><input type="text" id="${type}-name" placeholder="${T} adı"></div><div class="form-row"><div class="form-group"><label>Fiyat (₺)</label><input type="number" id="${type}-price" placeholder="0.00"></div><div class="form-group"><label>Kategori</label><select id="${type}-cat">${cats}</select></div></div><div class="form-group"><label>Açıklama</label><textarea id="${type}-desc" placeholder="Ürün hakkında kısa bilgi..."></textarea></div><button class="form-btn" onclick="addItem('${type}')">Ürünü Ekle ${e}</button></div></div>`;
+  return `<div class="ds" id="ds-add-${type}"><div class="dh"><h2>${e} ${T} Ekle</h2><p>Menüne yeni bir ürün ekle.</p></div>
+  <div class="ifrm"><h3>${e} Yeni ${T}</h3>
+  <div class="fg"><label>İsim</label><input id="${type}-n" placeholder="${T} adı"></div>
+  <div class="frow"><div class="fg"><label>Fiyat (₺)</label><input type="number" id="${type}-pr" placeholder="0.00"></div><div class="fg"><label>Kategori</label><select id="${type}-ct">${cats}</select></div></div>
+  <div class="fg"><label>Açıklama</label><textarea id="${type}-dc" placeholder="Kısa açıklama..."></textarea></div>
+  <button class="fbtn" onclick="addItem('${type}')">Ürünü Ekle ${e}</button>
+  </div></div>`;
 }
 
 window.addItem=async(type)=>{
-  const name=document.getElementById(type+'-name').value.trim();
-  const price=document.getElementById(type+'-price').value;
-  const cat=document.getElementById(type+'-cat').value;
-  const desc=document.getElementById(type+'-desc').value.trim();
+  const name=$(type+'-n').value.trim(),price=$(type+'-pr').value,cat=$(type+'-ct').value,desc=$(type+'-dc').value.trim();
   if(!name||!price){showToast('İsim ve fiyat zorunlu!','⚠️');return;}
   showToast('Ekleniyor...','⏳');
   try{
-    const item={name,price:parseFloat(price),cat,desc,type,emoji:type==='food'?'🍔':'🥤',owner:currentUser.username,ownerName:currentUser.name,createdAt:serverTimestamp()};
-    const ref=await addDoc(collection(db,'menuItems'),item);
-    menuItems.push({id:ref.id,...item});
-    showToast(name+' menüye eklendi!','✅');
-    document.getElementById(type+'-name').value='';
-    document.getElementById(type+'-price').value='';
-    document.getElementById(type+'-desc').value='';
+    const item={name,price:parseFloat(price),cat,desc,type,emoji:type==='food'?'🍔':'🥤',owner:CU.username,ownerName:CU.name,createdAt:serverTimestamp()};
+    const ref=await addDoc(collection(db,'menuItems'),item);menu.push({id:ref.id,...item});
+    showToast(name+' eklendi! ✅','✅');
+    $(type+'-n').value='';$(type+'-pr').value='';$(type+'-dc').value='';
     updateStats();
   }catch(e){showToast('Hata: '+e.message,'❌');}
 };
 
-window.renderItemsList=()=>{
-  const list=document.getElementById('items-list');if(!list)return;
-  const my=menuItems.filter(i=>i.owner===currentUser.username);
-  if(!my.length){list.innerHTML='<p style="color:var(--muted)">Henüz ürün yok.</p>';return;}
-  list.innerHTML=my.map(i=>`<div class="item-card"><div class="item-thumb">${i.emoji||'🍔'}</div><div class="item-info"><h4>${i.name}</h4><div class="price">₺${parseFloat(i.price).toFixed(2)}</div><div class="desc">${i.desc||''}</div><div style="margin-top:8px;"><span class="badge badge-blue">${i.cat}</span></div><button onclick="removeItem('${i.id}')" style="margin-top:8px;background:none;border:1px solid #fca5a5;color:#dc2626;border-radius:8px;padding:4px 10px;cursor:pointer;font-size:.8rem;font-family:'Nunito',sans-serif;">Kaldır</button></div></div>`).join('');
+window.renderItems=()=>{
+  const list=$('ilist');if(!list)return;
+  const my=menu.filter(i=>i.owner===CU.username);
+  if(!my.length){list.innerHTML='<p style="color:#8A6A5A">Henüz ürün yok.</p>';return;}
+  list.innerHTML=my.map(i=>`<div class="icard"><div class="ithumb">${i.emoji||'🍔'}</div><div class="iinfo"><h4>${i.name}</h4><div class="pr">₺${parseFloat(i.price).toFixed(2)}</div><div class="dc">${i.desc||''}</div><div style="margin-top:5px;"><span class="badge bb">${i.cat}</span></div><div class="iacts"><button class="ib ib-ed" onclick="editItem('${i.id}')">✏️ Düzenle</button><button class="ib ib-dl" onclick="delItem('${i.id}')">🗑️ Sil</button></div></div></div>`).join('');
 };
 
-window.removeItem=async(id)=>{
-  try{await deleteDoc(doc(db,'menuItems',id));menuItems=menuItems.filter(i=>i.id!==id);renderItemsList();updateStats();showToast('Ürün kaldırıldı','🗑️');}
-  catch(e){showToast('Hata: '+e.message,'❌');}
-};
-
-window.renderOrdersTable=async()=>{
-  const tbody=document.getElementById('orders-body');if(!tbody)return;
-  await loadAll();
-  const my=orders.filter(o=>o.restaurantOwner===currentUser.username);
-  const couriers=users.filter(u=>u.role==='courier');
-  if(!my.length){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:32px;">Henüz sipariş yok.</td></tr>';return;}
-  tbody.innerHTML=my.map(o=>`<tr><td><strong>#${String(o.id).slice(-5)}</strong></td><td>${o.customerName}<br><small style="color:var(--muted)">${o.customerPhone||''}</small></td><td>${(o.items||[]).map(x=>x.name).join(', ')}</td><td><strong>₺${parseFloat(o.total).toFixed(2)}</strong></td><td>${sBadge(o.status)}</td><td><select class="assign-select" onchange="assignCourier('${o.id}',this.value)"><option value="">-- Kurye Seç --</option>${couriers.map(c=>`<option value="${c.username}"${o.courierId===c.username?' selected':''}>${c.name} (${c.vehicle||''})</option>`).join('')}</select></td></tr>`).join('');
-};
-
-window.assignCourier=async(oid,cid)=>{
-  try{
-    await updateDoc(doc(db,'orders',oid),{courierId:cid,status:cid?'assigned':'pending'});
-    const o=orders.find(x=>x.id===oid);if(o){o.courierId=cid;o.status=cid?'assigned':'pending';}
-    showToast('Kurye atandı!','🛵');
-  }catch(e){showToast('Hata: '+e.message,'❌');}
-};
-
-function sBadge(s){
-  const m={pending:'badge-orange',assigned:'badge-blue',delivering:'badge-blue',delivered:'badge-green',cancelled:'badge-red'};
-  const t={pending:'Bekliyor',assigned:'Kurye Atandı',delivering:'Yolda',delivered:'Teslim Edildi',cancelled:'İptal'};
-  return `<span class="badge ${m[s]||'badge-orange'}">${t[s]||s}</span>`;
-}
-
-function updateStats(){
-  const e1=document.getElementById('st-menu');if(!e1)return;
-  const mi=menuItems.filter(i=>i.owner===currentUser.username);
-  const mo=orders.filter(o=>o.restaurantOwner===currentUser.username);
-  e1.textContent=mi.length;
-  document.getElementById('st-orders').textContent=mo.length;
-  document.getElementById('st-pending').textContent=mo.filter(o=>o.status==='pending').length;
-  document.getElementById('st-done').textContent=mo.filter(o=>o.status==='delivered').length;
-}
-
-// ── CUSTOMER DASH ──
-function custDash(){
-  return `<div class="dash-section" id="ds-home"><div class="dash-header"><h2>Merhaba, ${currentUser.name} 🎉</h2><p>Ne yemek istersin bugün?</p></div><div class="stats-row"><div class="stat-card"><div class="num" id="cst-orders">0</div><div class="lbl">Siparişlerim</div></div><div class="stat-card"><div class="num" id="cst-rest">0</div><div class="lbl">Restoran</div></div></div></div><div class="dash-section" id="ds-restaurants"><div class="dash-header"><h2>Restoranlar 🍽️</h2><p>Lezzetli seçenekler sizi bekliyor!</p></div><div class="restaurant-grid" id="rest-grid"></div></div><div class="dash-section" id="ds-my-orders"><div class="dash-header"><h2>Siparişlerim 📦</h2></div><div id="my-orders-list"></div></div>`;
-}
-
-window.renderRestaurants=()=>{
-  const grid=document.getElementById('rest-grid');if(!grid)return;
-  const biz=users.filter(u=>u.role==='business');
-  const el=document.getElementById('cst-rest');if(el)el.textContent=biz.length;
-  if(!biz.length){grid.innerHTML='<p style="color:var(--muted);">Henüz kayıtlı restoran yok.</p>';return;}
-  const em=['🍕','🍔','🌮','🍜','🥗','🍣','🥩','🍝'];
-  grid.innerHTML=biz.map((b,i)=>`<div class="rest-card" onclick="openRestMenu('${b.username}')"><div class="rest-banner" style="background:linear-gradient(135deg,hsl(${i*40},80%,85%),hsl(${i*40+30},80%,75%));">${em[i%em.length]}</div><div class="rest-info"><h3>${b.name}</h3><div class="meta"><span>⭐ 4.${3+i%7}</span><span>${b.btype||'Restoran'}</span></div><div style="margin-top:6px;">${b.addr||''}</div></div></div>`).join('');
-};
-
-window.openRestMenu=(ownerUsername)=>{
-  const biz=users.find(u=>u.username===ownerUsername);
-  const items=menuItems.filter(i=>i.owner===ownerUsername);
-  const foods=items.filter(i=>i.type==='food');
-  const drinks=items.filter(i=>i.type==='drink');
-  const ov=document.createElement('div');
-  ov.className='overlay active';ov.id='menu-overlay';
-  ov.innerHTML=`<div class="modal" style="max-width:580px;"><button class="modal-close" onclick="document.getElementById('menu-overlay').remove()">✕</button><div class="modal-title">${biz?.name||'Restoran'} 🍽️</div><div class="modal-sub">${biz?.btype||''} · ${biz?.addr||''}</div>${foods.length?`<h4 style="font-weight:800;margin:16px 0 10px;">🍔 Yemekler</h4><div style="display:flex;flex-direction:column;gap:10px;">${foods.map(f=>mRow(f,ownerUsername)).join('')}</div>`:``}${drinks.length?`<h4 style="font-weight:800;margin:16px 0 10px;">🥤 İçecekler</h4><div style="display:flex;flex-direction:column;gap:10px;">${drinks.map(f=>mRow(f,ownerUsername)).join('')}</div>`:``}${!items.length?`<p style="color:var(--muted);text-align:center;padding:32px 0;">Bu restoran henüz menü eklememiş.</p>`:''}</div>`;
+window.editItem=(id)=>{
+  const item=menu.find(i=>i.id===id);if(!item)return;
+  const ov=document.createElement('div');ov.className='overlay active';ov.id='ov-edit-item';
+  ov.innerHTML=`<div class="modal"><button class="modal-close" onclick="document.getElementById('ov-edit-item').remove()">✕</button>
+  <div class="modal-title">✏️ Ürünü Düzenle</div>
+  <div class="fg"><label>İsim</label><input id="ei-n" value="${item.name}"></div>
+  <div class="frow"><div class="fg"><label>Fiyat (₺)</label><input type="number" id="ei-pr" value="${item.price}"></div><div class="fg"><label>Kategori</label><input id="ei-ct" value="${item.cat}"></div></div>
+  <div class="fg"><label>Açıklama</label><textarea id="ei-dc">${item.desc||''}</textarea></div>
+  <button class="fbtn" onclick="saveItem('${id}')">💾 Kaydet</button>
+  <button class="fbtn-sec" onclick="document.getElementById('ov-edit-item').remove()">İptal</button></div>`;
   document.body.appendChild(ov);
 };
 
-function mRow(item,owner){
+window.saveItem=async(id)=>{
+  const name=$('ei-n').value.trim(),price=$('ei-pr').value,cat=$('ei-ct').value.trim(),desc=$('ei-dc').value.trim();
+  if(!name||!price){showToast('İsim ve fiyat zorunlu!','⚠️');return;}
+  try{
+    await updateDoc(doc(db,'menuItems',id),{name,price:parseFloat(price),cat,desc});
+    const i=menu.find(x=>x.id===id);if(i){i.name=name;i.price=parseFloat(price);i.cat=cat;i.desc=desc;}
+    $('ov-edit-item').remove();renderItems();updateStats();showToast('Ürün güncellendi! ✅','✅');
+  }catch(e){showToast('Hata: '+e.message,'❌');}
+};
+
+window.delItem=async(id)=>{
+  if(!confirm('Bu ürünü silmek istediğine emin misin?'))return;
+  try{await deleteDoc(doc(db,'menuItems',id));menu=menu.filter(i=>i.id!==id);renderItems();updateStats();showToast('Ürün silindi.','🗑️');}
+  catch(e){showToast('Hata: '+e.message,'❌');}
+};
+
+window.renderOrders=async()=>{
+  const tb=$('otbody');if(!tb)return;
+  await loadAll();
+  const my=orders.filter(o=>o.restaurantOwner===CU.username);
+  const couriers=users.filter(u=>u.role==='courier');
+  if(!my.length){tb.innerHTML='<tr><td colspan="7" style="text-align:center;color:#8A6A5A;padding:28px;">Henüz sipariş yok.</td></tr>';return;}
+  tb.innerHTML=my.map(o=>`<tr>
+    <td><strong>#${String(o.id).slice(-5)}</strong></td>
+    <td>${o.customerName}<br><small style="color:#8A6A5A">${o.customerPhone||''}</small></td>
+    <td style="max-width:160px;word-break:break-word;">${(o.items||[]).map(x=>x.name+' x'+x.qty).join(', ')}</td>
+    <td><strong>₺${parseFloat(o.total).toFixed(2)}</strong></td>
+    <td>${sbadge(o.status)}</td>
+    <td>${o.status==='cancelled'?'-':`<select class="asel" onchange="assignCourier('${o.id}',this.value)"><option value="">-- Seç --</option>${couriers.map(c=>`<option value="${c.username}"${o.courierId===c.username?' selected':''}>${c.name}</option>`).join('')}</select>`}</td>
+    <td>${o.status!=='delivered'&&o.status!=='cancelled'?`<button class="abtn-cancel" style="white-space:nowrap;" onclick="cancelBiz('${o.id}')">❌ İptal</button>`:'-'}</td>
+  </tr>`).join('');
+};
+
+window.assignCourier=async(oid,cid)=>{
+  try{await updateDoc(doc(db,'orders',oid),{courierId:cid,status:cid?'assigned':'pending'});const o=orders.find(x=>x.id===oid);if(o){o.courierId=cid;o.status=cid?'assigned':'pending';}showToast('Kurye atandı! 🛵','🛵');}
+  catch(e){showToast('Hata: '+e.message,'❌');}
+};
+
+window.cancelBiz=async(id)=>{
+  if(!confirm('Bu siparişi iptal etmek istediğine emin misin?'))return;
+  try{await updateDoc(doc(db,'orders',id),{status:'cancelled'});const o=orders.find(x=>x.id===id);if(o)o.status='cancelled';renderOrders();showToast('Sipariş iptal edildi.','❌');}
+  catch(e){showToast('Hata: '+e.message,'❌');}
+};
+
+function sbadge(s){
+  const m={pending:'bo',assigned:'bb',delivering:'bb',delivered:'bg',cancelled:'br'};
+  const t={pending:'Bekliyor',assigned:'Kurye Atandı',delivering:'Yolda',delivered:'Teslim Edildi',cancelled:'İptal'};
+  return `<span class="badge ${m[s]||'bo'}">${t[s]||s}</span>`;
+}
+
+function updateStats(){
+  const e=$('st-m');if(!e)return;
+  const mi=menu.filter(i=>i.owner===CU.username),mo=orders.filter(o=>o.restaurantOwner===CU.username);
+  $('st-m').textContent=mi.length;$('st-o').textContent=mo.length;
+  $('st-p').textContent=mo.filter(o=>o.status==='pending').length;
+  $('st-d').textContent=mo.filter(o=>o.status==='delivered').length;
+}
+
+// ── CUSTOMER ──
+function custContent(){
+  return `<div class="ds" id="ds-home">
+    <div class="dh"><h2>Merhaba, ${CU.name.split(' ')[0]} 🎉</h2><p>Ne yemek istersin bugün?</p></div>
+    <div class="stats"><div class="sc"><div class="n" id="co">0</div><div class="l">Siparişlerim</div></div><div class="sc"><div class="n" id="cr">0</div><div class="l">Restoran</div></div></div>
+    <p style="color:#8A6A5A;font-size:.88rem;">Sol menüden veya alttaki bardan restoranları gez.</p>
+  </div>
+  <div class="ds" id="ds-restaurants"><div class="dh"><h2>Restoranlar 🍽️</h2><p>Lezzetli seçenekler sizi bekliyor!</p></div><div class="rgrid" id="rgrid"></div></div>
+  <div class="ds" id="ds-my-orders"><div class="dh"><h2>Siparişlerim 📦</h2></div><div id="myol"></div></div>
+  ${profileSec()}`;
+}
+
+window.renderRests=()=>{
+  const g=$('rgrid');if(!g)return;
+  const biz=users.filter(u=>u.role==='business');
+  const cr=$('cr');if(cr)cr.textContent=biz.length;
+  if(!biz.length){g.innerHTML='<p style="color:#8A6A5A;">Henüz kayıtlı restoran yok.</p>';return;}
+  const em=['🍕','🍔','🌮','🍜','🥗','🍣','🥩','🍝'];
+  g.innerHTML=biz.map((b,i)=>`<div class="rcard" onclick="openRestMenu('${b.username}')">
+    <div class="rbnr" style="background:linear-gradient(135deg,hsl(${i*40},80%,85%),hsl(${i*40+30},80%,75%));">${em[i%em.length]}</div>
+    <div class="rinf"><h3>${b.name}</h3><div class="meta"><span>⭐ 4.${3+i%7}</span><span>${b.btype||'Restoran'}</span></div><div style="margin-top:4px;font-size:.8rem;color:#8A6A5A;">${b.addr||''}</div></div>
+  </div>`).join('');
+};
+
+window.openRestMenu=(owner)=>{
+  const biz=users.find(u=>u.username===owner);
+  const items=menu.filter(i=>i.owner===owner);
+  const foods=items.filter(i=>i.type==='food'),drinks=items.filter(i=>i.type==='drink');
+  const ov=document.createElement('div');ov.className='overlay active';ov.id='ov-rest';
+  ov.innerHTML=`<div class="modal" style="max-width:540px;">
+    <button class="modal-close" onclick="document.getElementById('ov-rest').remove()">✕</button>
+    <div class="modal-title">${biz?.name||'Restoran'} 🍽️</div>
+    <div class="modal-sub">${biz?.btype||''} · ${biz?.addr||''}</div>
+    ${foods.length?`<h4 style="font-weight:800;margin:12px 0 8px;">🍔 Yemekler</h4><div style="display:flex;flex-direction:column;gap:8px;">${foods.map(f=>mrow(f,owner)).join('')}</div>`:''}
+    ${drinks.length?`<h4 style="font-weight:800;margin:12px 0 8px;">🥤 İçecekler</h4><div style="display:flex;flex-direction:column;gap:8px;">${drinks.map(f=>mrow(f,owner)).join('')}</div>`:''}
+    ${!items.length?`<p style="color:#8A6A5A;text-align:center;padding:28px 0;">Bu restoran henüz menü eklememiş.</p>`:''}
+  </div>`;
+  document.body.appendChild(ov);
+};
+
+function mrow(item,owner){
   const safe=JSON.stringify({id:item.id,name:item.name,price:item.price,emoji:item.emoji||'🍔',type:item.type}).replace(/"/g,'&quot;');
-  return `<div style="display:flex;align-items:center;justify-content:space-between;background:#fff8f5;border-radius:12px;padding:12px 16px;gap:12px;"><div style="display:flex;align-items:center;gap:12px;"><div style="font-size:2rem;">${item.emoji||'🍔'}</div><div><div style="font-weight:800;">${item.name}</div><div style="color:var(--muted);font-size:.82rem;">${item.desc||''}</div></div></div><div style="display:flex;align-items:center;gap:10px;"><span style="font-weight:800;color:var(--orange);">₺${parseFloat(item.price).toFixed(2)}</span><button onclick="addToCart(${safe},'${owner}')" style="background:linear-gradient(135deg,var(--red),var(--orange));color:#fff;border:none;border-radius:50px;padding:7px 16px;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;font-size:.85rem;">+ Ekle</button></div></div>`;
+  return `<div style="display:flex;align-items:center;justify-content:space-between;background:#fff8f5;border-radius:11px;padding:10px 13px;gap:10px;flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:9px;flex:1;min-width:0;">
+      <span style="font-size:clamp(1.4rem,3vw,1.8rem);flex-shrink:0;">${item.emoji||'🍔'}</span>
+      <div style="min-width:0;"><div style="font-weight:800;font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${item.name}</div><div style="color:#8A6A5A;font-size:.76rem;">${item.desc||''}</div></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+      <span style="font-weight:800;color:#FF6B00;">₺${parseFloat(item.price).toFixed(2)}</span>
+      <button onclick="addToCart(${safe},'${owner}')" style="background:linear-gradient(135deg,#E8230A,#FF6B00);color:#fff;border:none;border-radius:50px;padding:6px 13px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.8rem;cursor:pointer;white-space:nowrap;">+ Ekle</button>
+    </div>
+  </div>`;
 }
 
 window.addToCart=(item,owner)=>{
   if(cart.length&&cart[0].owner!==owner){if(!confirm('Farklı restoran! Sepeti temizleyip devam et?'))return;cart=[];}
-  const ex=cart.find(c=>c.id===item.id);
-  if(ex)ex.qty++;else cart.push({...item,qty:1,owner,restaurantOwner:owner});
-  updateCartFloat();showToast(item.name+' sepete eklendi 🛒','✅');
+  const ex=cart.find(c=>c.id===item.id);if(ex)ex.qty++;else cart.push({...item,qty:1,owner,restaurantOwner:owner});
+  updateCart();showToast(item.name+' eklendi 🛒','✅');
 };
 
-window.updateCartFloat=()=>{
+window.updateCart=()=>{
   const t=cart.reduce((s,i)=>s+i.qty,0);
-  document.getElementById('cart-count').textContent=t;
-  const btn=document.getElementById('cart-float');
-  if(t>0)btn.classList.add('visible');else btn.classList.remove('visible');
+  $('ccount').textContent=t;
+  if(t>0)$('cartfl').classList.add('on');else $('cartfl').classList.remove('on');
 };
 
 window.openCart=()=>{
   const total=cart.reduce((s,i)=>s+i.price*i.qty,0);
-  const ov=document.createElement('div');ov.className='overlay active';ov.id='cart-overlay';
-  ov.innerHTML=`<div class="modal" style="max-width:480px;"><button class="modal-close" onclick="document.getElementById('cart-overlay').remove()">✕</button><div class="modal-title">🛒 Sepetim</div>${cart.length?`<div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;">${cart.map(i=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:#fff8f5;border-radius:10px;"><span>${i.emoji} ${i.name} x${i.qty}</span><span style="font-weight:800;color:var(--orange);">₺${(i.price*i.qty).toFixed(2)}</span></div>`).join('')}</div><div style="text-align:right;font-size:1.1rem;font-weight:800;margin-bottom:16px;">Toplam: ₺${total.toFixed(2)}</div><button class="form-btn" onclick="placeOrder()">Siparişi Onayla 🚀</button>`:`<p style="text-align:center;color:var(--muted);padding:32px 0;">Sepetiniz boş.</p>`}</div>`;
+  const ov=document.createElement('div');ov.className='overlay active';ov.id='ov-cart';
+  ov.innerHTML=`<div class="modal" style="max-width:440px;">
+    <button class="modal-close" onclick="document.getElementById('ov-cart').remove()">✕</button>
+    <div class="modal-title">🛒 Sepetim</div>
+    ${cart.length?`
+    <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:16px;">
+      ${cart.map(i=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 11px;background:#fff8f5;border-radius:10px;gap:8px;"><span style="font-size:.88rem;">${i.emoji} ${i.name} x${i.qty}</span><span style="font-weight:800;color:#FF6B00;white-space:nowrap;">₺${(i.price*i.qty).toFixed(2)}</span></div>`).join('')}
+    </div>
+    <div style="text-align:right;font-weight:800;font-size:1rem;margin-bottom:13px;">Toplam: ₺${total.toFixed(2)}</div>
+    <button class="fbtn" onclick="placeOrder()">Siparişi Onayla 🚀</button>`
+    :`<p style="text-align:center;color:#8A6A5A;padding:24px 0;">Sepetiniz boş.</p>`}
+  </div>`;
   document.body.appendChild(ov);
 };
 
 window.placeOrder=async()=>{
   const owner=cart[0]?.restaurantOwner||cart[0]?.owner;
-  const order={customerId:currentUser.username,customerName:currentUser.name,customerPhone:currentUser.phone||'',customerAddr:currentUser.addr||'',restaurantOwner:owner,items:cart.map(i=>({name:i.name,qty:i.qty,price:i.price})),total:cart.reduce((s,i)=>s+i.price*i.qty,0),status:'pending',courierId:null,date:new Date().toLocaleString('tr-TR'),createdAt:serverTimestamp()};
+  const order={customerId:CU.username,customerName:CU.name,customerPhone:CU.phone||'',customerAddr:CU.addr||'',restaurantOwner:owner,items:cart.map(i=>({name:i.name,qty:i.qty,price:i.price})),total:cart.reduce((s,i)=>s+i.price*i.qty,0),status:'pending',courierId:null,date:new Date().toLocaleString('tr-TR'),createdAt:serverTimestamp()};
   try{
-    const ref=await addDoc(collection(db,'orders'),order);
-    orders.push({id:ref.id,...order});
-    cart=[];updateCartFloat();
-    document.getElementById('cart-overlay')?.remove();
+    const ref=await addDoc(collection(db,'orders'),order);orders.push({id:ref.id,...order});
+    cart=[];updateCart();$('ov-cart')?.remove();
     showToast('Siparişin alındı! 🎉','✅');
-    const el=document.getElementById('cst-orders');if(el)el.textContent=orders.filter(o=>o.customerId===currentUser.username).length;
+    const el=$('co');if(el)el.textContent=orders.filter(o=>o.customerId===CU.username).length;
   }catch(e){showToast('Hata: '+e.message,'❌');}
 };
 
 window.renderMyOrders=async()=>{
-  const list=document.getElementById('my-orders-list');if(!list)return;
+  const list=$('myol');if(!list)return;
   await loadAll();
-  const my=orders.filter(o=>o.customerId===currentUser.username).reverse();
-  if(!my.length){list.innerHTML='<p style="color:var(--muted);">Henüz sipariş vermediniz.</p>';return;}
-  list.innerHTML=my.map(o=>`<div style="background:#fff;border-radius:16px;padding:20px;margin-bottom:14px;box-shadow:var(--shadow);"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;"><div><strong>#${String(o.id).slice(-5)}</strong> · ${o.date}</div>${sBadge(o.status)}</div><div style="margin-top:8px;color:var(--muted);font-size:.9rem;">${(o.items||[]).map(i=>i.name+' x'+i.qty).join(', ')}</div><div style="margin-top:8px;font-weight:800;">Toplam: ₺${parseFloat(o.total).toFixed(2)}</div>${o.courierId?`<div style="margin-top:6px;font-size:.85rem;color:var(--muted);">🛵 ${users.find(u=>u.username===o.courierId)?.name||o.courierId}</div>`:''}</div>`).join('');
+  const my=orders.filter(o=>o.customerId===CU.username).reverse();
+  const el=$('co');if(el)el.textContent=my.length;
+  if(!my.length){list.innerHTML='<p style="color:#8A6A5A;">Henüz sipariş vermediniz.</p>';return;}
+  list.innerHTML=my.map(o=>`<div class="ocard">
+    <div class="ocard-row">
+      <div>
+        <h4>#${String(o.id).slice(-5)} <span class="badge ${['pending','assigned'].includes(o.status)?'bo':'delivered'===o.status?'bg':'br'}" style="margin-left:4px;">${{pending:'Bekliyor',assigned:'Kurye Atandı',delivering:'Yolda',delivered:'Teslim Edildi',cancelled:'İptal'}[o.status]||o.status}</span></h4>
+        <div style="color:#8A6A5A;font-size:.8rem;margin-top:2px;">${o.date}</div>
+        <div style="font-size:.85rem;margin-top:5px;color:#8A6A5A;">${(o.items||[]).map(i=>i.name+' x'+i.qty).join(', ')}</div>
+        <div style="font-weight:800;margin-top:5px;">₺${parseFloat(o.total).toFixed(2)}</div>
+        ${o.courierId?`<div style="font-size:.8rem;color:#8A6A5A;margin-top:4px;">🛵 ${users.find(u=>u.username===o.courierId)?.name||o.courierId}</div>`:''}
+      </div>
+      <div class="ocard-btns">
+        ${o.status==='pending'||o.status==='assigned'?`<button class="abtn abtn-cancel" onclick="cancelCust('${o.id}')">❌ İptal Et</button>`:''}
+      </div>
+    </div>
+  </div>`).join('');
 };
 
-// ── COURIER DASH ──
-function courierDash(){
-  return `<div class="dash-section" id="ds-home"><div class="dash-header"><h2>Merhaba, ${currentUser.name} 🛵</h2><p>Bugün harika bir gün olsun!</p></div><div class="stats-row"><div class="stat-card"><div class="num" id="cr-pending">0</div><div class="lbl">Bekleyen</div></div><div class="stat-card"><div class="num" id="cr-done">0</div><div class="lbl">Teslim Ettiğim</div></div></div></div><div class="dash-section" id="ds-pending"><div class="dash-header"><h2>Bekleyen Siparişler 📦</h2><p>Sana atanan siparişler</p></div><div id="courier-pending-list"></div></div><div class="dash-section" id="ds-delivering"><div class="dash-header"><h2>Teslimatta 📍</h2><p>Aktif teslimatlar</p></div><div id="courier-delivering-list"></div></div>`;
-}
-
-window.renderCourierPending=async()=>{
-  const el=document.getElementById('courier-pending-list');if(!el)return;
-  await loadAll();
-  const mine=orders.filter(o=>o.courierId===currentUser.username&&o.status==='assigned');
-  if(!mine.length){el.innerHTML='<p style="color:var(--muted);">Sana atanmış sipariş yok.</p>';return;}
-  el.innerHTML=mine.map(o=>`<div class="courier-order"><div><h4>#${String(o.id).slice(-5)} · ${o.customerName}</h4><div class="addr">📍 ${o.customerAddr||'Adres yok'}</div><div style="margin-top:6px;">${(o.items||[]).map(i=>i.name).join(', ')}</div></div><div><div style="font-weight:800;color:var(--orange);margin-bottom:8px;">₺${parseFloat(o.total).toFixed(2)}</div><button class="accept-btn" onclick="startDelivery('${o.id}')">Teslimata Başla 🛵</button></div></div>`).join('');
-  const el2=document.getElementById('cr-pending');if(el2)el2.textContent=mine.length;
-};
-
-window.renderCourierDelivering=async()=>{
-  const el=document.getElementById('courier-delivering-list');if(!el)return;
-  await loadAll();
-  const mine=orders.filter(o=>o.courierId===currentUser.username&&o.status==='delivering');
-  if(!mine.length){el.innerHTML='<p style="color:var(--muted);">Aktif teslimat yok.</p>';return;}
-  el.innerHTML=mine.map(o=>`<div class="courier-order"><div><h4>#${String(o.id).slice(-5)} · ${o.customerName}</h4><div class="addr">📍 ${o.customerAddr||'Adres yok'}</div></div><div><button class="accept-btn" onclick="completeDelivery('${o.id}')">Teslim Edildi ✅</button></div></div>`).join('');
-};
-
-window.startDelivery=async(id)=>{
-  try{await updateDoc(doc(db,'orders',id),{status:'delivering'});const o=orders.find(x=>x.id===id);if(o)o.status='delivering';renderCourierPending();renderCourierDelivering();showToast('Teslimata çıkıldı!','🛵');}
+window.cancelCust=async(id)=>{
+  if(!confirm('Bu siparişi iptal etmek istediğine emin misin?'))return;
+  try{await updateDoc(doc(db,'orders',id),{status:'cancelled'});const o=orders.find(x=>x.id===id);if(o)o.status='cancelled';renderMyOrders();showToast('Sipariş iptal edildi.','❌');}
   catch(e){showToast('Hata: '+e.message,'❌');}
 };
 
-window.completeDelivery=async(id)=>{
-  try{await updateDoc(doc(db,'orders',id),{status:'delivered'});const o=orders.find(x=>x.id===id);if(o)o.status='delivered';renderCourierDelivering();showToast('Teslim edildi! ✅','✅');const el=document.getElementById('cr-done');if(el)el.textContent=orders.filter(x=>x.courierId===currentUser.username&&x.status==='delivered').length;}
+// ── COURIER ──
+function courierContent(){
+  return `<div class="ds" id="ds-home">
+    <div class="dh"><h2>Merhaba, ${CU.name.split(' ')[0]} 🛵</h2><p>Bugün harika bir gün olsun!</p></div>
+    <div class="stats"><div class="sc"><div class="n" id="crp">0</div><div class="l">Bekleyen</div></div><div class="sc"><div class="n" id="crd">0</div><div class="l">Teslim Ettiğim</div></div></div>
+  </div>
+  <div class="ds" id="ds-pending"><div class="dh"><h2>Bekleyen Siparişler 📦</h2><p>Sana atanan siparişler</p></div><div id="cpl"></div></div>
+  <div class="ds" id="ds-delivering"><div class="dh"><h2>Teslimatta 📍</h2><p>Aktif teslimatlar</p></div><div id="cdl"></div></div>
+  ${profileSec()}`;
+}
+
+window.renderPending=async()=>{
+  const el=$('cpl');if(!el)return;
+  await loadAll();
+  const mine=orders.filter(o=>o.courierId===CU.username&&o.status==='assigned');
+  if(!mine.length){el.innerHTML='<p style="color:#8A6A5A;">Sana atanmış sipariş yok.</p>';return;}
+  el.innerHTML=mine.map(o=>`<div class="ocard"><div class="ocard-row"><div><h4>#${String(o.id).slice(-5)} · ${o.customerName}</h4><div class="adr">📍 ${o.customerAddr||'Adres yok'}</div><div style="font-size:.83rem;margin-top:4px;">${(o.items||[]).map(i=>i.name).join(', ')}</div></div><div class="ocard-btns"><span style="font-weight:800;color:#FF6B00;">₺${parseFloat(o.total).toFixed(2)}</span><button class="abtn abtn-green" onclick="startDel('${o.id}')">Teslimata Başla 🛵</button></div></div></div>`).join('');
+  const e=$('crp');if(e)e.textContent=mine.length;
+};
+
+window.renderDelivering=async()=>{
+  const el=$('cdl');if(!el)return;
+  await loadAll();
+  const mine=orders.filter(o=>o.courierId===CU.username&&o.status==='delivering');
+  if(!mine.length){el.innerHTML='<p style="color:#8A6A5A;">Aktif teslimat yok.</p>';return;}
+  el.innerHTML=mine.map(o=>`<div class="ocard"><div class="ocard-row"><div><h4>#${String(o.id).slice(-5)} · ${o.customerName}</h4><div class="adr">📍 ${o.customerAddr||'Adres yok'}</div></div><div class="ocard-btns"><button class="abtn abtn-green" onclick="completeDel('${o.id}')">Teslim Edildi ✅</button></div></div></div>`).join('');
+};
+
+window.startDel=async(id)=>{
+  try{await updateDoc(doc(db,'orders',id),{status:'delivering'});const o=orders.find(x=>x.id===id);if(o)o.status='delivering';renderPending();renderDelivering();showToast('Teslimata çıkıldı! 🛵','🛵');}
+  catch(e){showToast('Hata: '+e.message,'❌');}
+};
+
+window.completeDel=async(id)=>{
+  try{await updateDoc(doc(db,'orders',id),{status:'delivered'});const o=orders.find(x=>x.id===id);if(o)o.status='delivered';renderDelivering();showToast('Teslim edildi! ✅','✅');const e=$('crd');if(e)e.textContent=orders.filter(x=>x.courierId===CU.username&&x.status==='delivered').length;}
   catch(e){showToast('Hata: '+e.message,'❌');}
 };
 </script>

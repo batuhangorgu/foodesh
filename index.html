@@ -269,12 +269,13 @@ footer a{color:var(--orange);text-decoration:none;}
     <div class="hero-t">
       <h1>Lezzetler <em>Kapında</em><br>Hızla Gelsin 🚀</h1>
       <p>En sevdiğin restoranlardan dakikalar içinde sipariş ver. Taze, sıcak, hızlı!</p>
-      <div class="hero-ctas">
-        <button class="btn btn-f" style="font-size:clamp(.88rem,2vw,.97rem);padding:clamp(9px,2vw,12px) clamp(20px,3.5vw,28px);" onclick="openLogin()">Sipariş Ver</button>
-        <button class="btn btn-o" style="font-size:clamp(.86rem,2vw,.95rem);padding:clamp(8px,1.8vw,11px) clamp(16px,3vw,22px);" onclick="showDl()">📱 İndir</button>
+      <div class="hero-ctas" id="hero-ctas">
+        <button class="btn btn-f" style="font-size:clamp(.88rem,2vw,.97rem);padding:clamp(9px,2vw,12px) clamp(20px,3.5vw,28px);" onclick="heroOrderBtn()">🛒 Sipariş Ver</button>
+        <button class="btn btn-o" style="font-size:clamp(.86rem,2vw,.95rem);padding:clamp(8px,1.8vw,11px) clamp(16px,3vw,22px);" onclick="heroTrackBtn()">📦 Takip Et</button>
+        <button class="btn btn-d" style="font-size:clamp(.84rem,1.8vw,.93rem);" onclick="showDl()">📱 İndir</button>
       </div>
     </div>
-    <div class="hero-img">🍕</div>
+    <div class="hero-img" id="hero-img">🍕</div>
   </div>
   <div class="dl-strip">
     <h2>📱 FooDash Uygulaması</h2>
@@ -393,7 +394,7 @@ async function init(){
     await loadAll();
     const restored=await restoreSession();
     if(restored){
-      setNavUser();buildDash();showPage('dash');
+      setNavUser();updateHeroBtns();buildDash();showPage('dash');
       // Restore last active section
       const lastSec=localStorage.getItem('fd_last_sec');
       if(lastSec&&document.getElementById(lastSec)){
@@ -418,7 +419,7 @@ async function loadAll(){
 }
 
 // ── NAV HELPERS ──
-window.goHome=()=>{if(!CU)showPage('home');};
+window.goHome=()=>showPage('home');
 window.showPage=(id)=>{document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$(id).classList.add('active');window.scrollTo(0,0);};
 window.showToast=(msg,ic='✅')=>{$('tmsg').textContent=msg;$('tic').textContent=ic;const t=$('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);};
 window.closeOv=(id)=>$(id).classList.remove('active');
@@ -452,7 +453,7 @@ window.doLogin=async()=>{
     CU={id:snap.docs[0].id,...snap.docs[0].data()};
     saveSession();
     closeOv('ov-login');closeMob();
-    await loadAll();setNavUser();buildDash();showPage('dash');
+    await loadAll();setNavUser();updateHeroBtns();buildDash();showPage('dash');
     showToast('Hoş geldin, '+CU.name.split(' ')[0]+'! 🎉','✅');
   }catch(e){showToast('Hata: '+e.message,'❌');}
 };
@@ -463,7 +464,43 @@ window.doLogout=()=>{
   $('ng').style.display='flex';$('nu').style.display='none';
   $('mg').style.display='flex';$('mu').style.display='none';
   $('cartfl').classList.remove('on');
+  updateHeroBtns();
   closeMob();showPage('home');showToast('Görüşürüz! 👋','👋');
+};
+
+// Hero button behaviour
+function updateHeroBtns(){
+  const ctas=$('hero-ctas');
+  if(!ctas)return;
+  if(CU){
+    const role=CU.role;
+    const roleTarget={business:'ds-orders',customer:'ds-restaurants',courier:'ds-pending'};
+    const trackTarget={business:'ds-orders',customer:'ds-my-orders',courier:'ds-delivering'};
+    ctas.innerHTML=`
+      <button class="btn btn-f" style="font-size:clamp(.88rem,2vw,.97rem);padding:clamp(9px,2vw,12px) clamp(20px,3.5vw,28px);" onclick="showPage('dash');setTimeout(()=>dsShow('${roleTarget[role]||'ds-home'}',null),60);">
+        ${role==='business'?'📦 Siparişler':role==='courier'?'🛵 Teslimatlar':'🛒 Sipariş Ver'}
+      </button>
+      <button class="btn btn-o" style="font-size:clamp(.86rem,2vw,.95rem);padding:clamp(8px,1.8vw,11px) clamp(16px,3vw,22px);" onclick="showPage('dash');setTimeout(()=>dsShow('${trackTarget[role]||'ds-home'}',null),60);">
+        ${role==='business'?'📊 Panelim':role==='courier'?'📍 Teslimatta':'📦 Siparişlerimi Takip Et'}
+      </button>
+      <button class="btn btn-o" style="font-size:clamp(.84rem,1.8vw,.93rem);border-color:#8A6A5A;color:#8A6A5A;" onclick="showPage('dash');">
+        Panele Dön →
+      </button>`;
+  } else {
+    ctas.innerHTML=`
+      <button class="btn btn-f" style="font-size:clamp(.88rem,2vw,.97rem);padding:clamp(9px,2vw,12px) clamp(20px,3.5vw,28px);" onclick="heroOrderBtn()">🛒 Sipariş Ver</button>
+      <button class="btn btn-o" style="font-size:clamp(.86rem,2vw,.95rem);padding:clamp(8px,1.8vw,11px) clamp(16px,3vw,22px);" onclick="heroTrackBtn()">📦 Takip Et</button>
+      <button class="btn btn-d" style="font-size:clamp(.84rem,1.8vw,.93rem);" onclick="showDl()">📱 İndir</button>`;
+  }
+}
+
+window.heroOrderBtn=()=>{
+  if(CU){showPage('dash');setTimeout(()=>dsShow(CU.role==='customer'?'ds-restaurants':CU.role==='business'?'ds-orders':'ds-pending',null),60);}
+  else openLogin();
+};
+window.heroTrackBtn=()=>{
+  if(CU){showPage('dash');setTimeout(()=>dsShow(CU.role==='customer'?'ds-my-orders':CU.role==='business'?'ds-orders':'ds-delivering',null),60);}
+  else openLogin();
 };
 
 // ── REGISTER ──
@@ -493,7 +530,7 @@ window.doReg=async()=>{
     const ref=await addDoc(collection(db,'users'),u);
     CU={id:ref.id,...u};users.push(CU);
     saveSession();
-    closeOv('ov-reg');setNavUser();buildDash();showPage('dash');
+    closeOv('ov-reg');setNavUser();updateHeroBtns();buildDash();showPage('dash');
     showToast('Kayıt başarılı! Hoş geldin 🎉','✅');
   }catch(e){showToast('Hata: '+e.message,'❌');}
 };
@@ -524,10 +561,11 @@ const TABS={
 
 function buildDash(){
   const tabs=TABS[CU.role]||[];
-  $('sbmenu').innerHTML=tabs.map((t,i)=>`<li><a href="#" class="${i===0?'act':''}" onclick="return dsShow('${t.id}',this)">${t.icon} ${t.lbl}</a></li>`).join('');
-  $('mbar').innerHTML=tabs.map((t,i)=>`<button class="mbi${i===0?' act':''}" id="mb-${t.id}" onclick="dsShow('${t.id}',null)"><div class="mbi-icon">${t.icon}</div><div class="mbi-lbl">${t.lbl}</div></button>`).join('');
+  $('sbmenu').innerHTML=`<li><a href="#" onclick="goHome()" style="color:rgba(255,200,150,.85);"><span style="font-size:.95rem;">🏠</span> Ana Sayfaya Dön</a></li><li style="height:1px;background:rgba(255,255,255,.08);margin:4px 0;"></li>`+tabs.map((t,i)=>`<li><a href="#" class="${i===0?'act':''}" onclick="return dsShow('${t.id}',this)">${t.icon} ${t.lbl}</a></li>`).join('');
+  const homeTab=`<button class="mbi" onclick="showPage('home')" style="flex:0.7;"><div class="mbi-icon">🔙</div><div class="mbi-lbl" style="color:#8A6A5A;">Ana Sayfa</div></button>`;
+  $('mbar').innerHTML=homeTab+tabs.map((t,i)=>`<button class="mbi${i===0?' act':''}" id="mb-${t.id}" onclick="dsShow('${t.id}',null)"><div class="mbi-icon">${t.icon}</div><div class="mbi-lbl">${t.lbl}</div></button>`).join('');
   const builders={business:bizContent,customer:custContent,courier:courierContent};
-  $('dcont').innerHTML=(builders[CU.role]||bizContent)();
+  $('dcont').innerHTML=`<div style="padding-bottom:2px;"><button onclick="showPage('home')" style="background:none;border:none;cursor:pointer;color:#8A6A5A;font-family:'Nunito',sans-serif;font-weight:700;font-size:.82rem;display:inline-flex;align-items:center;gap:4px;padding:2px 0 10px;"><span>←</span> Ana Sayfaya Dön</button></div>`+(builders[CU.role]||bizContent)();
   setTimeout(()=>{
     const s=document.querySelector('.ds');if(s)s.classList.add('active');
     updateStats();

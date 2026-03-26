@@ -884,7 +884,7 @@ window.placeOrder=async()=>{
     orders.push({id:ref.id,...order});
     cart=[];updateCartUI();
     $('ov-cart')?.remove();$('ov-rest')?.remove();
-    showToast('Siparişin alındı! 🎉 Takip için Siparişlerim'e bakabilirsin.','✅');
+    showToast('Siparişin alındı! 🎉 Siparişlerim sekmesinden takip edebilirsin.','✅');
     // Navigate to my orders tab
     setTimeout(()=>dsShow('ds-my-orders',null),400);
   }catch(e){showToast('Hata: '+e.message,'❌');}
@@ -895,8 +895,12 @@ window.renderMyOrders=async()=>{
   await loadAll();
   const my=orders.filter(o=>o.customerId===CU.username).sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
   const cso=$('cso');if(cso)cso.textContent=my.length;
-  const cnt=$('myol-count');if(cnt)cnt.textContent=my.length?`Toplam ${my.length} sipariş`:'Henüz sipariş vermediniz.';
-  if(!my.length){list.innerHTML='<p style="color:#8A6A5A;padding:20px 0;">Henüz sipariş vermediniz.<br><br><button onclick="dsShow('ds-restaurants',null)" style="background:linear-gradient(135deg,#E8230A,#FF6B00);color:#fff;border:none;border-radius:50px;padding:10px 22px;font-family:Nunito,sans-serif;font-weight:700;cursor:pointer;">🍽️ Restoranları Gez</button></p>';return;}
+  const cnt=$('myol-count');if(cnt)cnt.textContent=my.length?`Toplam ${my.length} sipariş`:'Henüz sipariş yok.';
+  if(!my.length){
+    list.innerHTML='<div style="text-align:center;padding:28px 0;color:#8A6A5A;"><p style="margin-bottom:16px;">Henüz sipariş vermediniz.</p><button id="go-rest-btn" style="background:linear-gradient(135deg,#E8230A,#FF6B00);color:#fff;border:none;border-radius:50px;padding:10px 22px;font-family:Nunito,sans-serif;font-weight:700;cursor:pointer;font-size:.9rem;">🍽️ Restoranları Gez</button></div>';
+    const rb=document.getElementById('go-rest-btn');if(rb)rb.onclick=()=>dsShow('ds-restaurants',null);
+    return;
+  }
 
   function trackSteps(status){
     const steps=[

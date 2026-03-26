@@ -587,7 +587,7 @@ function buildDash(){
   $('mobbar').innerHTML=ids.map(id=>`<button class="mob-bar-item${id==='ds-home'?' act':''}" id="mbi-${id}" onclick="dsShow('${id}',null)"><div class="mbi">${MOB_ICONS[id]}</div><div class="mbl">${MOB_LABELS[id]}</div></button>`).join('');
   const content={'business':bizContent,'customer':custContent,'courier':courierContent};
   $('dcontent').innerHTML=(content[CU.role]||bizContent)();
-  setTimeout(()=>{const s=document.querySelector('.ds');if(s)s.classList.add('active');updateStats();},40);
+  setTimeout(()=>{const s=document.querySelector('.ds');if(s)s.classList.add('active');updateStats();if(CU.role==='customer')renderRests();},40);
 }
 
 window.dsShow=(id,el)=>{
@@ -606,6 +606,7 @@ window.refreshSec=(id)=>{
     'ds-my-orders':renderMyOrders,'ds-pending':renderPending,'ds-delivering':renderDelivering,'ds-profile':renderProfile
   };
   if(m[id])m[id]();
+  if(id==='ds-home'&&CU&&CU.role==='customer')renderRests();
 };
 
 // ── PROFILE ──
@@ -780,23 +781,30 @@ function custContent(){
   return `<div class="ds" id="ds-home">
     <div class="dh"><h2>Merhaba, ${CU.name.split(' ')[0]} 🎉</h2><p>Ne yemek istersin bugün?</p></div>
     <div class="stats"><div class="sc"><div class="n" id="co">0</div><div class="l">Siparişlerim</div></div><div class="sc"><div class="n" id="cr">0</div><div class="l">Restoran</div></div></div>
-    <p style="color:#8A6A5A;font-size:.88rem;">Sol menüden veya alttaki bardan restoranları gez.</p>
+    <div class="dh" style="margin-top:20px;"><h2>Restoranlar 🍽️</h2><p>Hemen sipariş ver!</p></div>
+    <div class="rgrid" id="rgrid-home"></div>
   </div>
   <div class="ds" id="ds-restaurants"><div class="dh"><h2>Restoranlar 🍽️</h2><p>Lezzetli seçenekler sizi bekliyor!</p></div><div class="rgrid" id="rgrid"></div></div>
   <div class="ds" id="ds-my-orders"><div class="dh"><h2>Siparişlerim 📦</h2></div><div id="myol"></div></div>
   ${profileSec()}`;
 }
 
-window.renderRests=()=>{
-  const g=$('rgrid');if(!g)return;
-  const biz=users.filter(u=>u.role==='business');
-  const cr=$('cr');if(cr)cr.textContent=biz.length;
-  if(!biz.length){g.innerHTML='<p style="color:#8A6A5A;">Henüz kayıtlı restoran yok.</p>';return;}
+function buildRestCards(biz){
+  if(!biz.length) return '<p style="color:#8A6A5A;">Henüz kayıtlı restoran yok.</p>';
   const em=['🍕','🍔','🌮','🍜','🥗','🍣','🥩','🍝'];
-  g.innerHTML=biz.map((b,i)=>`<div class="rcard" onclick="openRestMenu('${b.username}')">
+  return biz.map((b,i)=>`<div class="rcard" onclick="openRestMenu('${b.username}')">
     <div class="rbnr" style="background:linear-gradient(135deg,hsl(${i*40},80%,85%),hsl(${i*40+30},80%,75%));">${em[i%em.length]}</div>
     <div class="rinf"><h3>${b.name}</h3><div class="meta"><span>⭐ 4.${3+i%7}</span><span>${b.btype||'Restoran'}</span></div><div style="margin-top:4px;font-size:.8rem;color:#8A6A5A;">${b.addr||''}</div></div>
   </div>`).join('');
+}
+
+window.renderRests=async()=>{
+  await loadAll();
+  const biz=users.filter(u=>u.role==='business');
+  const cr=$('cr');if(cr)cr.textContent=biz.length;
+  const cards=buildRestCards(biz);
+  const g=$('rgrid');if(g)g.innerHTML=cards;
+  const gh=$('rgrid-home');if(gh)gh.innerHTML=cards;
 };
 
 window.openRestMenu=(owner)=>{

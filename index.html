@@ -11,8 +11,10 @@ html{-webkit-text-size-adjust:100%;}
 body{font-family:"Nunito",sans-serif;background:#FFF8F0;color:#1A0A00;min-height:100vh;overflow-x:hidden;}
 button,input,select,textarea{font-family:"Nunito",sans-serif;}
 ::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-thumb{background:#FF6B00;border-radius:4px;}
-:root{--red:#E8230A;--or:#FF6B00;--cream:#FFF8F0;--dark:#1A0A00;--mu:#8A6A5A;--gr:#22C55E;--rad:14px;--sh:0 3px 16px rgba(232,35,10,.10);--nav:56px;--bar:60px;}
-.topnav{position:fixed;top:0;left:0;right:0;z-index:900;height:var(--nav);display:flex;align-items:center;justify-content:space-between;padding:0 14px;background:rgba(255,248,240,.97);backdrop-filter:blur(12px);border-bottom:1.5px solid rgba(255,107,0,.12);}
+:root{--red:#E8230A;--or:#FF6B00;--dark:#1A0A00;--mu:#8A6A5A;--gr:#22C55E;--rad:14px;--sh:0 3px 16px rgba(232,35,10,.10);--nav:56px;--bar:60px;--sb:220px;}
+
+/* NAV */
+.topnav{position:fixed;top:0;left:0;right:0;z-index:900;height:var(--nav);display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:rgba(255,248,240,.97);backdrop-filter:blur(12px);border-bottom:1.5px solid rgba(255,107,0,.12);}
 .logo{font-family:"Fredoka One",cursive;font-size:1.5rem;color:var(--red);display:flex;align-items:center;gap:3px;cursor:pointer;flex-shrink:0;}
 .logo b{color:var(--or);}
 .nav-r{display:flex;align-items:center;gap:7px;}
@@ -23,6 +25,8 @@ button,input,select,textarea{font-family:"Nunito",sans-serif;}
 .nbtn-f:hover{transform:translateY(-2px);}
 .nbtn-d{background:linear-gradient(135deg,#1A0A00,#3d1a00);color:#fff;display:flex;align-items:center;gap:4px;font-size:.76rem;}
 .nbtn-d svg{width:12px;height:12px;}
+
+/* PROFILE PILL */
 .ppill{display:flex;align-items:center;gap:6px;cursor:pointer;background:#fff;border:2px solid #f0d0c0;border-radius:50px;padding:4px 11px 4px 5px;position:relative;transition:border .18s;}
 .ppill:hover{border-color:var(--or);}
 .pav{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--or));display:flex;align-items:center;justify-content:center;font-size:.75rem;color:#fff;font-weight:800;}
@@ -33,212 +37,256 @@ button,input,select,textarea{font-family:"Nunito",sans-serif;}
 .pdi:hover{background:#fff8f5;}
 .pdi.red{color:#dc2626;}.pdi.red:hover{background:#fee2e2;}
 .pdiv{height:1px;background:#f0e0d6;margin:3px 0;}
+
+/* HAMBURGER */
 .ham{display:none;flex-direction:column;gap:4px;cursor:pointer;padding:5px;background:none;border:none;}
 .ham span{display:block;width:20px;height:2px;background:#1A0A00;border-radius:2px;transition:all .25s;}
 .ham.open span:nth-child(1){transform:rotate(45deg) translate(4px,4px);}
 .ham.open span:nth-child(2){opacity:0;}
 .ham.open span:nth-child(3){transform:rotate(-45deg) translate(4px,-4px);}
+
+/* MOBILE TOP DRAWER (guest) */
 .mobdr{display:none;position:fixed;top:var(--nav);left:0;right:0;z-index:899;background:#fff;border-bottom:1.5px solid rgba(255,107,0,.12);padding:12px 14px;flex-direction:column;gap:8px;box-shadow:0 6px 24px rgba(0,0,0,.08);}
 .mobdr.open{display:flex;}
+
+/* SIDEBAR - shared between home and dash */
+.sidebar{width:var(--sb);flex-shrink:0;background:linear-gradient(180deg,#1A0A00,#3d1a00);display:flex;flex-direction:column;}
+.sb-logo{font-family:"Fredoka One",cursive;font-size:1.1rem;color:#fff;padding:16px 16px 14px;border-bottom:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:space-between;}
+.sb-logo b{color:var(--or);}
+.sb-close{background:none;border:none;color:rgba(255,255,255,.5);font-size:1.2rem;cursor:pointer;padding:0;line-height:1;display:none;}
+.sbm{list-style:none;padding:8px 0;flex:1;overflow-y:auto;}
+.sbm li a{display:flex;align-items:center;gap:7px;padding:10px 16px;color:rgba(255,255,255,.7);text-decoration:none;font-weight:700;font-size:.82rem;transition:all .18s;border-left:3px solid transparent;}
+.sbm li a:hover,.sbm li a.on{color:#fff;background:rgba(255,107,0,.15);border-left-color:var(--or);}
+.sbm li.sep{height:1px;background:rgba(255,255,255,.08);margin:4px 0;}
+
+/* SIDEBAR OVERLAY */
+.sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:898;backdrop-filter:blur(2px);}
+.sb-overlay.open{display:block;}
+
+/* PAGES */
 .pg{display:none;padding-top:var(--nav);min-height:100vh;}.pg.on{display:block;}
-#pg-home{background:radial-gradient(ellipse at 80% 10%,rgba(255,107,0,.15),transparent 55%),radial-gradient(ellipse at 10% 85%,rgba(232,35,10,.10),transparent 55%),#FFF8F0;}
-.home-wrap{display:flex;min-height:calc(100vh - var(--nav));}
-.home-sidebar{width:220px;flex-shrink:0;background:linear-gradient(180deg,#1A0A00,#3d1a00);padding:20px 0;display:none;}
-.home-sidebar.visible{display:block;}
-.home-sidebar .sbl{font-family:"Fredoka One",cursive;font-size:1.1rem;color:#fff;padding:0 16px 16px;border-bottom:1px solid rgba(255,255,255,.1);}
-.home-sidebar .sbl b{color:#FF6B00;}
-.home-sidebar .sbm{list-style:none;padding:8px 0;}
-.home-sidebar .sbm li a{display:flex;align-items:center;gap:7px;padding:9px 16px;color:rgba(255,255,255,.7);text-decoration:none;font-weight:700;font-size:.81rem;transition:all .18s;border-left:3px solid transparent;}
-.home-sidebar .sbm li a:hover{color:#fff;background:rgba(255,107,0,.15);border-left-color:#FF6B00;}
-.home-sidebar .sbm li.sep{height:1px;background:rgba(255,255,255,.08);margin:4px 0;}
-.home-content{flex:1;overflow-x:hidden;}
-@media(max-width:720px){.home-sidebar{display:none !important;}}
-.hero{max-width:1060px;margin:0 auto;padding:clamp(32px,7vw,72px) 14px clamp(32px,5vw,52px);display:flex;align-items:center;justify-content:space-between;gap:28px;flex-wrap:wrap;}
+
+/* PAGE LAYOUT (home + dash share same structure) */
+.page-layout{display:flex;min-height:calc(100vh - var(--nav));}
+.page-main{flex:1;overflow-x:hidden;}
+
+/* HOME */
+#pg-home .page-main{background:radial-gradient(ellipse at 80% 10%,rgba(255,107,0,.15),transparent 55%),radial-gradient(ellipse at 10% 85%,rgba(232,35,10,.10),transparent 55%),#FFF8F0;}
+#pg-dash .page-main{background:#f7f0ea;padding-bottom:var(--bar);}
+
+/* HERO */
+.hero{max-width:1060px;margin:0 auto;padding:clamp(32px,6vw,68px) 16px clamp(28px,5vw,52px);display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;}
 .hero-t{flex:1;min-width:220px;}
-.hero-t h1{font-family:"Fredoka One",cursive;font-size:clamp(1.8rem,5vw,3.6rem);line-height:1.08;}
+.hero-t h1{font-family:"Fredoka One",cursive;font-size:clamp(1.8rem,5vw,3.5rem);line-height:1.08;}
 .hero-t h1 em{font-style:normal;background:linear-gradient(135deg,var(--red),var(--or));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.hero-t p{margin:clamp(10px,2vw,16px) 0 clamp(16px,2.5vw,24px);color:var(--mu);font-size:clamp(.9rem,2vw,1.04rem);line-height:1.65;max-width:400px;}
+.hero-t p{margin:clamp(10px,2vw,16px) 0 clamp(14px,2.5vw,22px);color:var(--mu);font-size:clamp(.88rem,2vw,1.02rem);line-height:1.65;max-width:400px;}
 .hero-btns{display:flex;gap:8px;flex-wrap:wrap;}
-.hero-img{width:clamp(130px,26vw,290px);height:clamp(130px,26vw,290px);border-radius:50%;background:linear-gradient(135deg,var(--red),var(--or));display:flex;align-items:center;justify-content:center;font-size:clamp(3rem,8vw,7rem);box-shadow:0 12px 44px rgba(232,35,10,.28);animation:fl 3s ease-in-out infinite;flex-shrink:0;}
+.hero-img{width:clamp(120px,24vw,280px);height:clamp(120px,24vw,280px);border-radius:50%;background:linear-gradient(135deg,var(--red),var(--or));display:flex;align-items:center;justify-content:center;font-size:clamp(2.8rem,7.5vw,6.5rem);box-shadow:0 12px 44px rgba(232,35,10,.28);animation:fl 3s ease-in-out infinite;flex-shrink:0;}
 @keyframes fl{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
-.dl-bar{background:linear-gradient(135deg,#1A0A00,#3d1a00);padding:clamp(32px,5vw,52px) 14px;text-align:center;}
-.dl-bar h2{font-family:"Fredoka One",cursive;font-size:clamp(1.3rem,3vw,1.8rem);color:#fff;margin-bottom:6px;}
-.dl-bar p{color:#d4a896;margin-bottom:clamp(16px,2.5vw,24px);font-size:clamp(.83rem,1.8vw,.95rem);}
-.dlcards{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;}
-.dlc{background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.15);border-radius:12px;padding:clamp(9px,1.8vw,15px) clamp(12px,2.2vw,20px);color:#fff;display:flex;align-items:center;gap:8px;cursor:pointer;transition:all .2s;min-width:110px;}
+
+/* DL BAR */
+.dl-bar{background:linear-gradient(135deg,#1A0A00,#3d1a00);padding:clamp(28px,5vw,48px) 16px;text-align:center;}
+.dl-bar h2{font-family:"Fredoka One",cursive;font-size:clamp(1.25rem,3vw,1.75rem);color:#fff;margin-bottom:6px;}
+.dl-bar p{color:#d4a896;margin-bottom:clamp(14px,2.5vw,22px);font-size:clamp(.81rem,1.8vw,.93rem);}
+.dlcards{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+.dlc{background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.15);border-radius:12px;padding:clamp(8px,1.8vw,14px) clamp(10px,2vw,18px);color:#fff;display:flex;align-items:center;gap:8px;cursor:pointer;transition:all .2s;min-width:100px;}
 .dlc:hover{background:rgba(255,107,0,.2);border-color:var(--or);transform:translateY(-3px);}
-.dlci{font-size:clamp(1.4rem,2.5vw,1.9rem);}
-.dlct small{display:block;font-size:.65rem;opacity:.7;}
-.dlct strong{font-size:clamp(.8rem,1.6vw,.93rem);}
-.feats{max-width:1060px;margin:0 auto;padding:clamp(32px,5vw,52px) 14px;}
-.sec-t{text-align:center;font-family:"Fredoka One",cursive;font-size:clamp(1.3rem,3vw,1.8rem);margin-bottom:clamp(16px,2.5vw,26px);}
-.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:clamp(9px,1.6vw,14px);}
-.fc{background:#fff;border-radius:var(--rad);padding:clamp(14px,2.5vw,22px) clamp(11px,2vw,16px);box-shadow:var(--sh);text-align:center;transition:transform .2s;}
+.dlci{font-size:clamp(1.3rem,2.5vw,1.8rem);}
+.dlct small{display:block;font-size:.63rem;opacity:.7;}
+.dlct strong{font-size:clamp(.78rem,1.6vw,.9rem);}
+
+/* FEATURES */
+.feats{max-width:1060px;margin:0 auto;padding:clamp(28px,5vw,48px) 16px;}
+.sec-t{text-align:center;font-family:"Fredoka One",cursive;font-size:clamp(1.25rem,3vw,1.75rem);margin-bottom:clamp(14px,2.5vw,24px);}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,165px),1fr));gap:clamp(8px,1.5vw,13px);}
+.fc{background:#fff;border-radius:var(--rad);padding:clamp(13px,2.5vw,20px) clamp(10px,2vw,15px);box-shadow:var(--sh);text-align:center;transition:transform .2s;}
 .fc:hover{transform:translateY(-4px);}
-.fci{font-size:clamp(1.7rem,3vw,2.3rem);margin-bottom:7px;}
-.fc h3{font-weight:800;margin-bottom:4px;font-size:clamp(.85rem,1.7vw,.95rem);}
-.fc p{color:var(--mu);font-size:clamp(.77rem,1.4vw,.85rem);}
-footer{background:#1A0A00;color:rgba(255,255,255,.4);text-align:center;padding:clamp(12px,2vw,20px) 14px;font-size:.79rem;}
+.fci{font-size:clamp(1.6rem,3vw,2.2rem);margin-bottom:7px;}
+.fc h3{font-weight:800;margin-bottom:4px;font-size:clamp(.83rem,1.7vw,.93rem);}
+.fc p{color:var(--mu);font-size:clamp(.75rem,1.4vw,.83rem);}
+footer{background:#1A0A00;color:rgba(255,255,255,.4);text-align:center;padding:clamp(12px,2vw,20px) 16px;font-size:.78rem;}
 footer a{color:var(--or);text-decoration:none;}
+
+/* MODALS */
 .ov{display:none;position:fixed;inset:0;z-index:2000;background:rgba(26,10,0,.6);backdrop-filter:blur(5px);align-items:center;justify-content:center;padding:14px;}
 .ov.on{display:flex;}
-.modal{background:#fff;border-radius:clamp(13px,3vw,20px);padding:clamp(16px,4vw,28px) clamp(13px,4vw,24px);width:100%;max-width:440px;max-height:90vh;overflow-y:auto;box-shadow:0 16px 60px rgba(232,35,10,.17);animation:pop .25s cubic-bezier(.34,1.56,.64,1);}
+.modal{background:#fff;border-radius:clamp(13px,3vw,20px);padding:clamp(16px,4vw,26px) clamp(13px,4vw,22px);width:100%;max-width:440px;max-height:90vh;overflow-y:auto;box-shadow:0 16px 60px rgba(232,35,10,.17);animation:pop .25s cubic-bezier(.34,1.56,.64,1);}
 @keyframes pop{from{transform:scale(.88);opacity:0;}to{transform:scale(1);opacity:1;}}
-.mttl{font-family:"Fredoka One",cursive;font-size:clamp(1.3rem,3vw,1.6rem);color:var(--red);margin-bottom:2px;}
-.msub{color:var(--mu);font-size:.83rem;margin-bottom:clamp(12px,2vw,18px);}
-.mcls{float:right;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--mu);line-height:1;}
-.fg{margin-bottom:11px;}
-.fg label{display:block;font-weight:700;font-size:.79rem;margin-bottom:4px;}
-.fg input,.fg select,.fg textarea{width:100%;padding:9px 11px;border:2px solid #f0e0d6;border-radius:10px;font-size:clamp(.84rem,1.9vw,.92rem);color:#1A0A00;background:#fff8f5;outline:none;transition:border .18s;}
+.mttl{font-family:"Fredoka One",cursive;font-size:clamp(1.25rem,3vw,1.55rem);color:var(--red);margin-bottom:2px;}
+.msub{color:var(--mu);font-size:.82rem;margin-bottom:clamp(11px,2vw,17px);}
+.mcls{float:right;background:none;border:none;font-size:1.25rem;cursor:pointer;color:var(--mu);line-height:1;}
+.fg{margin-bottom:10px;}
+.fg label{display:block;font-weight:700;font-size:.78rem;margin-bottom:4px;}
+.fg input,.fg select,.fg textarea{width:100%;padding:8px 11px;border:2px solid #f0e0d6;border-radius:10px;font-size:clamp(.83rem,1.9vw,.91rem);color:#1A0A00;background:#fff8f5;outline:none;transition:border .18s;}
 .fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--or);}
-.fg textarea{min-height:65px;resize:vertical;}
-.rgr{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:13px;}
+.fg textarea{min-height:62px;resize:vertical;}
+.rgr{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px;}
 .rc{border:2.5px solid #f0e0d6;border-radius:11px;padding:clamp(8px,1.8vw,12px) 4px;text-align:center;cursor:pointer;transition:all .18s;}
 .rc:hover,.rc.sel{border-color:var(--or);background:#fff5ee;}
 .rc .ri{font-size:clamp(1.3rem,2.8vw,1.7rem);margin-bottom:3px;}
-.rc span{font-size:.72rem;font-weight:700;}
-.fb{width:100%;padding:10px;border:none;border-radius:50px;background:linear-gradient(135deg,var(--red),var(--or));color:#fff;font-weight:800;font-size:.9rem;box-shadow:0 4px 14px rgba(232,35,10,.26);transition:all .18s;margin-top:5px;cursor:pointer;}
+.rc span{font-size:.71rem;font-weight:700;}
+.fb{width:100%;padding:10px;border:none;border-radius:50px;background:linear-gradient(135deg,var(--red),var(--or));color:#fff;font-weight:800;font-size:.89rem;box-shadow:0 4px 14px rgba(232,35,10,.26);transition:all .18s;margin-top:5px;cursor:pointer;}
 .fb:hover{transform:translateY(-2px);}
-.fb-s{width:100%;padding:9px;border:2px solid var(--or);border-radius:50px;background:transparent;color:var(--or);font-weight:800;font-size:.87rem;transition:all .18s;margin-top:5px;cursor:pointer;}
+.fb-s{width:100%;padding:9px;border:2px solid var(--or);border-radius:50px;background:transparent;color:var(--or);font-weight:800;font-size:.86rem;transition:all .18s;margin-top:5px;cursor:pointer;}
 .fb-s:hover{background:var(--or);color:#fff;}
-.fb-d{width:100%;padding:9px;border:2px solid #dc2626;border-radius:50px;background:transparent;color:#dc2626;font-weight:800;font-size:.87rem;transition:all .18s;margin-top:5px;cursor:pointer;}
+.fb-d{width:100%;padding:9px;border:2px solid #dc2626;border-radius:50px;background:transparent;color:#dc2626;font-weight:800;font-size:.86rem;transition:all .18s;margin-top:5px;cursor:pointer;}
 .fb-d:hover{background:#dc2626;color:#fff;}
-.lbtn{background:none;border:none;color:var(--or);font-weight:700;font-size:.84rem;cursor:pointer;}
-.mft{text-align:center;margin-top:11px;font-size:.83rem;color:var(--mu);}
-.badge{display:inline-block;padding:2px 8px;border-radius:50px;font-size:.7rem;font-weight:700;}
+.lbtn{background:none;border:none;color:var(--or);font-weight:700;font-size:.83rem;cursor:pointer;}
+.mft{text-align:center;margin-top:10px;font-size:.82rem;color:var(--mu);}
+.badge{display:inline-block;padding:2px 8px;border-radius:50px;font-size:.69rem;font-weight:700;}
 .bg{background:#dcfce7;color:#16a34a;}.bo{background:#fff3e0;color:#e65100;}.br{background:#fee2e2;color:#dc2626;}.bb{background:#dbeafe;color:#1d4ed8;}
-#pg-dash{background:#f7f0ea;padding-bottom:var(--bar);}
-.dwrap{display:flex;min-height:calc(100vh - var(--nav));}
-.sidebar{width:220px;flex-shrink:0;background:linear-gradient(180deg,#1A0A00,#3d1a00);padding:20px 0;position:sticky;top:var(--nav);height:calc(100vh - var(--nav));overflow-y:auto;}
-.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:897;backdrop-filter:blur(2px);}
-.sidebar-overlay.open{display:block;}
-.sbl{font-family:"Fredoka One",cursive;font-size:1.1rem;color:#fff;padding:0 16px 16px;border-bottom:1px solid rgba(255,255,255,.1);}
-.sbl b{color:var(--or);}
-.sbm{list-style:none;padding:8px 0;}
-.sbm li a{display:flex;align-items:center;gap:7px;padding:9px 16px;color:rgba(255,255,255,.7);text-decoration:none;font-weight:700;font-size:.81rem;transition:all .18s;border-left:3px solid transparent;}
-.sbm li a:hover,.sbm li a.on{color:#fff;background:rgba(255,107,0,.15);border-left-color:var(--or);}
-.sbm li.sep{height:1px;background:rgba(255,255,255,.08);margin:4px 0;}
-.dmain{flex:1;padding:clamp(12px,2.5vw,24px);overflow-x:hidden;max-width:100%;}
-.back-btn{background:none;border:none;cursor:pointer;color:var(--mu);font-weight:700;font-size:.8rem;display:inline-flex;align-items:center;gap:4px;padding:0 0 10px;transition:color .18s;}
+
+/* DASH CONTENT */
+.dmain{flex:1;padding:clamp(12px,2.5vw,22px);overflow-x:hidden;max-width:100%;}
+.back-btn{background:none;border:none;cursor:pointer;color:var(--mu);font-weight:700;font-size:.79rem;display:inline-flex;align-items:center;gap:4px;padding:0 0 10px;transition:color .18s;}
 .back-btn:hover{color:var(--red);}
-.mbar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:898;background:#fff;border-top:1.5px solid #f0d0c0;height:var(--bar);align-items:center;justify-content:space-around;padding-bottom:max(0px,env(safe-area-inset-bottom));}
-.mbi{display:flex;flex-direction:column;align-items:center;gap:1px;cursor:pointer;padding:4px 2px;border:none;background:none;flex:1;min-width:0;max-width:72px;}
-.mbi-ic{font-size:1.1rem;line-height:1;}
-.mbi-lb{font-size:.57rem;font-weight:700;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;}
-.mbi.on .mbi-lb{color:var(--or);}
-.mbi.on .mbi-ic{filter:drop-shadow(0 0 2px rgba(255,107,0,.4));}
 .ds{display:none;}.ds.on{display:block;}
-.dh{margin-bottom:clamp(12px,2vw,20px);}
-.dh h2{font-family:"Fredoka One",cursive;font-size:clamp(1.25rem,2.8vw,1.65rem);color:#1A0A00;}
-.dh p{color:var(--mu);font-size:.83rem;margin-top:2px;}
-.dhr{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:clamp(12px,2vw,20px);}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,110px),1fr));gap:clamp(8px,1.4vw,12px);margin-bottom:clamp(12px,2vw,20px);}
-.sc{background:#fff;border-radius:12px;padding:clamp(11px,1.8vw,16px);box-shadow:var(--sh);}
-.sc.cl{cursor:pointer;transition:border .18s;border:2px solid transparent;}
-.sc.cl:hover{border-color:var(--or);}
-.sc .n{font-family:"Fredoka One",cursive;font-size:clamp(1.4rem,2.8vw,1.8rem);color:var(--red);}
-.sc .l{font-size:.74rem;color:var(--mu);font-weight:700;}
-.sc .ht{color:var(--or);font-size:.68rem;font-weight:700;margin-top:3px;}
-.ifrm{background:#fff;border-radius:var(--rad);padding:clamp(14px,2.5vw,22px);box-shadow:var(--sh);max-width:520px;}
-.ifrm h3{font-family:"Fredoka One",cursive;font-size:1.05rem;margin-bottom:13px;}
+.dh{margin-bottom:clamp(11px,2vw,18px);}
+.dh h2{font-family:"Fredoka One",cursive;font-size:clamp(1.2rem,2.8vw,1.6rem);color:#1A0A00;}
+.dh p{color:var(--mu);font-size:.82rem;margin-top:2px;}
+.dhr{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:7px;margin-bottom:clamp(11px,2vw,18px);}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,108px),1fr));gap:clamp(7px,1.4vw,11px);margin-bottom:clamp(11px,2vw,18px);}
+.sc{background:#fff;border-radius:12px;padding:clamp(10px,1.8vw,15px);box-shadow:var(--sh);}
+.sc.cl{cursor:pointer;border:2px solid transparent;transition:border .18s;}.sc.cl:hover{border-color:var(--or);}
+.sc .n{font-family:"Fredoka One",cursive;font-size:clamp(1.35rem,2.8vw,1.75rem);color:var(--red);}
+.sc .l{font-size:.73rem;color:var(--mu);font-weight:700;}
+.sc .ht{color:var(--or);font-size:.67rem;font-weight:700;margin-top:2px;}
+.ifrm{background:#fff;border-radius:var(--rad);padding:clamp(13px,2.5vw,20px);box-shadow:var(--sh);max-width:520px;}
+.ifrm h3{font-family:"Fredoka One",cursive;font-size:1.02rem;margin-bottom:12px;}
 .frow{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
 .tblw{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:var(--rad);box-shadow:var(--sh);}
-.otbl{width:100%;border-collapse:collapse;background:#fff;min-width:480px;}
-.otbl th{background:linear-gradient(135deg,var(--red),var(--or));color:#fff;padding:10px 11px;text-align:left;font-size:.76rem;white-space:nowrap;}
-.otbl td{padding:9px 11px;border-bottom:1px solid #f5e8e0;font-size:.81rem;vertical-align:middle;}
-.otbl tr:last-child td{border-bottom:none;}
-.otbl tr:hover td{background:#fff8f5;}
-.asel{border:2px solid #f0d0c0;border-radius:7px;padding:3px 6px;font-size:.77rem;background:#fff8f5;max-width:115px;cursor:pointer;}
-.igrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,150px),1fr));gap:clamp(9px,1.6vw,13px);}
+.otbl{width:100%;border-collapse:collapse;background:#fff;min-width:460px;}
+.otbl th{background:linear-gradient(135deg,var(--red),var(--or));color:#fff;padding:9px 10px;text-align:left;font-size:.74rem;white-space:nowrap;}
+.otbl td{padding:8px 10px;border-bottom:1px solid #f5e8e0;font-size:.8rem;vertical-align:middle;}
+.otbl tr:last-child td{border-bottom:none;}.otbl tr:hover td{background:#fff8f5;}
+.asel{border:2px solid #f0d0c0;border-radius:7px;padding:3px 6px;font-size:.76rem;background:#fff8f5;max-width:112px;cursor:pointer;}
+.igrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,148px),1fr));gap:clamp(8px,1.5vw,12px);}
 .icard{background:#fff;border-radius:12px;overflow:hidden;box-shadow:var(--sh);transition:transform .18s;}
 .icard:hover{transform:translateY(-3px);}
-.ith{height:clamp(80px,12vw,105px);background:linear-gradient(135deg,#ffe0c8,#ffc5a0);display:flex;align-items:center;justify-content:center;font-size:clamp(2rem,4vw,2.8rem);}
-.iin{padding:clamp(8px,1.4vw,11px);}
-.iin h4{font-weight:800;font-size:clamp(.81rem,1.6vw,.9rem);margin-bottom:2px;}
-.ipr{color:var(--or);font-weight:800;font-size:clamp(.85rem,1.7vw,.93rem);}
-.idc{color:var(--mu);font-size:.72rem;margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.iacts{display:flex;gap:4px;margin-top:6px;}
-.ib{flex:1;border:none;border-radius:6px;padding:5px 0;font-weight:700;font-size:.7rem;cursor:pointer;transition:all .15s;}
+.ith{height:clamp(78px,12vw,102px);background:linear-gradient(135deg,#ffe0c8,#ffc5a0);display:flex;align-items:center;justify-content:center;font-size:clamp(1.9rem,4vw,2.7rem);}
+.iin{padding:clamp(7px,1.3vw,10px);}
+.iin h4{font-weight:800;font-size:clamp(.79rem,1.6vw,.88rem);margin-bottom:2px;}
+.ipr{color:var(--or);font-weight:800;font-size:clamp(.83rem,1.7vw,.91rem);}
+.idc{color:var(--mu);font-size:.71rem;margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.iacts{display:flex;gap:4px;margin-top:5px;}
+.ib{flex:1;border:none;border-radius:6px;padding:4px 0;font-weight:700;font-size:.69rem;cursor:pointer;transition:all .15s;}
 .ib-e{background:#fff3e0;color:#e65100;border:1px solid #f0d0c0;}.ib-e:hover{background:#e65100;color:#fff;}
 .ib-d{background:#fee2e2;color:#dc2626;border:1px solid #fca5a5;}.ib-d:hover{background:#dc2626;color:#fff;}
-.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,200px),1fr));gap:clamp(9px,1.6vw,14px);margin-bottom:18px;}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,195px),1fr));gap:clamp(8px,1.5vw,13px);margin-bottom:16px;}
 .rcard{background:#fff;border-radius:var(--rad);overflow:hidden;box-shadow:var(--sh);cursor:pointer;transition:transform .2s;}
 .rcard:hover{transform:translateY(-3px);}
-.rbnr{height:clamp(70px,10vw,90px);display:flex;align-items:center;justify-content:center;font-size:clamp(2.3rem,4vw,3rem);}
-.rin{padding:clamp(9px,1.4vw,12px);}
-.rin h3{font-weight:800;font-size:clamp(.85rem,1.7vw,.95rem);margin-bottom:2px;}
-.rin .meta{color:var(--mu);font-size:.76rem;display:flex;gap:6px;flex-wrap:wrap;}
-.ocard{background:#fff;border-radius:12px;padding:clamp(11px,1.8vw,16px);box-shadow:var(--sh);margin-bottom:clamp(8px,1.4vw,12px);}
-.ocard-r{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:7px;}
-.ocard-acts{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:4px;}
-.abtn{border:none;border-radius:50px;padding:6px 13px;font-weight:700;font-size:.79rem;cursor:pointer;white-space:nowrap;transition:all .18s;}
+.rbnr{height:clamp(68px,10vw,88px);display:flex;align-items:center;justify-content:center;font-size:clamp(2.2rem,4vw,2.9rem);}
+.rin{padding:clamp(8px,1.3vw,11px);}
+.rin h3{font-weight:800;font-size:clamp(.83rem,1.7vw,.93rem);margin-bottom:2px;}
+.rin .meta{color:var(--mu);font-size:.74rem;display:flex;gap:6px;flex-wrap:wrap;}
+.ocard{background:#fff;border-radius:12px;padding:clamp(10px,1.8vw,15px);box-shadow:var(--sh);margin-bottom:clamp(7px,1.3vw,11px);}
+.ocard-r{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:6px;}
+.ocard-acts{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:3px;}
+.abtn{border:none;border-radius:50px;padding:6px 12px;font-weight:700;font-size:.78rem;cursor:pointer;white-space:nowrap;transition:all .18s;}
 .abtn-g{background:linear-gradient(135deg,var(--gr),#16a34a);color:#fff;}.abtn-g:hover{transform:translateY(-2px);}
 .abtn-c{background:#fee2e2;color:#dc2626;border:1.5px solid #fca5a5;}.abtn-c:hover{background:#dc2626;color:#fff;}
-.track{margin:11px 0 4px;}
+.track{margin:10px 0 3px;}
 .track-row{display:flex;align-items:flex-start;justify-content:space-between;position:relative;padding:0 2px;}
-.track-line-bg{position:absolute;top:14px;left:16px;right:16px;height:3px;background:#f0e0d6;border-radius:2px;z-index:0;}
-.track-line-fg{position:absolute;top:14px;left:16px;height:3px;background:linear-gradient(90deg,var(--red),var(--or));border-radius:2px;z-index:1;transition:width .4s;}
-.track-step{display:flex;flex-direction:column;align-items:center;gap:3px;position:relative;z-index:2;flex:1;}
-.track-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;transition:all .3s;}
+.track-line-bg{position:absolute;top:13px;left:14px;right:14px;height:3px;background:#f0e0d6;border-radius:2px;z-index:0;}
+.track-line-fg{position:absolute;top:13px;left:14px;height:3px;background:linear-gradient(90deg,var(--red),var(--or));border-radius:2px;z-index:1;transition:width .4s;}
+.track-step{display:flex;flex-direction:column;align-items:center;gap:2px;position:relative;z-index:2;flex:1;}
+.track-dot{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;transition:all .3s;}
 .track-dot.done{background:linear-gradient(135deg,var(--red),var(--or));box-shadow:0 2px 7px rgba(232,35,10,.3);}
 .track-dot.idle{background:#f0e0d6;}
-.track-lbl{font-size:.6rem;font-weight:700;text-align:center;max-width:52px;line-height:1.2;}
+.track-lbl{font-size:.58rem;font-weight:700;text-align:center;max-width:50px;line-height:1.2;}
 .track-lbl.done{color:var(--red);}.track-lbl.idle{color:var(--mu);}
-.aob{border-radius:11px;padding:11px 13px;margin-bottom:13px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;border:1.5px solid rgba(0,0,0,.06);transition:opacity .2s;}
+.aob{border-radius:11px;padding:10px 12px;margin-bottom:12px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:7px;border:1.5px solid rgba(0,0,0,.06);transition:opacity .2s;}
 .aob:hover{opacity:.85;}
-.pcard{background:#fff;border-radius:var(--rad);padding:clamp(14px,2.5vw,22px);box-shadow:var(--sh);max-width:440px;}
-.pav-b{width:clamp(50px,9vw,62px);height:clamp(50px,9vw,62px);border-radius:50%;background:linear-gradient(135deg,var(--red),var(--or));display:flex;align-items:center;justify-content:center;font-size:clamp(1.2rem,2.5vw,1.7rem);color:#fff;font-weight:800;margin-bottom:10px;}
-.ptag{display:inline-block;padding:2px 10px;border-radius:50px;font-size:.73rem;font-weight:700;background:#fff3e0;color:#e65100;margin-bottom:13px;}
-.prow{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #f0e0d6;gap:8px;flex-wrap:wrap;}
-.prl{color:var(--mu);font-size:.78rem;font-weight:700;flex-shrink:0;}
-.prv{font-weight:700;font-size:.86rem;text-align:right;word-break:break-word;max-width:58%;}
-.toast{position:fixed;bottom:calc(var(--bar) + 10px);left:50%;transform:translateX(-50%) translateY(80px);z-index:5000;background:#1A0A00;color:#fff;padding:10px 16px;border-radius:11px;font-weight:700;font-size:.82rem;display:flex;align-items:center;gap:7px;opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;max-width:88vw;overflow:hidden;text-overflow:ellipsis;}
+.pcard{background:#fff;border-radius:var(--rad);padding:clamp(13px,2.5vw,20px);box-shadow:var(--sh);max-width:430px;}
+.pav-b{width:clamp(48px,9vw,60px);height:clamp(48px,9vw,60px);border-radius:50%;background:linear-gradient(135deg,var(--red),var(--or));display:flex;align-items:center;justify-content:center;font-size:clamp(1.15rem,2.5vw,1.65rem);color:#fff;font-weight:800;margin-bottom:9px;}
+.ptag{display:inline-block;padding:2px 9px;border-radius:50px;font-size:.71rem;font-weight:700;background:#fff3e0;color:#e65100;margin-bottom:12px;}
+.prow{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #f0e0d6;gap:7px;flex-wrap:wrap;}
+.prl{color:var(--mu);font-size:.77rem;font-weight:700;flex-shrink:0;}
+.prv{font-weight:700;font-size:.85rem;text-align:right;word-break:break-word;max-width:58%;}
+
+/* MOBILE BAR */
+.mbar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:899;background:#fff;border-top:1.5px solid #f0d0c0;height:var(--bar);align-items:center;justify-content:space-around;padding-bottom:max(0px,env(safe-area-inset-bottom));}
+.mbi{display:flex;flex-direction:column;align-items:center;gap:1px;cursor:pointer;padding:4px 2px;border:none;background:none;flex:1;min-width:0;max-width:68px;}
+.mbi-ic{font-size:1.1rem;line-height:1;}
+.mbi-lb{font-size:.56rem;font-weight:700;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;}
+.mbi.on .mbi-lb{color:var(--or);}
+.mbi.on .mbi-ic{filter:drop-shadow(0 0 2px rgba(255,107,0,.4));}
+
+/* TOAST & CART */
+.toast{position:fixed;bottom:calc(var(--bar) + 8px);left:50%;transform:translateX(-50%) translateY(80px);z-index:5000;background:#1A0A00;color:#fff;padding:9px 15px;border-radius:10px;font-weight:700;font-size:.8rem;display:flex;align-items:center;gap:6px;opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;max-width:86vw;overflow:hidden;text-overflow:ellipsis;}
 .toast.on{transform:translateX(-50%) translateY(0);opacity:1;}
-.cartfl{position:fixed;bottom:calc(var(--bar) + 10px);right:13px;z-index:899;background:linear-gradient(135deg,var(--red),var(--or));color:#fff;border:none;border-radius:50px;padding:10px 16px;font-weight:800;font-size:.83rem;cursor:pointer;box-shadow:0 5px 20px rgba(232,35,10,.36);display:none;align-items:center;gap:5px;transition:all .2s;}
+.cartfl{position:fixed;bottom:calc(var(--bar) + 8px);right:12px;z-index:900;background:linear-gradient(135deg,var(--red),var(--or));color:#fff;border:none;border-radius:50px;padding:9px 15px;font-weight:800;font-size:.81rem;cursor:pointer;box-shadow:0 5px 18px rgba(232,35,10,.35);display:none;align-items:center;gap:5px;transition:all .2s;}
 .cartfl.on{display:flex;}
 .cartfl:hover{transform:translateY(-3px);}
-.cbadge{background:#fff;color:var(--red);border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:.7rem;}
-.loader{position:fixed;inset:0;background:#FFF8F0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:12px;}
-.l-lg{font-family:"Fredoka One",cursive;font-size:clamp(1.8rem,4.5vw,2.5rem);color:var(--red);}
+.cbadge{background:#fff;color:var(--red);border-radius:50%;width:17px;height:17px;display:flex;align-items:center;justify-content:center;font-size:.68rem;}
+
+/* LOADER */
+.loader{position:fixed;inset:0;background:#FFF8F0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:11px;}
+.l-lg{font-family:"Fredoka One",cursive;font-size:clamp(1.75rem,4.5vw,2.4rem);color:var(--red);}
 .l-lg b{color:var(--or);}
-.spin{width:34px;height:34px;border:4px solid #f0d0c0;border-top-color:var(--or);border-radius:50%;animation:sp .7s linear infinite;}
+.spin{width:32px;height:32px;border:4px solid #f0d0c0;border-top-color:var(--or);border-radius:50%;animation:sp .7s linear infinite;}
 @keyframes sp{to{transform:rotate(360deg);}}
+
+/* ── RESPONSIVE ── */
+
+/* MOBILE: ≤ 720px */
 @media(max-width:720px){
-  :root{--nav:52px;--bar:58px;}
-  .nav-r .nbtn-d,.nav-r .nbtn-o,.nav-r .nbtn-f{display:none;}
+  :root{--nav:52px;--bar:56px;}
+  /* Hide desktop nav buttons */
+  .nav-r .nbtn-d,.nav-r .nbtn-o,.nav-r .nbtn-f,.nav-r .ppill{display:none;}
   .ham{display:flex;}
-  #sb-close-btn{display:block !important;}
-  .sidebar{
-    display:block;
-    position:fixed;
-    top:0;left:-240px;
-    width:240px;
-    height:100vh;
-    z-index:1000;
-    padding-top:calc(var(--nav) + 8px);
-    transition:left .28s cubic-bezier(.4,0,.2,1);
-    box-shadow:none;
-  }
-  .sidebar.open{left:0;box-shadow:4px 0 24px rgba(0,0,0,.3);}
+  /* Show mobile bar */
   .mbar{display:flex;}
-  .dmain{padding:10px 10px calc(var(--bar) + 8px);}
-  .cartfl{bottom:calc(var(--bar) + 8px);}
-  .toast{bottom:calc(var(--bar) + 8px);}
-  .hero{padding:28px 12px 26px;text-align:center;justify-content:center;}
+  /* Sidebar becomes slide-in drawer */
+  .sidebar{
+    position:fixed;top:0;left:-260px;bottom:0;
+    width:260px;z-index:1001;
+    padding-top:var(--nav);
+    transition:left .28s cubic-bezier(.4,0,.2,1);
+  }
+  .sidebar.open{left:0;box-shadow:4px 0 24px rgba(0,0,0,.35);}
+  .sb-close{display:flex !important;}
+  /* Show mobile profile pill */
+  .nav-r .ppill{display:none;}
+  /* Adjust content padding */
+  .dmain{padding:10px 10px calc(var(--bar) + 6px);}
+  #pg-home .page-main{padding-bottom:calc(var(--bar) + 4px);}
+  .cartfl{bottom:calc(var(--bar) + 6px);}
+  .toast{bottom:calc(var(--bar) + 6px);}
+  /* Hero center */
+  .hero{padding:26px 12px 24px;text-align:center;justify-content:center;}
   .hero-t p{margin-left:auto;margin-right:auto;}
   .hero-btns{justify-content:center;}
+  /* Form */
   .frow{grid-template-columns:1fr;}
   .ifrm,.pcard{max-width:100%;}
+  /* Modal slides up */
   .ov{padding:0;align-items:flex-end;}
   .modal{border-radius:18px 18px 0 0;max-width:100%;max-height:88vh;animation:slideU .25s ease;}
   @keyframes slideU{from{transform:translateY(100%);}to{transform:translateY(0);}}
 }
-@media(max-width:340px){.dlc{min-width:calc(50% - 8px);} .hero-btns .nbtn{font-size:.74rem;padding:7px 10px;}}
-@media(min-width:1200px){.sidebar{width:215px;}}
+
+/* TABLET: 721px – 1023px */
+@media(min-width:721px) and (max-width:1023px){
+  :root{--sb:190px;}
+  .mbar{display:none;}
+  .ham{display:none;}
+  .sidebar{position:sticky;top:var(--nav);height:calc(100vh - var(--nav));}
+}
+
+/* DESKTOP: ≥ 1024px */
+@media(min-width:1024px){
+  .mbar{display:none;}
+  .ham{display:none;}
+  .sidebar{position:sticky;top:var(--nav);height:calc(100vh - var(--nav));}
+  .sb-close{display:none !important;}
+}
+@media(min-width:1280px){:root{--sb:225px;}}
+@media(max-width:340px){.dlc{min-width:calc(50% - 6px);}.hero-btns .nbtn{font-size:.73rem;padding:7px 10px;}}
 </style>
 </head>
 <body>
-<div class="loader" id="loader"><div class="l-lg">🍔 Foo<b>Dash</b></div><div class="spin"></div><p style="color:#8A6A5A;font-size:.86rem;">Yükleniyor...</p></div>
+<div class="loader" id="loader"><div class="l-lg">🍔 Foo<b>Dash</b></div><div class="spin"></div><p style="color:#8A6A5A;font-size:.84rem;">Yükleniyor...</p></div>
 <nav class="topnav">
   <div class="logo" onclick="goHome()">🍔 Foo<b>Dash</b></div>
   <div class="nav-r" id="nav-r">
@@ -249,7 +297,7 @@ footer a{color:var(--or);text-decoration:none;}
     </div>
     <div id="nu" style="display:none;">
       <div class="ppill" id="pp" onclick="togDrop()">
-        <div class="pav" id="pav">?</div><span class="pnm" id="pnm">-</span><span style="font-size:.68rem;color:#8A6A5A;">▾</span>
+        <div class="pav" id="pav">?</div><span class="pnm" id="pnm">-</span><span style="font-size:.66rem;color:#8A6A5A;">▾</span>
         <div class="pdrop" id="pdrop">
           <div class="pdi" onclick="goPrf()">👤 Profilim</div><div class="pdiv"></div>
           <div class="pdi red" onclick="doLogout()">🚪 Çıkış Yap</div>
@@ -257,7 +305,7 @@ footer a{color:var(--or);text-decoration:none;}
       </div>
     </div>
   </div>
-  <button class="ham" id="ham" onclick="togMob()" title="Menüyü Aç"><span></span><span></span><span></span></button>
+  <button class="ham" id="ham" onclick="togMob()"><span></span><span></span><span></span></button>
 </nav>
 <div class="mobdr" id="mobdr">
   <div id="mg" style="display:flex;flex-direction:column;gap:7px;">
@@ -270,53 +318,55 @@ footer a{color:var(--or);text-decoration:none;}
     <button class="nbtn nbtn-o" style="text-align:center;" onclick="doLogout()">🚪 Çıkış Yap</button>
   </div>
 </div>
+<div class="sb-overlay" id="sb-ov" onclick="closeSidebar()"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sb-logo">🍔 Foo<b>Dash</b><button class="sb-close" onclick="closeSidebar()">✕</button></div>
+  <ul class="sbm" id="sbm"></ul>
+</aside>
 <div id="pg-home" class="pg on">
-  <div class="home-wrap">
-  <aside class="home-sidebar" id="home-sidebar">
-    <div class="sbl">🍔 Foo<b>Dash</b></div>
-    <ul class="sbm" id="home-sbm"></ul>
-  </aside>
-  <div class="home-content">
-  <div class="hero">
-    <div class="hero-t">
-      <h1>Lezzetler <em>Kapında</em><br>Hızla Gelsin 🚀</h1>
-      <p>En sevdiğin restoranlardan dakikalar içinde sipariş ver. Taze, sıcak, hızlı!</p>
-      <div class="hero-btns" id="hero-btns">
-        <button class="nbtn nbtn-f" style="font-size:.93rem;padding:10px 22px;" onclick="heroOrder()">🛒 Sipariş Ver</button>
-        <button class="nbtn nbtn-o" style="font-size:.91rem;padding:9px 18px;" onclick="heroTrack()">📦 Takip Et</button>
-        <button class="nbtn nbtn-d" style="font-size:.88rem;" onclick="showDl()">📱 İndir</button>
+  <div class="page-layout">
+    <div class="page-main">
+      <div class="hero">
+        <div class="hero-t">
+          <h1>Lezzetler <em>Kapında</em><br>Hızla Gelsin 🚀</h1>
+          <p>En sevdiğin restoranlardan dakikalar içinde sipariş ver. Taze, sıcak, hızlı!</p>
+          <div class="hero-btns" id="hero-btns">
+            <button class="nbtn nbtn-f" style="font-size:.9rem;padding:10px 20px;" onclick="heroOrder()">🛒 Sipariş Ver</button>
+            <button class="nbtn nbtn-o" style="font-size:.88rem;padding:9px 16px;" onclick="heroTrack()">📦 Takip Et</button>
+            <button class="nbtn nbtn-d" style="font-size:.85rem;" onclick="showDl()">📱 İndir</button>
+          </div>
+        </div>
+        <div class="hero-img">🍕</div>
       </div>
+      <div class="dl-bar">
+        <h2>📱 FooDash Uygulaması</h2>
+        <p>Her platformda yanında.</p>
+        <div class="dlcards">
+          <div class="dlc" onclick="showDl()"><div class="dlci">🪟</div><div class="dlct"><small>İndir –</small><strong>Windows</strong></div></div>
+          <div class="dlc" onclick="showDl()"><div class="dlci">🍎</div><div class="dlct"><small>İndir –</small><strong>macOS</strong></div></div>
+          <div class="dlc" onclick="showDl()"><div class="dlci">🤖</div><div class="dlct"><small>İndir –</small><strong>Android</strong></div></div>
+          <div class="dlc" onclick="showDl()"><div class="dlci">📱</div><div class="dlct"><small>İndir –</small><strong>iOS</strong></div></div>
+        </div>
+      </div>
+      <div class="feats">
+        <div class="sec-t">Neden FooDash?</div>
+        <div class="fgrid">
+          <div class="fc"><div class="fci">⚡</div><h3>Süper Hızlı</h3><p>Ortalama teslimat 28 dk.</p></div>
+          <div class="fc"><div class="fci">🍳</div><h3>Taze Malzeme</h3><p>Hazırlanınca kuryeye verilir.</p></div>
+          <div class="fc"><div class="fci">📍</div><h3>Canlı Takip</h3><p>Siparişini anlık takip et.</p></div>
+          <div class="fc"><div class="fci">💳</div><h3>Güvenli Ödeme</h3><p>256-bit SSL koruması.</p></div>
+        </div>
+      </div>
+      <footer>© 2025 FooDash. Tüm hakları saklıdır. | <a href="#">Gizlilik</a> | <a href="#">KVKK</a></footer>
     </div>
-    <div class="hero-img">🍕</div>
   </div>
-  <div class="dl-bar">
-    <h2>📱 FooDash Uygulaması</h2>
-    <p>Her platformda yanında.</p>
-    <div class="dlcards">
-      <div class="dlc" onclick="showDl()"><div class="dlci">🪟</div><div class="dlct"><small>İndir –</small><strong>Windows</strong></div></div>
-      <div class="dlc" onclick="showDl()"><div class="dlci">🍎</div><div class="dlct"><small>İndir –</small><strong>macOS</strong></div></div>
-      <div class="dlc" onclick="showDl()"><div class="dlci">🤖</div><div class="dlct"><small>İndir –</small><strong>Android</strong></div></div>
-      <div class="dlc" onclick="showDl()"><div class="dlci">📱</div><div class="dlct"><small>İndir –</small><strong>iOS</strong></div></div>
-    </div>
-  </div>
-  <div class="feats">
-    <div class="sec-t">Neden FooDash?</div>
-    <div class="fgrid">
-      <div class="fc"><div class="fci">⚡</div><h3>Süper Hızlı</h3><p>Ortalama teslimat 28 dk.</p></div>
-      <div class="fc"><div class="fci">🍳</div><h3>Taze Malzeme</h3><p>Hazırlanınca kuryeye verilir.</p></div>
-      <div class="fc"><div class="fci">📍</div><h3>Canlı Takip</h3><p>Siparişini anlık takip et.</p></div>
-      <div class="fc"><div class="fci">💳</div><h3>Güvenli Ödeme</h3><p>256-bit SSL koruması.</p></div>
-    </div>
-  </div>
-  <footer>© 2025 FooDash. Tüm hakları saklıdır. | <a href="#">Gizlilik</a> | <a href="#">KVKK</a></footer>
-  </div><!-- home-content -->
-  </div><!-- home-wrap -->
 </div>
-<div class="sidebar-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
 <div id="pg-dash" class="pg">
-  <div class="dwrap">
-    <aside class="sidebar"><div class="sbl" style="display:flex;justify-content:space-between;align-items:center;">🍔 Foo<b>Dash</b><button onclick="closeSidebar()" style="background:none;border:none;color:rgba(255,255,255,.6);font-size:1.2rem;cursor:pointer;padding:0;line-height:1;display:none;" id="sb-close-btn">✕</button></div><ul class="sbm" id="sbm"></ul></aside>
-    <main class="dmain"><button class="back-btn" onclick="closeSidebar();goHome()">← Ana Sayfaya Dön</button><div id="dcont"></div></main>
+  <div class="page-layout">
+    <div class="page-main dmain">
+      <button class="back-btn" onclick="goHome()">← Ana Sayfaya Dön</button>
+      <div id="dcont"></div>
+    </div>
   </div>
   <nav class="mbar" id="mbar"></nav>
 </div>
@@ -326,13 +376,17 @@ footer a{color:var(--or);text-decoration:none;}
 <div class="toast" id="toast"><span id="tic">✅</span><span id="tmsg"></span></div>
 <button class="cartfl" id="cartfl" onclick="openCart()">🛒 Sepetim <span class="cbadge" id="ccount">0</span></button>
 <script type="module">
+
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import{getFirestore,collection,doc,addDoc,getDocs,updateDoc,deleteDoc,query,where,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 const db=getFirestore(initializeApp({apiKey:"AIzaSyB4SOHzkQ_RPbHqbWlVWIxxdTq3QhqWng0",authDomain:"foo-dash-b6bb9.firebaseapp.com",projectId:"foo-dash-b6bb9",storageBucket:"foo-dash-b6bb9.firebasestorage.app",messagingSenderId:"137063973696",appId:"1:137063973696:web:df1f30eed2f2ef708b30a5"}));
+
 let CU=null,uRole=null,cart=[];
 let users=[],menu=[],orders=[];
-const SK="fd_ses",LK="fd_last";
+const SK="fd_ses",LK="fd_last",PK="fd_page";
 const $=id=>document.getElementById(id);
+
+/* LOAD */
 async function loadAll(){
   users=[];menu=[];orders=[];
   const[u,m,o]=await Promise.all([getDocs(collection(db,"users")),getDocs(collection(db,"menuItems")),getDocs(collection(db,"orders"))]);
@@ -340,76 +394,91 @@ async function loadAll(){
   m.forEach(d=>menu.push({id:d.id,...d.data()}));
   o.forEach(d=>orders.push({id:d.id,...d.data()}));
 }
-const PK="fd_page"; // current page key
+
+/* SESSION */
 function saveSes(){if(CU)localStorage.setItem(SK,JSON.stringify({id:CU.id,username:CU.username}));}
 function savePageSes(pg){localStorage.setItem(PK,pg);}
+
+function savePg(pg){if(CU)localStorage.setItem(PK,pg);}
 function clrSes(){localStorage.removeItem(SK);localStorage.removeItem(LK);localStorage.removeItem(PK);}
 async function restoreSes(){
   const r=localStorage.getItem(SK);if(!r)return false;
-  try{const s=JSON.parse(r);const sn=await getDocs(query(collection(db,"users"),where("username","==",s.username)));if(sn.empty){clrSes();return false;}CU={id:sn.docs[0].id,...sn.docs[0].data()};return true;}catch{clrSes();return false;}
+  try{const s=JSON.parse(r);const sn=await getDocs(query(collection(db,"users"),where("username","==",s.username)));if(sn.empty){clrSes();return false;}CU={id:sn.docs[0].id,...sn.docs[0].data()};return true;}
+  catch{clrSes();return false;}
 }
+
+/* INIT */
 (async()=>{
   try{
     await loadAll();
     const ok=await restoreSes();
     if(ok){
       setNavU();
-      buildDash();
-      // Restore last page: home or dash
       const lastPg=localStorage.getItem(PK)||"pg-home";
-      showPg(lastPg);
-      // If was on dash, restore last section
       if(lastPg==="pg-dash"){
+        buildDash();
+        showPg("pg-dash");
         const ls=localStorage.getItem(LK);
         if(ls&&$(ls))setTimeout(()=>dsShow(ls,null),80);
+      } else {
+        showPg("pg-home");
       }
     }
-    // If no session: always show home (default - pg on class already set)
   }catch(e){console.error(e);}
   $("loader").style.display="none";
 })();
-window.goHome=()=>{closeSidebar();savePageSes("pg-home");showPg("pg-home");};
+
+/* HELPERS */
 window.showPg=(id)=>{
   document.querySelectorAll(".pg").forEach(p=>p.classList.remove("on"));
   $(id).classList.add("on");
   window.scrollTo(0,0);
-  if(CU)savePageSes(id); // only save if logged in
+  if(CU)savePg(id);
+  // sidebar: show on desktop for both pages, hidden on mobile
+  updateSidebar(id);
 };
+window.goHome=()=>{closeSB();savePg("pg-home");document.querySelectorAll(".pg").forEach(p=>p.classList.remove("on"));$("pg-home").classList.add("on");window.scrollTo(0,0);updateSidebar("pg-home");};
 window.toast=(msg,ic="✅")=>{$("tmsg").textContent=msg;$("tic").textContent=ic;const t=$("toast");t.classList.add("on");setTimeout(()=>t.classList.remove("on"),2600);};
 window.cOv=(id)=>$(id).classList.remove("on");
 window.openLogin=()=>$("ov-login").classList.add("on");
 window.openReg=()=>$("ov-reg").classList.add("on");
 window.showDl=()=>$("ov-dl").classList.add("on");
 window.doDl=(lbl,el)=>{el.style.borderColor="#22C55E";el.style.background="rgba(34,197,94,.1)";setTimeout(()=>{cOv("ov-dl");toast(lbl+" indiriliyor...","📥");},600);};
-window.togMob=()=>{
-  const onDash=$("pg-dash").classList.contains("on");
-  if(onDash){
-    const sb=$("sbm").closest(".sidebar");
-    const isOpen=sb.classList.contains("open");
-    if(isOpen){closeSidebar();}else{openSidebar();}
+
+/* SIDEBAR */
+function updateSidebar(pg){
+  const sb=$("sidebar");
+  const mc=$("main-content");
+  if(!CU){sb.classList.add("hidden");mc.classList.add("full");return;}
+  // On desktop: sidebar always visible (both home and dash)
+  const isMobile=window.innerWidth<=720;
+  if(isMobile){
+    sb.classList.add("hidden");mc.classList.add("full");
   } else {
-    $("ham").classList.toggle("open");
-    $("mobdr").classList.toggle("open");
+    sb.classList.remove("hidden");mc.classList.remove("full");
   }
+}
+window.openSB=()=>{
+  $("sidebar").classList.remove("hidden");$("sidebar").classList.add("open");
+  $("sb-overlay").classList.add("open");$("ham").classList.add("open");
 };
-window.openSidebar=()=>{
-  const sb=document.querySelector(".sidebar");
-  if(sb){sb.classList.add("open");}
-  $("sb-overlay").classList.add("open");
-  $("ham").classList.add("open");
+window.closeSB=()=>{
+  $("sidebar").classList.remove("open");$("sidebar").classList.add("hidden");
+  $("sb-overlay").classList.remove("open");$("ham").classList.remove("open");
 };
-window.closeSidebar=()=>{
-  const sb=document.querySelector(".sidebar");
-  if(sb){sb.classList.remove("open");}
-  $("sb-overlay").classList.remove("open");
-  $("ham").classList.remove("open");
+window.togHam=()=>{
+  if(!CU){$("ham").classList.toggle("open");$("mobdr").classList.toggle("open");return;}
+  const isOpen=$("sidebar").classList.contains("open");
+  if(isOpen)closeSB();else openSB();
 };
-window.cMob=()=>{$("ham").classList.remove("open");$("mobdr").classList.remove("open");closeSidebar();};
+window.cMob=()=>{$("ham").classList.remove("open");$("mobdr").classList.remove("open");closeSB();};
 window.togDrop=()=>$("pdrop").classList.toggle("open");
 document.addEventListener("click",e=>{const p=$("pp");if(p&&!p.contains(e.target))$("pdrop").classList.remove("open");});
-window.goPrf=()=>{$("pdrop").classList.remove("open");showPg("pg-dash");setTimeout(()=>dsShow("ds-profile",null),60);};
-window.heroOrder=()=>{if(CU){showPg("pg-dash");setTimeout(()=>dsShow(CU.role==="customer"?"ds-rest":CU.role==="business"?"ds-orders":"ds-pending",null),60);}else openLogin();};
-window.heroTrack=()=>{if(CU){showPg("pg-dash");setTimeout(()=>dsShow(CU.role==="customer"?"ds-myord":CU.role==="business"?"ds-orders":"ds-delivering",null),60);}else openLogin();};
+window.addEventListener("resize",()=>{if(CU)updateSidebar(document.querySelector(".pg.on")?.id||"pg-home");});
+window.goPrf=()=>{$("pdrop").classList.remove("open");if(!$("pg-dash").classList.contains("on")){buildDash();showPg("pg-dash");}setTimeout(()=>dsShow("ds-profile",null),60);};
+window.heroOrder=()=>{if(CU){if(!$("pg-dash").classList.contains("on")){buildDash();showPg("pg-dash");}setTimeout(()=>dsShow(CU.role==="customer"?"ds-rest":CU.role==="business"?"ds-orders":"ds-pending",null),60);}else openLogin();};
+window.heroTrack=()=>{if(CU){if(!$("pg-dash").classList.contains("on")){buildDash();showPg("pg-dash");}setTimeout(()=>dsShow(CU.role==="customer"?"ds-myord":CU.role==="business"?"ds-orders":"ds-delivering",null),60);}else openLogin();};
+
 function setNavU(){
   $("ng").style.display="none";$("nu").style.display="flex";
   $("mg").style.display="none";$("mu").style.display="flex";
@@ -417,16 +486,26 @@ function setNavU(){
   [$("pav"),$("pav2")].forEach(e=>{if(e)e.textContent=ini;});
   [$("pnm"),$("pnm2")].forEach(e=>{if(e)e.textContent=fn;});
   updHeroBtns();
-  buildHomeSidebar();
+  buildSidebar();
+  updateSidebar("pg-home");
 }
 
-function buildHomeSidebar(){
-  const hs=$("home-sidebar");
-  const hsbm=$("home-sbm");
-  if(!hs||!hsbm||!CU){return;}
+function buildSidebar(){
   const tabs=TABS[CU.role]||[];
-  hsbm.innerHTML=tabs.map(t=>`<li><a href="#" onclick="showPg('pg-dash');savePageSes('pg-dash');setTimeout(()=>dsShow('${t.id}',null),60);return false;">${t.ic} ${t.lb}</a></li>`).join("");
-  hs.classList.add("visible");
+  $("sbm").innerHTML=
+    `<li><a href="#" onclick="goHome();return false;" style="color:rgba(255,190,120,.85);">← Ana Sayfaya Dön</a></li>`+
+    `<li class="sep"></li>`+
+    tabs.map((t,i)=>`<li><a href="#" class="${i===0?"on":""}" onclick="return dsShow('${t.id}',this)">${t.ic} ${t.lb}</a></li>`).join("");
+  $("mbar").innerHTML=
+    `<button class="mbi" onclick="goHome()"><div class="mbi-ic">🔙</div><div class="mbi-lb">Ana Sayfa</div></button>`+
+    tabs.map((t,i)=>`<button class="mbi${i===0?" on":""}" id="mb-${t.id}" onclick="dsShow('${t.id}',null)"><div class="mbi-ic">${t.ic}</div><div class="mbi-lb">${t.lb}</div></button>`).join("");
+}
+
+function buildAllSidebars(){
+  if(!CU)return;
+  const tabs=TABS[CU.role]||[];
+  const menuHTML=`<li><a href="#" onclick="closeSidebar();savePageSes('pg-home');showPg('pg-home');return false;" style="color:rgba(255,190,120,.8);">← Ana Sayfaya Dön</a></li><li class="sep"></li>`+tabs.map(t=>`<li><a href="#" onclick="closeSidebar();savePageSes('pg-dash');showPg('pg-dash');setTimeout(()=>dsShow('${t.id}',null),60);return false;">${t.ic} ${t.lb}</a></li>`).join("");
+  const sbm=$("sbm");if(sbm)sbm.innerHTML=menuHTML;
 }
 function updHeroBtns(){
   const c=$("hero-btns");if(!c)return;
@@ -435,21 +514,46 @@ function updHeroBtns(){
     const tt={business:"ds-orders",customer:"ds-myord",courier:"ds-delivering"};
     const rl={business:"📦 Siparişler",customer:"🛒 Sipariş Ver",courier:"🛵 Teslimatlar"};
     const tl={business:"📊 Panelim",customer:"📦 Siparişlerimi Takip Et",courier:"📍 Teslimatta"};
-    c.innerHTML=`<button class="nbtn nbtn-f" style="font-size:.9rem;padding:10px 20px;" onclick="showPg('pg-dash');setTimeout(()=>dsShow('${rt[CU.role]}',null),60)">${rl[CU.role]}</button><button class="nbtn nbtn-o" style="font-size:.88rem;padding:9px 16px;" onclick="showPg('pg-dash');setTimeout(()=>dsShow('${tt[CU.role]}',null),60)">${tl[CU.role]}</button><button class="nbtn nbtn-o" style="font-size:.85rem;border-color:#8A6A5A;color:#8A6A5A;" onclick="showPg('pg-dash')">Panele Dön →</button>`;
+    c.innerHTML=
+      `<button class="btn btn-f" style="font-size:.9rem;padding:10px 20px;" onclick="heroOrder()">${rl[CU.role]}</button>`+
+      `<button class="btn btn-o" style="font-size:.88rem;padding:9px 16px;" onclick="heroTrack()">${tl[CU.role]}</button>`+
+      `<button class="btn btn-o" style="font-size:.85rem;border-color:#8A6A5A;color:#8A6A5A;" onclick="if(!document.getElementById('pg-dash').classList.contains('on')){buildDash();showPg('pg-dash');}">Panele Git →</button>`;
   }else{
-    c.innerHTML=`<button class="nbtn nbtn-f" style="font-size:.93rem;padding:10px 22px;" onclick="heroOrder()">🛒 Sipariş Ver</button><button class="nbtn nbtn-o" style="font-size:.91rem;padding:9px 18px;" onclick="heroTrack()">📦 Takip Et</button><button class="nbtn nbtn-d" style="font-size:.88rem;" onclick="showDl()">📱 İndir</button>`;
+    c.innerHTML=
+      `<button class="btn btn-f" style="font-size:.93rem;padding:10px 22px;" onclick="heroOrder()">🛒 Sipariş Ver</button>`+
+      `<button class="btn btn-o" style="font-size:.91rem;padding:9px 18px;" onclick="heroTrack()">📦 Takip Et</button>`+
+      `<button class="btn btn-d" style="font-size:.88rem;" onclick="showDl()">📱 İndir</button>`;
   }
 }
+
+/* LOGIN */
 window.doLogin=async()=>{
   const u=$("lu").value.trim(),p=$("lp").value;
   if(!u||!p){toast("Tüm alanları doldur!","⚠️");return;}
   toast("Giriş yapılıyor...","⏳");
-  try{const sn=await getDocs(query(collection(db,"users"),where("username","==",u),where("password","==",p)));if(sn.empty){toast("Kullanıcı adı veya şifre yanlış!","❌");return;}CU={id:sn.docs[0].id,...sn.docs[0].data()};saveSes();cOv("ov-login");cMob();await loadAll();setNavU();buildDash();savePageSes("pg-home");showPg("pg-home");toast("Hoş geldin, "+CU.name.split(" ")[0]+"! 🎉","✅");}catch(e){toast("Hata: "+e.message,"❌");}
+  try{
+    const sn=await getDocs(query(collection(db,"users"),where("username","==",u),where("password","==",p)));
+    if(sn.empty){toast("Kullanıcı adı veya şifre yanlış!","❌");return;}
+    CU={id:sn.docs[0].id,...sn.docs[0].data()};saveSes();
+    cOv("ov-login");cMob();await loadAll();
+    buildDash();setNavU();
+    savePg("pg-home");showPg("pg-home");
+    toast("Hoş geldin, "+CU.name.split(" ")[0]+"! 🎉","✅");
+  }catch(e){toast("Hata: "+e.message,"❌");}
 };
+
 window.doLogout=()=>{
   if(!confirm("Çıkış yapmak istediğine emin misin?"))return;
-  CU=null;cart=[];clrSes();$("ng").style.display="flex";$("nu").style.display="none";$("mg").style.display="flex";$("mu").style.display="none";$("cartfl").classList.remove("on");updHeroBtns();const hs=$("home-sidebar");if(hs){hs.classList.remove("visible");const hsbm=$("home-sbm");if(hsbm)hsbm.innerHTML="";}cMob();showPg("pg-home");toast("Görüşürüz! 👋","👋");
+  CU=null;cart=[];clrSes();
+  $("ng").style.display="flex";$("nu").style.display="none";
+  $("mg").style.display="flex";$("mu").style.display="none";
+  $("cartfl").classList.remove("on");
+  $("sidebar").classList.add("hidden");$("main-content").classList.add("full");
+  $("mbar").innerHTML="";$("sbm").innerHTML="";
+  updHeroBtns();cMob();showPg("pg-home");toast("Görüşürüz! 👋","👋");
 };
+
+/* REGISTER */
 window.pickRole=(r,el)=>{
   uRole=r;document.querySelectorAll(".rc").forEach(c=>c.classList.remove("sel"));el.classList.add("sel");
   const fs={
@@ -459,6 +563,7 @@ window.pickRole=(r,el)=>{
   };
   $("rfc").innerHTML=fs[r]+`<button class="fb" onclick="doReg()">Kayıt Ol 🎉</button><div class="mft">Hesabın var mı? <button class="lbtn" onclick="cOv('ov-reg');openLogin()">Giriş Yap</button></div>`;
 };
+
 window.doReg=async()=>{
   const name=$("rn")?.value.trim(),user=$("ru")?.value.trim(),pass=$("rp")?.value;
   if(!name||!user||!pass){toast("Zorunlu alanları doldur!","⚠️");return;}
@@ -470,41 +575,56 @@ window.doReg=async()=>{
     if(uRole==="business"){u.btype=$("rb")?.value||"Restoran";u.addr=$("ra")?.value||"";}
     if(uRole==="customer"){u.addr=$("ra")?.value||"";}
     if(uRole==="courier"){u.vehicle=$("rv")?.value||"";}
-    const ref=await addDoc(collection(db,"users"),u);CU={id:ref.id,...u};users.push(CU);saveSes();
-    cOv("ov-reg");setNavU();buildDash();savePageSes("pg-home");showPg("pg-home");toast("Kayıt başarılı! Hoş geldin 🎉","✅");
+    const ref=await addDoc(collection(db,"users"),u);
+    CU={id:ref.id,...u};users.push(CU);saveSes();
+    cOv("ov-reg");buildDash();setNavU();
+    savePg("pg-home");showPg("pg-home");
+    toast("Kayıt başarılı! Hoş geldin 🎉","✅");
   }catch(e){toast("Hata: "+e.message,"❌");}
 };
+
+/* DASHBOARD */
 const TABS={
   business:[{id:"ds-home",ic:"🏠",lb:"Ana Sayfa"},{id:"ds-add-food",ic:"🍔",lb:"Yemek Ekle"},{id:"ds-add-drink",ic:"🥤",lb:"İçecek Ekle"},{id:"ds-menu",ic:"📋",lb:"Menüm"},{id:"ds-orders",ic:"📦",lb:"Siparişler"},{id:"ds-profile",ic:"👤",lb:"Profil"}],
   customer:[{id:"ds-home",ic:"🏠",lb:"Ana Sayfa"},{id:"ds-rest",ic:"🍽️",lb:"Restoranlar"},{id:"ds-myord",ic:"📦",lb:"Siparişlerim"},{id:"ds-profile",ic:"👤",lb:"Profil"}],
   courier:[{id:"ds-home",ic:"🏠",lb:"Ana Sayfa"},{id:"ds-pending",ic:"🛵",lb:"Bekleyen"},{id:"ds-delivering",ic:"📍",lb:"Teslimatta"},{id:"ds-profile",ic:"👤",lb:"Profil"}]
 };
+
 function buildDash(){
-  const tabs=TABS[CU.role]||[];
-  $("sbm").innerHTML=`<li><a href="#" onclick="goHome();return false;" style="color:rgba(255,190,120,.8);">← Ana Sayfaya Dön</a></li><li class="sep"></li>`+tabs.map((t,i)=>`<li><a href="#" class="${i===0?"on":""}" onclick="return dsShow('${t.id}',this)">${t.ic} ${t.lb}</a></li>`).join("");
-  $("mbar").innerHTML=`<button class="mbi" onclick="goHome()"><div class="mbi-ic">🔙</div><div class="mbi-lb">Ana Sayfa</div></button>`+tabs.map((t,i)=>`<button class="mbi${i===0?" on":""}" id="mb-${t.id}" onclick="dsShow('${t.id}',null)"><div class="mbi-ic">${t.ic}</div><div class="mbi-lb">${t.lb}</div></button>`).join("");
   const B={business:bizHTML,customer:custHTML,courier:courHTML};
   $("dcont").innerHTML=(B[CU.role]||bizHTML)();
+  buildSidebar();
   setTimeout(()=>{const s=$("dcont").querySelector(".ds");if(s)s.classList.add("on");updStats();if(CU.role==="customer")renderRest();if(CU.role==="courier")crStats();},50);
 }
+
 window.dsShow=(id,el)=>{
+  if(!$("pg-dash").classList.contains("on")){showPg("pg-dash");}
   document.querySelectorAll(".ds").forEach(s=>s.classList.remove("on"));
   const sec=$(id);if(sec){sec.classList.add("on");refSec(id);}
   document.querySelectorAll(".sbm li a").forEach(a=>a.classList.remove("on"));
   document.querySelectorAll(".mbi").forEach(b=>b.classList.remove("on"));
-  if(el)el.classList.add("on");const mb=$("mb-"+id);if(mb)mb.classList.add("on");
+  if(el)el.classList.add("on");
+  const mb=$("mb-"+id);if(mb)mb.classList.add("on");
   localStorage.setItem(LK,id);
-  closeSidebar();
+  savePg("pg-dash");
+  closeSB();
   return false;
 };
+
 window.refSec=(id)=>{
-  const map={"ds-home":()=>{updStats();if(CU.role==="customer"){renderRest();updHomeOrders();}if(CU.role==="courier")crStats();},"ds-menu":renderMenu,"ds-orders":renderOrders,"ds-rest":renderRest,"ds-myord":renderMyOrd,"ds-pending":renderPend,"ds-delivering":renderDeliv,"ds-profile":renderProf};
+  const map={
+    "ds-home":()=>{updStats();if(CU.role==="customer"){renderRest();updHomeOrds();}if(CU.role==="courier")crStats();},
+    "ds-menu":renderMenu,"ds-orders":renderOrds,"ds-rest":renderRest,
+    "ds-myord":renderMyOrd,"ds-pending":renderPend,"ds-delivering":renderDeliv,"ds-profile":renderProf
+  };
   if(map[id])map[id]();
 };
+
+/* PROFILE */
 function profHTML(){
   const rm={customer:"Müşteri 🧑",business:"İşletme 🏪",courier:"Kurye 🛵"};
   const ini=CU.name.split(" ").map(w=>w[0]).join("").toUpperCase().slice(0,2);
-  return `<div class="ds" id="ds-profile"><div class="dh"><h2>Profilim 👤</h2><p>Bilgilerini görüntüle ve düzenle.</p></div><div class="pcard"><div class="pav-b">${ini}</div><div class="ptag">${rm[CU.role]||CU.role}</div><div id="pview"><div class="prow"><span class="prl">Ad Soyad</span><span class="prv">${CU.name}</span></div><div class="prow"><span class="prl">Kullanıcı Adı</span><span class="prv">@${CU.username}</span></div><div class="prow"><span class="prl">Telefon</span><span class="prv">${CU.phone||"-"}</span></div>${CU.addr!==undefined?`<div class="prow"><span class="prl">Adres</span><span class="prv">${CU.addr||"-"}</span></div>`:""}${CU.btype?`<div class="prow"><span class="prl">İşletme Türü</span><span class="prv">${CU.btype}</span></div>`:""}${CU.vehicle?`<div class="prow"><span class="prl">Araç</span><span class="prv">${CU.vehicle}</span></div>`:""}<button class="fb" style="margin-top:13px;" onclick="showPE()">✏️ Bilgileri Düzenle</button><button class="fb-d" onclick="delAcc()">🗑️ Hesabı Sil</button></div><div id="pedit" style="display:none;"><div class="fg"><label>Ad Soyad</label><input id="pen" value="${CU.name}"></div><div class="fg"><label>Telefon</label><input type="tel" id="pet" value="${CU.phone||""}"></div>${CU.addr!==undefined?`<div class="fg"><label>Adres</label><input id="pea" value="${CU.addr||""}"></div>`:""}<div class="fg"><label>Yeni Şifre <small style="font-weight:400;color:#8A6A5A;">(boş = değişmez)</small></label><input type="password" id="pep" placeholder="Yeni şifre"></div><button class="fb" onclick="savePrf()">💾 Kaydet</button><button class="fb-s" onclick="hidePE()">İptal</button></div></div></div>`;
+  return`<div class="ds" id="ds-profile"><div class="dh"><h2>Profilim 👤</h2><p>Bilgilerini görüntüle ve düzenle.</p></div><div class="pcard"><div class="pav-b">${ini}</div><div class="ptag">${rm[CU.role]||CU.role}</div><div id="pview"><div class="prow"><span class="prl">Ad Soyad</span><span class="prv">${CU.name}</span></div><div class="prow"><span class="prl">Kullanıcı Adı</span><span class="prv">@${CU.username}</span></div><div class="prow"><span class="prl">Telefon</span><span class="prv">${CU.phone||"-"}</span></div>${CU.addr!==undefined?`<div class="prow"><span class="prl">Adres</span><span class="prv">${CU.addr||"-"}</span></div>`:""}${CU.btype?`<div class="prow"><span class="prl">İşletme Türü</span><span class="prv">${CU.btype}</span></div>`:""}${CU.vehicle?`<div class="prow"><span class="prl">Araç</span><span class="prv">${CU.vehicle}</span></div>`:""}<button class="fb" style="margin-top:13px;" onclick="showPE()">✏️ Bilgileri Düzenle</button><button class="fb-d" onclick="delAcc()">🗑️ Hesabı Sil</button></div><div id="pedit" style="display:none;"><div class="fg"><label>Ad Soyad</label><input id="pen" value="${CU.name}"></div><div class="fg"><label>Telefon</label><input type="tel" id="pet" value="${CU.phone||""}"></div>${CU.addr!==undefined?`<div class="fg"><label>Adres</label><input id="pea" value="${CU.addr||""}"></div>`:""}<div class="fg"><label>Yeni Şifre <small style="font-weight:400;color:#8A6A5A;">(boş = değişmez)</small></label><input type="password" id="pep" placeholder="Yeni şifre"></div><button class="fb" onclick="savePrf()">💾 Kaydet</button><button class="fb-s" onclick="hidePE()">İptal</button></div></div></div>`;
 }
 window.renderProf=()=>{const o=$("ds-profile");if(o){const w=o.classList.contains("on");o.outerHTML=profHTML();if(w)$("ds-profile").classList.add("on");}};
 window.showPE=()=>{$("pview").style.display="none";$("pedit").style.display="block";};
@@ -514,38 +634,45 @@ window.savePrf=async()=>{
   if(!name){toast("Ad boş olamaz!","⚠️");return;}toast("Kaydediliyor...","⏳");
   try{const upd={name,phone};if(addr!==undefined)upd.addr=addr;if(pass)upd.password=pass;await updateDoc(doc(db,"users",CU.id),upd);Object.assign(CU,upd);saveSes();const ini=CU.name.split(" ").map(w=>w[0]).join("").toUpperCase().slice(0,2),fn=CU.name.split(" ")[0];[$("pav"),$("pav2")].forEach(e=>{if(e)e.textContent=ini;});[$("pnm"),$("pnm2")].forEach(e=>{if(e)e.textContent=fn;});renderProf();toast("Profil güncellendi! ✅","✅");}catch(e){toast("Hata: "+e.message,"❌");}
 };
-window.delAcc=async()=>{if(!confirm("Hesabını silmek istediğine emin misin?"))return;if(!confirm("Son onay: Tüm veriler silinecek!"))return;try{await deleteDoc(doc(db,"users",CU.id));doLogout();toast("Hesap silindi.","🗑️");}catch(e){toast("Hata: "+e.message,"❌");}};
-function bizHTML(){return`<div class="ds" id="ds-home"><div class="dh"><h2>Merhaba, ${CU.name.split(" ")[0]} 👋</h2><p>İşletme panelinize hoş geldiniz.</p></div><div class="stats"><div class="sc"><div class="n" id="stm">0</div><div class="l">Menü Ürünü</div></div><div class="sc"><div class="n" id="sto">0</div><div class="l">Toplam Sipariş</div></div><div class="sc"><div class="n" id="stp">0</div><div class="l">Bekleyen</div></div><div class="sc"><div class="n" id="std">0</div><div class="l">Tamamlanan</div></div></div><p style="color:#8A6A5A;font-size:.83rem;">Alttaki bar veya sol menüden tüm seçeneklere ulaş.</p></div>${itemFrm("food")}${itemFrm("drink")}<div class="ds" id="ds-menu"><div class="dhr"><div class="dh" style="margin:0;"><h2>Menüm 📋</h2><p>Eklenmiş ürünler</p></div><button onclick="renderMenu()" class="abtn abtn-g" style="font-size:.78rem;">🔄 Yenile</button></div><div class="igrid" id="ilist"></div></div><div class="ds" id="ds-orders"><div class="dhr"><div class="dh" style="margin:0;"><h2>Siparişler 📦</h2><p>Gelen siparişleri yönet</p></div><button onclick="renderOrders()" class="abtn abtn-g" style="font-size:.78rem;">🔄 Yenile</button></div><div class="tblw"><table class="otbl"><thead><tr><th>#</th><th>Müşteri</th><th>Ürünler</th><th>Tutar</th><th>Durum</th><th>Kurye</th><th>İşlem</th></tr></thead><tbody id="otb"></tbody></table></div></div>${profHTML()}`;}
-function itemFrm(type){const T=type==="food"?"Yemek":"İçecek",e=type==="food"?"🍔":"🥤";const cats=type==="food"?"<option>Ana Yemek</option><option>Başlangıç</option><option>Salata</option><option>Tatlı</option><option>Atıştırmalık</option>":"<option>Soğuk İçecek</option><option>Sıcak İçecek</option><option>Meyve Suyu</option><option>Kahve</option><option>Çay</option>";return`<div class="ds" id="ds-add-${type}"><div class="dh"><h2>${e} ${T} Ekle</h2><p>Menüne yeni bir ürün ekle.</p></div><div class="ifrm"><h3>${e} Yeni ${T}</h3><div class="fg"><label>İsim</label><input id="${type}-n" placeholder="${T} adı"></div><div class="frow"><div class="fg"><label>Fiyat (₺)</label><input type="number" id="${type}-pr" placeholder="0.00" inputmode="decimal"></div><div class="fg"><label>Kategori</label><select id="${type}-ct">${cats}</select></div></div><div class="fg"><label>Açıklama</label><textarea id="${type}-dc" placeholder="Kısa açıklama..."></textarea></div><button class="fb" onclick="addItem('${type}')">Ürünü Ekle ${e}</button></div></div>`;}
-window.addItem=async(type)=>{const name=$(type+"-n").value.trim(),price=$(type+"-pr").value,cat=$(type+"-ct").value,desc=$(type+"-dc").value.trim();if(!name||!price){toast("İsim ve fiyat zorunlu!","⚠️");return;}toast("Ekleniyor...","⏳");try{const item={name,price:parseFloat(price),cat,desc,type,emoji:type==="food"?"🍔":"🥤",owner:CU.username,ownerName:CU.name,createdAt:serverTimestamp()};const ref=await addDoc(collection(db,"menuItems"),item);menu.push({id:ref.id,...item});toast(name+" eklendi! ✅","✅");$(type+"-n").value="";$(type+"-pr").value="";$(type+"-dc").value="";updStats();}catch(e){toast("Hata: "+e.message,"❌");}};
-window.renderMenu=()=>{const list=$("ilist");if(!list)return;const my=menu.filter(i=>i.owner===CU.username);if(!my.length){list.innerHTML="<p style='color:#8A6A5A;padding:12px 0;'>Henüz ürün yok. Yemek veya İçecek Ekle sekmesinden ekleyebilirsin.</p>";return;}list.innerHTML=my.map(i=>`<div class="icard"><div class="ith">${i.emoji||"🍔"}</div><div class="iin"><h4>${i.name}</h4><div class="ipr">₺${parseFloat(i.price).toFixed(2)}</div><div class="idc">${i.desc||""}</div><div style="margin-top:5px;"><span class="badge bb">${i.cat}</span></div><div class="iacts"><button class="ib ib-e" onclick="editItem('${i.id}')">✏️ Düzenle</button><button class="ib ib-d" onclick="delItem('${i.id}')">🗑️ Sil</button></div></div></div>`).join("");};
+window.delAcc=async()=>{if(!confirm("Hesabını silmek istediğine emin misin?"))return;if(!confirm("Son onay!"))return;try{await deleteDoc(doc(db,"users",CU.id));doLogout();}catch(e){toast("Hata: "+e.message,"❌");}};
+
+/* BUSINESS */
+function bizHTML(){return`<div class="ds" id="ds-home"><div class="dh"><h2>Merhaba, ${CU.name.split(" ")[0]} 👋</h2><p>İşletme panelinize hoş geldiniz.</p></div><div class="stats"><div class="sc"><div class="n" id="stm">0</div><div class="l">Menü Ürünü</div></div><div class="sc"><div class="n" id="sto">0</div><div class="l">Toplam Sipariş</div></div><div class="sc"><div class="n" id="stp">0</div><div class="l">Bekleyen</div></div><div class="sc"><div class="n" id="std">0</div><div class="l">Tamamlanan</div></div></div></div>${itemFrm("food")}${itemFrm("drink")}<div class="ds" id="ds-menu"><div class="dhr"><div class="dh" style="margin:0;"><h2>Menüm 📋</h2><p>Eklenmiş ürünler</p></div><button onclick="renderMenu()" class="abtn abtn-g" style="font-size:.78rem;">🔄 Yenile</button></div><div class="igrid" id="ilist"></div></div><div class="ds" id="ds-orders"><div class="dhr"><div class="dh" style="margin:0;"><h2>Siparişler 📦</h2><p>Gelen siparişleri yönet</p></div><button onclick="renderOrds()" class="abtn abtn-g" style="font-size:.78rem;">🔄 Yenile</button></div><div class="tblw"><table class="otbl"><thead><tr><th>#</th><th>Müşteri</th><th>Ürünler</th><th>Tutar</th><th>Durum</th><th>Kurye</th><th>İşlem</th></tr></thead><tbody id="otb"></tbody></table></div></div>${profHTML()}`;}
+function itemFrm(t){const T=t==="food"?"Yemek":"İçecek",e=t==="food"?"🍔":"🥤",cats=t==="food"?"<option>Ana Yemek</option><option>Başlangıç</option><option>Salata</option><option>Tatlı</option><option>Atıştırmalık</option>":"<option>Soğuk İçecek</option><option>Sıcak İçecek</option><option>Meyve Suyu</option><option>Kahve</option><option>Çay</option>";return`<div class="ds" id="ds-add-${t}"><div class="dh"><h2>${e} ${T} Ekle</h2><p>Menüne yeni bir ürün ekle.</p></div><div class="ifrm"><h3>${e} Yeni ${T}</h3><div class="fg"><label>İsim</label><input id="${t}-n" placeholder="${T} adı"></div><div class="frow"><div class="fg"><label>Fiyat (₺)</label><input type="number" id="${t}-pr" placeholder="0.00" inputmode="decimal"></div><div class="fg"><label>Kategori</label><select id="${t}-ct">${cats}</select></div></div><div class="fg"><label>Açıklama</label><textarea id="${t}-dc" placeholder="Kısa açıklama..."></textarea></div><button class="fb" onclick="addItem('${t}')">Ürünü Ekle ${e}</button></div></div>`;}
+window.addItem=async(t)=>{const name=$(t+"-n").value.trim(),price=$(t+"-pr").value,cat=$(t+"-ct").value,desc=$(t+"-dc").value.trim();if(!name||!price){toast("İsim ve fiyat zorunlu!","⚠️");return;}toast("Ekleniyor...","⏳");try{const item={name,price:parseFloat(price),cat,desc,type:t,emoji:t==="food"?"🍔":"🥤",owner:CU.username,ownerName:CU.name,createdAt:serverTimestamp()};const ref=await addDoc(collection(db,"menuItems"),item);menu.push({id:ref.id,...item});toast(name+" eklendi! ✅","✅");$(t+"-n").value="";$(t+"-pr").value="";$(t+"-dc").value="";updStats();}catch(e){toast("Hata: "+e.message,"❌");}};
+window.renderMenu=()=>{const l=$("ilist");if(!l)return;const my=menu.filter(i=>i.owner===CU.username);if(!my.length){l.innerHTML="<p style='color:#8A6A5A;padding:12px 0;'>Henüz ürün yok. Yemek veya İçecek Ekle sekmesinden ekleyebilirsin.</p>";return;}l.innerHTML=my.map(i=>`<div class="icard"><div class="ith">${i.emoji||"🍔"}</div><div class="iin"><h4>${i.name}</h4><div class="ipr">₺${parseFloat(i.price).toFixed(2)}</div><div class="idc">${i.desc||""}</div><div style="margin-top:5px;"><span class="badge bb">${i.cat}</span></div><div class="iacts"><button class="ib ib-e" onclick="editItem('${i.id}')">✏️ Düzenle</button><button class="ib ib-d" onclick="delItem('${i.id}')">🗑️ Sil</button></div></div></div>`).join("");};
 window.editItem=(id)=>{const item=menu.find(i=>i.id===id);if(!item)return;const ov=document.createElement("div");ov.className="ov on";ov.id="ov-ei";ov.innerHTML=`<div class="modal"><button class="mcls" onclick="document.getElementById('ov-ei').remove()">✕</button><div class="mttl">✏️ Ürünü Düzenle</div><div class="fg"><label>İsim</label><input id="ein" value="${item.name}"></div><div class="frow"><div class="fg"><label>Fiyat (₺)</label><input type="number" id="eip" value="${item.price}" inputmode="decimal"></div><div class="fg"><label>Kategori</label><input id="eic" value="${item.cat}"></div></div><div class="fg"><label>Açıklama</label><textarea id="eid">${item.desc||""}</textarea></div><button class="fb" onclick="saveItem('${id}')">💾 Kaydet</button><button class="fb-s" onclick="document.getElementById('ov-ei').remove()">İptal</button></div>`;document.body.appendChild(ov);};
 window.saveItem=async(id)=>{const name=$("ein").value.trim(),price=$("eip").value,cat=$("eic").value.trim(),desc=$("eid").value.trim();if(!name||!price){toast("İsim ve fiyat zorunlu!","⚠️");return;}try{await updateDoc(doc(db,"menuItems",id),{name,price:parseFloat(price),cat,desc});const i=menu.find(x=>x.id===id);if(i){i.name=name;i.price=parseFloat(price);i.cat=cat;i.desc=desc;}$("ov-ei").remove();renderMenu();updStats();toast("Ürün güncellendi! ✅","✅");}catch(e){toast("Hata: "+e.message,"❌");}};
 window.delItem=async(id)=>{if(!confirm("Bu ürünü silmek istediğine emin misin?"))return;try{await deleteDoc(doc(db,"menuItems",id));menu=menu.filter(i=>i.id!==id);renderMenu();updStats();toast("Ürün silindi.","🗑️");}catch(e){toast("Hata: "+e.message,"❌");}};
-window.renderOrders=async()=>{const tb=$("otb");if(!tb)return;await loadAll();const my=orders.filter(o=>o.restaurantOwner===CU.username).sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));const crs=users.filter(u=>u.role==="courier");if(!my.length){tb.innerHTML="<tr><td colspan='7' style='text-align:center;color:#8A6A5A;padding:22px;'>Henüz sipariş yok.</td></tr>";return;}tb.innerHTML=my.map(o=>`<tr><td><strong>#${String(o.id).slice(-5)}</strong></td><td><div style="font-weight:700;">${o.customerName}</div><small style="color:#8A6A5A;">${o.customerPhone||""}</small></td><td style="max-width:140px;">${(o.items||[]).map(x=>x.name+" x"+x.qty).join(", ")}</td><td><strong>₺${parseFloat(o.total).toFixed(2)}</strong></td><td>${sbadge(o.status)}</td><td>${o.status==="cancelled"?"-":`<select class="asel" onchange="assCourier('${o.id}',this.value)"><option value="">-- Seç --</option>${crs.map(c=>`<option value="${c.username}"${o.courierId===c.username?" selected":""}>${c.name}</option>`).join("")}</select>`}</td><td>${o.status!=="delivered"&&o.status!=="cancelled"?`<button class="abtn abtn-c" style="font-size:.74rem;padding:5px 10px;" onclick="cancelBiz('${o.id}')">❌ İptal</button>`:"-"}</td></tr>`).join("");};
+window.renderOrds=async()=>{const tb=$("otb");if(!tb)return;await loadAll();const my=orders.filter(o=>o.restaurantOwner===CU.username).sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));const crs=users.filter(u=>u.role==="courier");if(!my.length){tb.innerHTML="<tr><td colspan='7' style='text-align:center;color:#8A6A5A;padding:22px;'>Henüz sipariş yok.</td></tr>";return;}tb.innerHTML=my.map(o=>`<tr><td><strong>#${String(o.id).slice(-5)}</strong></td><td><div style="font-weight:700;">${o.customerName}</div><small style="color:#8A6A5A;">${o.customerPhone||""}</small></td><td style="max-width:140px;">${(o.items||[]).map(x=>x.name+" x"+x.qty).join(", ")}</td><td><strong>₺${parseFloat(o.total).toFixed(2)}</strong></td><td>${sbadge(o.status)}</td><td>${o.status==="cancelled"?"-":`<select class="asel" onchange="assCourier('${o.id}',this.value)"><option value="">-- Seç --</option>${crs.map(c=>`<option value="${c.username}"${o.courierId===c.username?" selected":""}>${c.name}</option>`).join("")}</select>`}</td><td>${o.status!=="delivered"&&o.status!=="cancelled"?`<button class="abtn abtn-c" style="font-size:.74rem;padding:5px 10px;" onclick="cancelBiz('${o.id}')">❌ İptal</button>`:"-"}</td></tr>`).join("");};
 window.assCourier=async(oid,cid)=>{try{await updateDoc(doc(db,"orders",oid),{courierId:cid,status:cid?"assigned":"pending"});const o=orders.find(x=>x.id===oid);if(o){o.courierId=cid;o.status=cid?"assigned":"pending";}toast("Kurye atandı! 🛵","🛵");}catch(e){toast("Hata: "+e.message,"❌");}};
-window.cancelBiz=async(id)=>{if(!confirm("Bu siparişi iptal etmek istediğine emin misin?"))return;try{await updateDoc(doc(db,"orders",id),{status:"cancelled"});const o=orders.find(x=>x.id===id);if(o)o.status="cancelled";renderOrders();toast("Sipariş iptal edildi.","❌");}catch(e){toast("Hata: "+e.message,"❌");}};
+window.cancelBiz=async(id)=>{if(!confirm("Bu siparişi iptal etmek istediğine emin misin?"))return;try{await updateDoc(doc(db,"orders",id),{status:"cancelled"});const o=orders.find(x=>x.id===id);if(o)o.status="cancelled";renderOrds();toast("Sipariş iptal edildi.","❌");}catch(e){toast("Hata: "+e.message,"❌");}};
 function sbadge(s){const m={pending:"bo",assigned:"bb",delivering:"bb",delivered:"bg",cancelled:"br"};const t={pending:"Bekliyor",assigned:"Kurye Atandı",delivering:"Yolda",delivered:"Teslim Edildi",cancelled:"İptal"};return`<span class="badge ${m[s]||"bo"}">${t[s]||s}</span>`;}
 function updStats(){const e=$("stm");if(!e)return;const mi=menu.filter(i=>i.owner===CU.username),mo=orders.filter(o=>o.restaurantOwner===CU.username);$("stm").textContent=mi.length;$("sto").textContent=mo.length;$("stp").textContent=mo.filter(o=>o.status==="pending").length;$("std").textContent=mo.filter(o=>o.status==="delivered").length;}
-function custHTML(){return`<div class="ds" id="ds-home"><div class="dh"><h2>Merhaba, ${CU.name.split(" ")[0]} 🎉</h2><p>Ne yemek istersin bugün?</p></div><div class="stats"><div class="sc cl" onclick="dsShow('ds-myord',null)"><div class="n" id="cso">0</div><div class="l">Siparişlerim</div><div class="ht">Takip Et →</div></div><div class="sc"><div class="n" id="csr">0</div><div class="l">Restoran</div></div></div><div id="aob-area"></div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:6px;"><h3 style="font-family:'Fredoka One',cursive;font-size:clamp(1rem,2.5vw,1.2rem);">🍽️ Restoranlar</h3><button onclick="dsShow('ds-rest',null)" class="abtn abtn-g" style="font-size:.76rem;">Tümünü Gör →</button></div><div class="rgrid" id="rhome"></div></div><div class="ds" id="ds-rest"><div class="dhr"><div class="dh" style="margin:0;"><h2>Restoranlar 🍽️</h2><p>Lezzetli seçenekler!</p></div><button onclick="renderRest()" class="abtn abtn-g" style="font-size:.78rem;">🔄 Yenile</button></div><div class="rgrid" id="rgrid"></div></div><div class="ds" id="ds-myord"><div class="dhr"><div class="dh" style="margin:0;"><h2>Siparişlerim 📦</h2><p id="ord-count">Siparişlerini takip et</p></div><button onclick="renderMyOrd()" class="abtn abtn-g" style="font-size:.78rem;">🔄 Yenile</button></div><div id="myol"></div></div>${profHTML()}`;}
-function restCards(biz){if(!biz.length)return"<p style='color:#8A6A5A;padding:12px 0;'>Henüz kayıtlı restoran yok.</p>";const em=["🍕","🍔","🌮","🍜","🥗","🍣","🥩","🍝"];return biz.map((b,i)=>`<div class="rcard" onclick="openRest('${b.username}')"><div class="rbnr" style="background:linear-gradient(135deg,hsl(${i*40},80%,85%),hsl(${i*40+30},80%,75%));">${em[i%em.length]}</div><div class="rin"><h3>${b.name}</h3><div class="meta"><span>⭐ 4.${3+i%7}</span><span>${b.btype||"Restoran"}</span></div><div style="margin-top:3px;font-size:.75rem;color:#8A6A5A;">${b.addr||""}</div></div></div>`).join("");}
-window.renderRest=async()=>{await loadAll();const biz=users.filter(u=>u.role==="business");const csr=$("csr");if(csr)csr.textContent=biz.length;const cards=restCards(biz);const g=$("rgrid");if(g)g.innerHTML=cards;const h=$("rhome");if(h)h.innerHTML=cards;updHomeOrders();};
-function updHomeOrders(){const area=$("aob-area");if(!area)return;const my=orders.filter(o=>o.customerId===CU.username);const cso=$("cso");if(cso)cso.textContent=my.length;const active=my.find(o=>["pending","assigned","delivering"].includes(o.status));if(active){const sm={pending:"Restoran onaylıyor...",assigned:"Kurye yolda geliyor...",delivering:"Siparişin yolda! 🚀"};const cl={pending:"#fff3e0",assigned:"#dbeafe",delivering:"#dcfce7"};const ic={pending:"⏳",assigned:"🛵",delivering:"🚀"};area.innerHTML=`<div class="aob" style="background:${cl[active.status]};" onclick="dsShow('ds-myord',null)"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:1.4rem;">${ic[active.status]}</span><div><div style="font-weight:800;font-size:.86rem;">Aktif Sipariş #${String(active.id).slice(-5)}</div><div style="font-size:.76rem;color:#555;margin-top:1px;">${sm[active.status]}</div></div></div><span style="color:var(--or);font-weight:800;font-size:.79rem;white-space:nowrap;">Takip Et →</span></div>`;}else area.innerHTML="";}
+
+/* CUSTOMER */
+function custHTML(){return`<div class="ds" id="ds-home"><div class="dh"><h2>Merhaba, ${CU.name.split(" ")[0]} 🎉</h2><p>Ne yemek istersin bugün?</p></div><div class="stats"><div class="sc cl" onclick="dsShow('ds-myord',null)"><div class="n" id="cso">0</div><div class="l">Siparişlerim</div><div class="ht">Takip Et →</div></div><div class="sc"><div class="n" id="csr">0</div><div class="l">Restoran</div></div></div><div id="aob-area"></div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:6px;"><h3 style="font-family:'Fredoka One',cursive;font-size:clamp(1rem,2.5vw,1.2rem);">🍽️ Restoranlar</h3><button onclick="dsShow('ds-rest',null)" class="abtn abtn-g" style="font-size:.76rem;">Tümünü Gör →</button></div><div class="rgrid" id="rhome"></div></div><div class="ds" id="ds-rest"><div class="dhr"><div class="dh" style="margin:0;"><h2>Restoranlar 🍽️</h2><p>Lezzetli seçenekler!</p></div><button onclick="renderRest()" class="abtn abtn-g" style="font-size:.78rem;">🔄 Yenile</button></div><div class="rgrid" id="rgrid"></div></div><div class="ds" id="ds-myord"><div class="dhr"><div class="dh" style="margin:0;"><h2>Siparişlerim 📦</h2><p id="ord-cnt">Siparişlerini takip et</p></div><button onclick="renderMyOrd()" class="abtn abtn-g" style="font-size:.78rem;">🔄 Yenile</button></div><div id="myol"></div></div>${profHTML()}`;}
+function rCards(biz){if(!biz.length)return"<p style='color:#8A6A5A;padding:12px 0;'>Henüz kayıtlı restoran yok.</p>";const em=["🍕","🍔","🌮","🍜","🥗","🍣","🥩","🍝"];return biz.map((b,i)=>`<div class="rcard" onclick="openRest('${b.username}')"><div class="rbnr" style="background:linear-gradient(135deg,hsl(${i*40},80%,85%),hsl(${i*40+30},80%,75%));">${em[i%em.length]}</div><div class="rin"><h3>${b.name}</h3><div class="meta"><span>⭐ 4.${3+i%7}</span><span>${b.btype||"Restoran"}</span></div><div style="margin-top:3px;font-size:.75rem;color:#8A6A5A;">${b.addr||""}</div></div></div>`).join("");}
+window.renderRest=async()=>{await loadAll();const biz=users.filter(u=>u.role==="business");const csr=$("csr");if(csr)csr.textContent=biz.length;const cards=rCards(biz);const g=$("rgrid");if(g)g.innerHTML=cards;const h=$("rhome");if(h)h.innerHTML=cards;updHomeOrds();};
+function updHomeOrds(){const area=$("aob-area");if(!area)return;const my=orders.filter(o=>o.customerId===CU.username);const cso=$("cso");if(cso)cso.textContent=my.length;const active=my.find(o=>["pending","assigned","delivering"].includes(o.status));if(active){const sm={pending:"Restoran onaylıyor...",assigned:"Kurye yolda geliyor...",delivering:"Siparişin yolda! 🚀"};const cl={pending:"#fff3e0",assigned:"#dbeafe",delivering:"#dcfce7"};const ic={pending:"⏳",assigned:"🛵",delivering:"🚀"};area.innerHTML=`<div class="aob" style="background:${cl[active.status]};" onclick="dsShow('ds-myord',null)"><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:1.4rem;">${ic[active.status]}</span><div><div style="font-weight:800;font-size:.86rem;">Aktif Sipariş #${String(active.id).slice(-5)}</div><div style="font-size:.76rem;color:#555;margin-top:1px;">${sm[active.status]}</div></div></div><span style="color:var(--or);font-weight:800;font-size:.79rem;white-space:nowrap;">Takip Et →</span></div>`;}else area.innerHTML="";}
 window.openRest=(owner)=>{const biz=users.find(u=>u.username===owner);const items=menu.filter(i=>i.owner===owner);const foods=items.filter(i=>i.type==="food"),drinks=items.filter(i=>i.type==="drink");const ov=document.createElement("div");ov.className="ov on";ov.id="ov-rest";ov.innerHTML=`<div class="modal" style="max-width:500px;"><button class="mcls" onclick="document.getElementById('ov-rest').remove()">✕</button><div class="mttl">${biz?.name||"Restoran"} 🍽️</div><div class="msub">${biz?.btype||""} · ${biz?.addr||""}</div>${foods.length?`<h4 style="font-weight:800;margin:10px 0 7px;font-size:.9rem;">🍔 Yemekler</h4><div style="display:flex;flex-direction:column;gap:7px;">${foods.map(f=>mrow(f,owner)).join("")}</div>`:""}${drinks.length?`<h4 style="font-weight:800;margin:10px 0 7px;font-size:.9rem;">🥤 İçecekler</h4><div style="display:flex;flex-direction:column;gap:7px;">${drinks.map(f=>mrow(f,owner)).join("")}</div>`:""}${!items.length?`<p style="color:#8A6A5A;text-align:center;padding:22px 0;">Bu restoran henüz menü eklememiş.</p>`:""}</div>`;document.body.appendChild(ov);};
 function mrow(item,owner){const safe=JSON.stringify({id:item.id,name:item.name,price:item.price,emoji:item.emoji||"🍔",type:item.type}).replace(/"/g,"&quot;");return`<div style="display:flex;align-items:center;justify-content:space-between;background:#fff8f5;border-radius:10px;padding:9px 11px;gap:8px;flex-wrap:wrap;"><div style="display:flex;align-items:center;gap:7px;flex:1;min-width:0;"><span style="font-size:1.5rem;flex-shrink:0;">${item.emoji||"🍔"}</span><div style="min-width:0;"><div style="font-weight:800;font-size:.84rem;">${item.name}</div><div style="color:#8A6A5A;font-size:.73rem;">${item.desc||""}</div></div></div><div style="display:flex;align-items:center;gap:7px;flex-shrink:0;"><span style="font-weight:800;color:var(--or);font-size:.88rem;">₺${parseFloat(item.price).toFixed(2)}</span><button onclick="addToCart(${safe},'${owner}')" style="background:linear-gradient(135deg,var(--red),var(--or));color:#fff;border:none;border-radius:50px;padding:5px 12px;font-family:Nunito,sans-serif;font-weight:700;font-size:.76rem;cursor:pointer;white-space:nowrap;">+ Ekle</button></div></div>`;}
 window.addToCart=(item,owner)=>{if(cart.length&&cart[0].owner!==owner){if(!confirm("Farklı restoran! Sepeti temizleyip devam et?"))return;cart=[];}const ex=cart.find(c=>c.id===item.id);if(ex)ex.qty++;else cart.push({...item,qty:1,owner,restaurantOwner:owner});updCart();toast(item.name+" eklendi 🛒","✅");};
 window.updCart=()=>{const t=cart.reduce((s,i)=>s+i.qty,0);$("ccount").textContent=t;if(t>0)$("cartfl").classList.add("on");else $("cartfl").classList.remove("on");};
 window.openCart=()=>{const total=cart.reduce((s,i)=>s+i.price*i.qty,0);const ov=document.createElement("div");ov.className="ov on";ov.id="ov-cart";ov.innerHTML=`<div class="modal" style="max-width:400px;"><button class="mcls" onclick="document.getElementById('ov-cart').remove()">✕</button><div class="mttl">🛒 Sepetim</div>${cart.length?`<div style="display:flex;flex-direction:column;gap:6px;margin-bottom:13px;">${cart.map(i=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 10px;background:#fff8f5;border-radius:9px;gap:6px;"><span style="font-size:.82rem;">${i.emoji} ${i.name} x${i.qty}</span><span style="font-weight:800;color:var(--or);white-space:nowrap;">₺${(i.price*i.qty).toFixed(2)}</span></div>`).join("")}</div><div style="text-align:right;font-weight:800;font-size:.93rem;margin-bottom:11px;">Toplam: ₺${total.toFixed(2)}</div><button class="fb" onclick="placeOrder()">Siparişi Onayla 🚀</button>`:"<p style='text-align:center;color:#8A6A5A;padding:20px 0;'>Sepetiniz boş.</p>"}</div>`;document.body.appendChild(ov);};
 window.placeOrder=async()=>{const owner=cart[0]?.restaurantOwner||cart[0]?.owner;const order={customerId:CU.username,customerName:CU.name,customerPhone:CU.phone||"",customerAddr:CU.addr||"",restaurantOwner:owner,items:cart.map(i=>({name:i.name,qty:i.qty,price:i.price})),total:cart.reduce((s,i)=>s+i.price*i.qty,0),status:"pending",courierId:null,date:new Date().toLocaleString("tr-TR"),createdAt:serverTimestamp()};try{const ref=await addDoc(collection(db,"orders"),order);orders.push({id:ref.id,...order});cart=[];updCart();$("ov-cart")?.remove();$("ov-rest")?.remove();toast("Siparişin alındı! Siparişlerim sekmesinden takip edebilirsin 🎉","✅");setTimeout(()=>dsShow("ds-myord",null),500);}catch(e){toast("Hata: "+e.message,"❌");}};
-function trackHTML(status){const steps=[{key:"pending",ic:"📋",lb:"Alındı"},{key:"assigned",ic:"🛵",lb:"Kurye Atandı"},{key:"delivering",ic:"🚀",lb:"Yolda"},{key:"delivered",ic:"✅",lb:"Teslim Edildi"}];if(status==="cancelled")return`<div style="display:flex;align-items:center;gap:6px;margin-top:9px;padding:7px 10px;background:#fee2e2;border-radius:8px;"><span>❌</span><span style="font-size:.78rem;font-weight:700;color:#dc2626;">Sipariş İptal Edildi</span></div>`;const idx=steps.findIndex(s=>s.key===status);const pct=idx<=0?0:idx===1?33:idx===2?66:100;return`<div class="track"><div class="track-row"><div class="track-line-bg"></div><div class="track-line-fg" style="width:${pct}%"></div>${steps.map((s,i)=>`<div class="track-step"><div class="track-dot ${i<=idx?"done":"idle"}">${s.ic}</div><div class="track-lbl ${i<=idx?"done":"idle"}">${s.lb}</div></div>`).join("")}</div></div>`;}
-window.renderMyOrd=async()=>{const list=$("myol");if(!list)return;await loadAll();const my=orders.filter(o=>o.customerId===CU.username).sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));const cnt=$("ord-count");if(cnt)cnt.textContent=my.length?`Toplam ${my.length} sipariş`:"Henüz sipariş vermediniz.";const cso=$("cso");if(cso)cso.textContent=my.length;if(!my.length){list.innerHTML="<div style='text-align:center;padding:24px 0;color:#8A6A5A;'><p style='margin-bottom:14px;'>Henüz sipariş vermediniz.</p><button id='go-rest' class='fb' style='max-width:220px;'>🍽️ Restoranları Gez</button></div>";const rb=$("go-rest");if(rb)rb.onclick=()=>dsShow("ds-rest",null);return;}list.innerHTML=my.map(o=>{const courier=o.courierId?users.find(u=>u.username===o.courierId):null;return`<div class="ocard"><div class="ocard-r"><div><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:3px;"><strong style="font-size:.9rem;">#${String(o.id).slice(-5)}</strong>${sbadge(o.status)}</div><div style="color:#8A6A5A;font-size:.75rem;">${o.date}</div><div style="font-size:.8rem;margin-top:5px;color:#8A6A5A;">${(o.items||[]).map(i=>i.name+" x"+i.qty).join(" · ")}</div><div style="font-weight:800;margin-top:3px;">₺${parseFloat(o.total).toFixed(2)}</div>${courier?`<div style="font-size:.76rem;color:#8A6A5A;margin-top:3px;">🛵 ${courier.name}${courier.phone?" · "+courier.phone:""}</div>`:""}</div><div class="ocard-acts">${o.status==="pending"||o.status==="assigned"?`<button class="abtn abtn-c" onclick="cancelCust('${o.id}')">❌ İptal</button>`:""}</div></div>${trackHTML(o.status)}</div>`;}).join("");clearTimeout(window._orTimer);window._orTimer=setTimeout(()=>{if($("ds-myord")?.classList.contains("on"))renderMyOrd();},15000);};
+function trackHTML(s){const steps=[{key:"pending",ic:"📋",lb:"Alındı"},{key:"assigned",ic:"🛵",lb:"Kurye Atandı"},{key:"delivering",ic:"🚀",lb:"Yolda"},{key:"delivered",ic:"✅",lb:"Teslim Edildi"}];if(s==="cancelled")return`<div style="display:flex;align-items:center;gap:6px;margin-top:9px;padding:7px 10px;background:#fee2e2;border-radius:8px;"><span>❌</span><span style="font-size:.78rem;font-weight:700;color:#dc2626;">Sipariş İptal Edildi</span></div>`;const idx=steps.findIndex(x=>x.key===s);const pct=idx<=0?0:idx===1?33:idx===2?66:100;return`<div class="track"><div class="track-row"><div class="tlbg"></div><div class="tlfg" style="width:${pct}%"></div>${steps.map((x,i)=>`<div class="tstep"><div class="tdot ${i<=idx?"done":"idle"}">${x.ic}</div><div class="tlbl ${i<=idx?"done":"idle"}">${x.lb}</div></div>`).join("")}</div></div>`;}
+window.renderMyOrd=async()=>{const list=$("myol");if(!list)return;await loadAll();const my=orders.filter(o=>o.customerId===CU.username).sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));const cnt=$("ord-cnt");if(cnt)cnt.textContent=my.length?`Toplam ${my.length} sipariş`:"Henüz sipariş vermediniz.";const cso=$("cso");if(cso)cso.textContent=my.length;if(!my.length){list.innerHTML="<div style='text-align:center;padding:24px 0;color:#8A6A5A;'><p style='margin-bottom:14px;'>Henüz sipariş vermediniz.</p><button id='go-rest' class='fb' style='max-width:220px;'>🍽️ Restoranları Gez</button></div>";const rb=$("go-rest");if(rb)rb.onclick=()=>dsShow("ds-rest",null);return;}list.innerHTML=my.map(o=>{const courier=o.courierId?users.find(u=>u.username===o.courierId):null;return`<div class="ocard"><div class="ocard-r"><div><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:3px;"><strong style="font-size:.9rem;">#${String(o.id).slice(-5)}</strong>${sbadge(o.status)}</div><div style="color:#8A6A5A;font-size:.75rem;">${o.date}</div><div style="font-size:.8rem;margin-top:5px;color:#8A6A5A;">${(o.items||[]).map(i=>i.name+" x"+i.qty).join(" · ")}</div><div style="font-weight:800;margin-top:3px;">₺${parseFloat(o.total).toFixed(2)}</div>${courier?`<div style="font-size:.76rem;color:#8A6A5A;margin-top:3px;">🛵 ${courier.name}${courier.phone?" · "+courier.phone:""}</div>`:""}</div><div class="ocard-acts">${o.status==="pending"||o.status==="assigned"?`<button class="abtn abtn-c" onclick="cancelCust('${o.id}')">❌ İptal</button>`:""}</div></div>${trackHTML(o.status)}</div>`;}).join("");clearTimeout(window._orTimer);window._orTimer=setTimeout(()=>{if($("ds-myord")?.classList.contains("on"))renderMyOrd();},15000);};
 window.cancelCust=async(id)=>{if(!confirm("Bu siparişi iptal etmek istediğine emin misin?"))return;try{await updateDoc(doc(db,"orders",id),{status:"cancelled"});const o=orders.find(x=>x.id===id);if(o)o.status="cancelled";renderMyOrd();toast("Sipariş iptal edildi.","❌");}catch(e){toast("Hata: "+e.message,"❌");}};
+
+/* COURIER */
 function courHTML(){return`<div class="ds" id="ds-home"><div class="dh"><h2>Merhaba, ${CU.name.split(" ")[0]} 🛵</h2><p>Bugün harika bir gün olsun!</p></div><div class="stats"><div class="sc"><div class="n" id="crp">0</div><div class="l">Bekleyen</div></div><div class="sc"><div class="n" id="crd">0</div><div class="l">Teslim Ettim</div></div></div></div><div class="ds" id="ds-pending"><div class="dhr"><div class="dh" style="margin:0;"><h2>Bekleyen Siparişler 📦</h2><p>Sana atanan siparişler</p></div><button onclick="renderPend()" class="abtn abtn-g" style="font-size:.78rem;">🔄 Yenile</button></div><div id="cpl"></div></div><div class="ds" id="ds-delivering"><div class="dhr"><div class="dh" style="margin:0;"><h2>Teslimatta 📍</h2><p>Aktif teslimatlar</p></div><button onclick="renderDeliv()" class="abtn abtn-g" style="font-size:.78rem;">🔄 Yenile</button></div><div id="cdl"></div></div>${profHTML()}`;}
 function crStats(){const ep=$("crp"),ed=$("crd");if(ep)ep.textContent=orders.filter(o=>o.courierId===CU.username&&o.status==="assigned").length;if(ed)ed.textContent=orders.filter(o=>o.courierId===CU.username&&o.status==="delivered").length;}
 window.renderPend=async()=>{const el=$("cpl");if(!el)return;await loadAll();const mine=orders.filter(o=>o.courierId===CU.username&&o.status==="assigned");crStats();if(!mine.length){el.innerHTML="<p style='color:#8A6A5A;padding:12px 0;'>Sana atanmış sipariş yok.</p>";return;}el.innerHTML=mine.map(o=>`<div class="ocard"><div class="ocard-r"><div><h4 style="font-weight:800;font-size:.9rem;">#${String(o.id).slice(-5)} · ${o.customerName}</h4><div style="color:#8A6A5A;font-size:.79rem;margin-top:2px;">📍 ${o.customerAddr||"Adres yok"}</div><div style="font-size:.79rem;margin-top:4px;">${(o.items||[]).map(i=>i.name).join(", ")}</div><div style="font-weight:800;color:var(--or);margin-top:4px;">₺${parseFloat(o.total).toFixed(2)}</div></div><div class="ocard-acts"><button class="abtn abtn-g" onclick="startDel('${o.id}')">Teslimata Başla 🛵</button></div></div></div>`).join("");};
 window.renderDeliv=async()=>{const el=$("cdl");if(!el)return;await loadAll();const mine=orders.filter(o=>o.courierId===CU.username&&o.status==="delivering");if(!mine.length){el.innerHTML="<p style='color:#8A6A5A;padding:12px 0;'>Aktif teslimat yok.</p>";return;}el.innerHTML=mine.map(o=>`<div class="ocard"><div class="ocard-r"><div><h4 style="font-weight:800;font-size:.9rem;">#${String(o.id).slice(-5)} · ${o.customerName}</h4><div style="color:#8A6A5A;font-size:.79rem;margin-top:2px;">📍 ${o.customerAddr||"Adres yok"}</div></div><div class="ocard-acts"><button class="abtn abtn-g" onclick="completeDel('${o.id}')">Teslim Edildi ✅</button></div></div></div>`).join("");};
 window.startDel=async(id)=>{try{await updateDoc(doc(db,"orders",id),{status:"delivering"});const o=orders.find(x=>x.id===id);if(o)o.status="delivering";renderPend();renderDeliv();toast("Teslimata çıkıldı! 🛵","🛵");}catch(e){toast("Hata: "+e.message,"❌");}};
 window.completeDel=async(id)=>{try{await updateDoc(doc(db,"orders",id),{status:"delivered"});const o=orders.find(x=>x.id===id);if(o)o.status="delivered";renderDeliv();crStats();toast("Teslim edildi! ✅","✅");}catch(e){toast("Hata: "+e.message,"❌");}};
+
 </script>
 </body>
 </html>

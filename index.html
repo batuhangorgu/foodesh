@@ -504,7 +504,7 @@ function buildSidebar(){
 function buildAllSidebars(){
   if(!CU)return;
   const tabs=TABS[CU.role]||[];
-  const menuHTML=`<li><a href="#" onclick="closeSidebar();savePageSes('pg-home');showPg('pg-home');return false;" style="color:rgba(255,190,120,.8);">← Ana Sayfaya Dön</a></li><li class="sep"></li>`+tabs.map(t=>`<li><a href="#" onclick="closeSidebar();savePageSes('pg-dash');showPg('pg-dash');setTimeout(()=>dsShow('${t.id}',null),60);return false;">${t.ic} ${t.lb}</a></li>`).join("");
+  const menuHTML=`<li><a href="#" onclick="closeSidebar();savePageSes('pg-home');showPg('pg-home');return false;" style="color:rgba(255,190,120,.8);">🏠 Ana Sayfa</a></li><li class="sep"></li>`+tabs.map(t=>`<li><a href="#" onclick="closeSidebar();savePageSes('pg-dash');showPg('pg-dash');setTimeout(()=>dsShow('${t.id}',null),60);return false;">${t.ic} ${t.lb}</a></li>`).join("");
   const sbm=$("sbm");if(sbm)sbm.innerHTML=menuHTML;
 }
 function updHeroBtns(){
@@ -585,16 +585,22 @@ window.doReg=async()=>{
 
 /* DASHBOARD */
 const TABS={
-  business:[{id:"ds-home",ic:"🏠",lb:"Ana Sayfa"},{id:"ds-add-food",ic:"🍔",lb:"Yemek Ekle"},{id:"ds-add-drink",ic:"🥤",lb:"İçecek Ekle"},{id:"ds-menu",ic:"📋",lb:"Menüm"},{id:"ds-orders",ic:"📦",lb:"Siparişler"},{id:"ds-profile",ic:"👤",lb:"Profil"}],
-  customer:[{id:"ds-home",ic:"🏠",lb:"Ana Sayfa"},{id:"ds-rest",ic:"🍽️",lb:"Restoranlar"},{id:"ds-myord",ic:"📦",lb:"Siparişlerim"},{id:"ds-profile",ic:"👤",lb:"Profil"}],
-  courier:[{id:"ds-home",ic:"🏠",lb:"Ana Sayfa"},{id:"ds-pending",ic:"🛵",lb:"Bekleyen"},{id:"ds-delivering",ic:"📍",lb:"Teslimatta"},{id:"ds-profile",ic:"👤",lb:"Profil"}]
+  business:[{id:"ds-add-food",ic:"🍔",lb:"Yemek Ekle"},{id:"ds-add-drink",ic:"🥤",lb:"İçecek"},{id:"ds-menu",ic:"📋",lb:"Menüm"},{id:"ds-orders",ic:"📦",lb:"Siparişler"},{id:"ds-profile",ic:"👤",lb:"Profil"}],
+  customer:[{id:"ds-rest",ic:"🍽️",lb:"Restoranlar"},{id:"ds-myord",ic:"📦",lb:"Siparişlerim"},{id:"ds-profile",ic:"👤",lb:"Profil"}],
+  courier:[{id:"ds-pending",ic:"🛵",lb:"Bekleyen"},{id:"ds-delivering",ic:"📍",lb:"Teslimatta"},{id:"ds-profile",ic:"👤",lb:"Profil"}]
 };
 
 function buildDash(){
   const B={business:bizHTML,customer:custHTML,courier:courHTML};
   $("dcont").innerHTML=(B[CU.role]||bizHTML)();
   buildSidebar();
-  setTimeout(()=>{const s=$("dcont").querySelector(".ds");if(s)s.classList.add("on");updStats();if(CU.role==="customer")renderRest();if(CU.role==="courier")crStats();},50);
+  setTimeout(()=>{
+    const firstTab=(TABS[CU.role]||[])[0];
+    if(firstTab)dsShow(firstTab.id,null);
+    updStats();
+    if(CU.role==="customer")renderRest();
+    if(CU.role==="courier")crStats();
+  },50);
 }
 
 window.dsShow=(id,el)=>{

@@ -321,18 +321,41 @@ async function loadAll(){
   m.forEach(d=>menu.push({id:d.id,...d.data()}));
   o.forEach(d=>orders.push({id:d.id,...d.data()}));
 }
+const PK="fd_page"; // current page key
 function saveSes(){if(CU)localStorage.setItem(SK,JSON.stringify({id:CU.id,username:CU.username}));}
-function clrSes(){localStorage.removeItem(SK);localStorage.removeItem(LK);}
+function savePageSes(pg){localStorage.setItem(PK,pg);}
+function clrSes(){localStorage.removeItem(SK);localStorage.removeItem(LK);localStorage.removeItem(PK);}
 async function restoreSes(){
   const r=localStorage.getItem(SK);if(!r)return false;
   try{const s=JSON.parse(r);const sn=await getDocs(query(collection(db,"users"),where("username","==",s.username)));if(sn.empty){clrSes();return false;}CU={id:sn.docs[0].id,...sn.docs[0].data()};return true;}catch{clrSes();return false;}
 }
 (async()=>{
-  try{await loadAll();const ok=await restoreSes();if(ok){setNavU();buildDash();showPg("pg-dash");const ls=localStorage.getItem(LK);if(ls&&$(ls))setTimeout(()=>dsShow(ls,null),80);}}catch(e){console.error(e);}
+  try{
+    await loadAll();
+    const ok=await restoreSes();
+    if(ok){
+      setNavU();
+      buildDash();
+      // Restore last page: home or dash
+      const lastPg=localStorage.getItem(PK)||"pg-home";
+      showPg(lastPg);
+      // If was on dash, restore last section
+      if(lastPg==="pg-dash"){
+        const ls=localStorage.getItem(LK);
+        if(ls&&$(ls))setTimeout(()=>dsShow(ls,null),80);
+      }
+    }
+    // If no session: always show home (default - pg on class already set)
+  }catch(e){console.error(e);}
   $("loader").style.display="none";
 })();
-window.goHome=()=>{closeSidebar();showPg("pg-home");};
-window.showPg=(id)=>{document.querySelectorAll(".pg").forEach(p=>p.classList.remove("on"));$(id).classList.add("on");window.scrollTo(0,0);};
+window.goHome=()=>{closeSidebar();savePageSes("pg-home");showPg("pg-home");};
+window.showPg=(id)=>{
+  document.querySelectorAll(".pg").forEach(p=>p.classList.remove("on"));
+  $(id).classList.add("on");
+  window.scrollTo(0,0);
+  if(CU)savePageSes(id); // only save if logged in
+};
 window.toast=(msg,ic="✅")=>{$("tmsg").textContent=msg;$("tic").textContent=ic;const t=$("toast");t.classList.add("on");setTimeout(()=>t.classList.remove("on"),2600);};
 window.cOv=(id)=>$(id).classList.remove("on");
 window.openLogin=()=>$("ov-login").classList.add("on");

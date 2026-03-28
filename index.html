@@ -378,6 +378,8 @@ footer a{color:var(--or);text-decoration:none;}
 <script type="module">
 
 
+
+
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import{getFirestore,collection,doc,addDoc,getDocs,updateDoc,deleteDoc,query,where,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 const db=getFirestore(initializeApp({apiKey:"AIzaSyB4SOHzkQ_RPbHqbWlVWIxxdTq3QhqWng0",authDomain:"foo-dash-b6bb9.firebaseapp.com",projectId:"foo-dash-b6bb9",storageBucket:"foo-dash-b6bb9.firebasestorage.app",messagingSenderId:"137063973696",appId:"1:137063973696:web:df1f30eed2f2ef708b30a5"}));
@@ -386,6 +388,38 @@ let CU=null,uRole=null,cart=[];
 let users=[],menu=[],orders=[];
 const SK="fd_ses",LK="fd_last",PK="fd_page";
 const $=id=>document.getElementById(id);
+/* ── NAV USER STATE ── */
+function setNavU(){
+  $("ng").style.display="none";
+  $("nu").style.display="flex";
+  $("mg").style.display="none";
+  $("mu").style.display="flex";
+  const ini=CU.name.split(" ").map(w=>w[0]).join("").toUpperCase().slice(0,2);
+  const fn=CU.name.split(" ")[0];
+  [$("pav"),$("pav2")].forEach(e=>{if(e)e.textContent=ini;});
+  [$("pnm"),$("pnm2")].forEach(e=>{if(e)e.textContent=fn;});
+  updHeroBtns();
+  buildAllSidebars();
+}
+function updHeroBtns(){
+  const c=$("hero-btns");if(!c)return;
+  if(CU){
+    const rl={business:"📦 Siparişler",customer:"🛒 Sipariş Ver",courier:"🛵 Teslimatlar"};
+    const tl={business:"📊 Panelim",customer:"📦 Siparişlerim Takip Et",courier:"📍 Teslimatta"};
+    const rs={business:"ds-orders",customer:"ds-rest",courier:"ds-pending"};
+    const ts={business:"ds-orders",customer:"ds-myord",courier:"ds-delivering"};
+    c.innerHTML=
+      `<button class="nbtn nbtn-f" style="font-size:.9rem;padding:10px 20px;" onclick="navDash('${rs[CU.role]}')">${rl[CU.role]}</button>`+
+      `<button class="nbtn nbtn-o" style="font-size:.88rem;padding:9px 16px;" onclick="navDash('${ts[CU.role]}')">${tl[CU.role]}</button>`+
+      `<button class="nbtn nbtn-o" style="font-size:.85rem;border-color:#8A6A5A;color:#8A6A5A;" onclick="goDash()">Panele Git →</button>`;
+  } else {
+    c.innerHTML=
+      `<button class="nbtn nbtn-f" style="font-size:.93rem;padding:10px 22px;" onclick="heroOrder()">🛒 Sipariş Ver</button>`+
+      `<button class="nbtn nbtn-o" style="font-size:.91rem;padding:9px 18px;" onclick="heroTrack()">📦 Takip Et</button>`+
+      `<button class="nbtn nbtn-d" style="font-size:.88rem;" onclick="showDl()">📱 İndir</button>`;
+  }
+}
+
 
 /* LOAD */
 async function loadAll(){
@@ -521,6 +555,38 @@ window.pickRole=(r,el)=>{
   $("rfc").innerHTML=fs[r]+`<button class="fb" onclick="doReg()">Kayıt Ol 🎉</button><div class="mft">Hesabın var mı? <button class="lbtn" onclick="cOv('ov-reg');openLogin()">Giriş Yap</button></div>`;
 };
 
+
+/* ── LOGIN / LOGOUT ── */
+window.doLogin=async()=>{
+  const u=$("lu").value.trim(),p=$("lp").value;
+  if(!u||!p){toast("Tüm alanları doldur!","⚠️");return;}
+  toast("Giriş yapılıyor...","⏳");
+  try{
+    const sn=await getDocs(query(collection(db,"users"),where("username","==",u),where("password","==",p)));
+    if(sn.empty){toast("Kullanıcı adı veya şifre yanlış!","❌");return;}
+    CU={id:sn.docs[0].id,...sn.docs[0].data()};
+    saveSes();cOv("ov-login");cMob();
+    await loadAll();setNavU();buildDash();
+    savePageSes("pg-home");showPg("pg-home");
+    toast("Hoş geldin, "+CU.name.split(" ")[0]+"! 🎉","✅");
+  }catch(e){toast("Hata: "+e.message,"❌");}
+};
+
+window.doLogout=()=>{
+  if(!confirm("Çıkış yapmak istediğine emin misin?"))return;
+  CU=null;cart=[];clrSes();
+  $("ng").style.display="flex";$("nu").style.display="none";
+  $("mg").style.display="flex";$("mu").style.display="none";
+  $("cartfl").classList.remove("on");
+  const sbm=$("sbm");if(sbm)sbm.innerHTML="";
+  updHeroBtns();cMob();closeSB();
+  showPg("pg-home");toast("Görüşürüz! 👋","👋");
+};
+
+window.heroOrder=()=>{
+  if(CU){navDash(CU.role==="customer"?"ds-rest":CU.role==="business"?"ds-orders":"ds-pending");}
+  else openLogin();
+};
 window.doReg=async()=>{
   const name=$("rn")?.value.trim(),user=$("ru")?.value.trim(),pass=$("rp")?.value;
   if(!name||!user||!pass){toast("Zorunlu alanları doldur!","⚠️");return;}
@@ -638,6 +704,8 @@ window.completeDel=async(id)=>{try{await updateDoc(doc(db,"orders",id),{status:"
 
 
 window.heroTrack=()=>{if(CU){navDash(CU.role==="customer"?"ds-myord":CU.role==="business"?"ds-orders":"ds-delivering");}else openLogin();};
+
+
 </script>
 </body>
 </html>

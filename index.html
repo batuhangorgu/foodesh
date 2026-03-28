@@ -440,14 +440,18 @@ window.showPg=(id)=>{
 };
 window.goDash=()=>{if(!$("pg-dash").classList.contains("on")){buildDash();}showPg("pg-dash");savePageSes("pg-dash");};
 window.goHome=()=>{
-  closeSB();
+  // Close sidebar safely
+  const sb=document.querySelector(".sidebar");
+  if(sb){sb.classList.remove("open");}
+  const sbo=$("sb-ov")||$("sb-overlay");
+  if(sbo)sbo.classList.remove("open");
   $("ham").classList.remove("open");
   $("mobdr").classList.remove("open");
+  // Navigate home
   savePageSes("pg-home");
   document.querySelectorAll(".pg").forEach(p=>p.classList.remove("on"));
   $("pg-home").classList.add("on");
   window.scrollTo(0,0);
-  if(typeof updateSidebar==="function")updateSidebar("pg-home");
 };
 window.toast=(msg,ic="✅")=>{$("tmsg").textContent=msg;$("tic").textContent=ic;const t=$("toast");t.classList.add("on");setTimeout(()=>t.classList.remove("on"),2600);};
 window.cOv=(id)=>$(id).classList.remove("on");
@@ -474,8 +478,9 @@ window.openSB=()=>{
   $("sb-overlay").classList.add("open");$("ham").classList.add("open");
 };
 window.closeSB=()=>{
-  $("sidebar").classList.remove("open");$("sidebar").classList.add("hidden");
-  $("sb-overlay").classList.remove("open");$("ham").classList.remove("open");
+  const sb=document.querySelector(".sidebar");if(sb)sb.classList.remove("open");
+  const sbo=$("sb-ov")||$("sb-overlay");if(sbo)sbo.classList.remove("open");
+  $("ham").classList.remove("open");
 };
 window.togHam=()=>{
   if(!CU){$("ham").classList.toggle("open");$("mobdr").classList.toggle("open");return;}
@@ -526,7 +531,7 @@ function buildSidebar(){
 function buildAllSidebars(){
   if(!CU)return;
   const tabs=TABS[CU.role]||[];
-  const menuHTML=`<li><a href="#" onclick="closeSidebar();savePageSes('pg-home');showPg('pg-home');return false;" style="color:rgba(255,190,120,.8);">🏠 Ana Sayfa</a></li><li class="sep"></li>`+tabs.map(t=>`<li><a href="#" onclick="closeSidebar();savePageSes('pg-dash');showPg('pg-dash');setTimeout(()=>dsShow('${t.id}',null),60);return false;">${t.ic} ${t.lb}</a></li>`).join("");
+  const menuHTML=`<li><a href="#" onclick="closeSidebar();savePageSes('pg-home');showPg('pg-home');return false;" style="color:rgba(255,190,120,.8);">🏠 Ana Sayfa</a></li><li class="sep"></li>`+tabs.map(t=>`<li><a href="#" onclick="closeSidebar();savePageSes('pg-dash');showPg('pg-dash');setTimeout(()=>dsShow('${t.id}',null),60);return false;">${t.ic} ${t.lb}</a></li>`).join("")+`<li class="sep"></li><li><a href="#" onclick="doLogout();return false;" style="color:#fca5a5;">🚪 Çıkış Yap</a></li>`;
   const sbm=$("sbm");if(sbm)sbm.innerHTML=menuHTML;
 }
 function updHeroBtns(){

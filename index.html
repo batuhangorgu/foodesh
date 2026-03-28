@@ -439,6 +439,11 @@ window.showPg=(id)=>{
   updateSidebar(id);
 };
 window.goDash=()=>{if(!$("pg-dash").classList.contains("on")){buildDash();}showPg("pg-dash");savePageSes("pg-dash");};
+window.navDash=(secId)=>{
+  if(!$("dcont")||!$("dcont").innerHTML.trim()){buildDash();}
+  showPg("pg-dash");savePageSes("pg-dash");
+  setTimeout(()=>dsShow(secId,null),80);
+};
 window.goHome=()=>{
   // Close sidebar safely
   const sb=document.querySelector(".sidebar");
@@ -503,84 +508,7 @@ window.cMob=()=>{$("ham").classList.remove("open");$("mobdr").classList.remove("
 window.togDrop=()=>$("pdrop").classList.toggle("open");
 document.addEventListener("click",e=>{const p=$("pp");if(p&&!p.contains(e.target))$("pdrop").classList.remove("open");});
 window.addEventListener("resize",()=>{if(CU)updateSidebar(document.querySelector(".pg.on")?.id||"pg-home");});
-window.goPrf=()=>{$("pdrop").classList.remove("open");if(!$("pg-dash").classList.contains("on")){buildDash();showPg("pg-dash");}setTimeout(()=>dsShow("ds-profile",null),60);};
-window.heroOrder=()=>{if(CU){if(!$("pg-dash").classList.contains("on")){buildDash();showPg("pg-dash");}setTimeout(()=>dsShow(CU.role==="customer"?"ds-rest":CU.role==="business"?"ds-orders":"ds-pending",null),60);}else openLogin();};
-window.heroTrack=()=>{if(CU){if(!$("pg-dash").classList.contains("on")){buildDash();showPg("pg-dash");}setTimeout(()=>dsShow(CU.role==="customer"?"ds-myord":CU.role==="business"?"ds-orders":"ds-delivering",null),60);}else openLogin();};
-
-function setNavU(){
-  $("ng").style.display="none";$("nu").style.display="flex";
-  $("mg").style.display="none";$("mu").style.display="flex";
-  const ini=CU.name.split(" ").map(w=>w[0]).join("").toUpperCase().slice(0,2),fn=CU.name.split(" ")[0];
-  [$("pav"),$("pav2")].forEach(e=>{if(e)e.textContent=ini;});
-  [$("pnm"),$("pnm2")].forEach(e=>{if(e)e.textContent=fn;});
-  updHeroBtns();
-  buildSidebar();
-  updateSidebar("pg-home");
-}
-
-function buildSidebar(){
-  const tabs=TABS[CU.role]||[];
-  $("sbm").innerHTML=
-    `<li><a href="#" onclick="goHome();return false;" style="color:rgba(255,190,120,.85);">← Ana Sayfaya Dön</a></li>`+
-    `<li class="sep"></li>`+
-    tabs.map((t,i)=>`<li><a href="#" class="${i===0?"on":""}" onclick="return dsShow('${t.id}',this)">${t.ic} ${t.lb}</a></li>`).join("");
-  $("mbar").innerHTML=
-    `<button class="mbi" onclick="goHome()"><div class="mbi-ic">🔙</div><div class="mbi-lb">Ana Sayfa</div></button>`+
-    tabs.map((t,i)=>`<button class="mbi${i===0?" on":""}" id="mb-${t.id}" onclick="dsShow('${t.id}',null)"><div class="mbi-ic">${t.ic}</div><div class="mbi-lb">${t.lb}</div></button>`).join("")+
-    `<button class="mbi" onclick="doLogout()" style="flex:0.8;"><div class="mbi-ic">🚪</div><div class="mbi-lb" style="color:#dc2626;">Çıkış</div></button>`;
-}
-
-function buildAllSidebars(){
-  if(!CU)return;
-  const tabs=TABS[CU.role]||[];
-  const menuHTML=`<li><a href="#" onclick="closeSidebar();savePageSes('pg-home');showPg('pg-home');return false;" style="color:rgba(255,190,120,.8);">🏠 Ana Sayfa</a></li><li class="sep"></li>`+tabs.map(t=>`<li><a href="#" onclick="closeSidebar();savePageSes('pg-dash');showPg('pg-dash');setTimeout(()=>dsShow('${t.id}',null),60);return false;">${t.ic} ${t.lb}</a></li>`).join("")+`<li class="sep"></li><li><a href="#" onclick="doLogout();return false;" style="color:#fca5a5;">🚪 Çıkış Yap</a></li>`;
-  const sbm=$("sbm");if(sbm)sbm.innerHTML=menuHTML;
-}
-function updHeroBtns(){
-  const c=$("hero-btns");if(!c)return;
-  if(CU){
-    const rt={business:"ds-orders",customer:"ds-rest",courier:"ds-pending"};
-    const tt={business:"ds-orders",customer:"ds-myord",courier:"ds-delivering"};
-    const rl={business:"📦 Siparişler",customer:"🛒 Sipariş Ver",courier:"🛵 Teslimatlar"};
-    const tl={business:"📊 Panelim",customer:"📦 Siparişlerimi Takip Et",courier:"📍 Teslimatta"};
-    c.innerHTML=
-      `<button class="nbtn nbtn-f" style="font-size:.9rem;padding:10px 20px;" onclick="heroOrder()">${rl[CU.role]}</button>`+
-      `<button class="nbtn nbtn-o" style="font-size:.88rem;padding:9px 16px;" onclick="heroTrack()">${tl[CU.role]}</button>`+
-      `<button class="nbtn nbtn-o" style="font-size:.85rem;border-color:#8A6A5A;color:#8A6A5A;" onclick="if(!document.getElementById('pg-dash').classList.contains('on')){buildDash();showPg('pg-dash');}">Panele Git →</button>`;
-  }else{
-    c.innerHTML=
-      `<button class="nbtn nbtn-f" style="font-size:.93rem;padding:10px 22px;" onclick="heroOrder()">🛒 Sipariş Ver</button>`+
-      `<button class="nbtn nbtn-o" style="font-size:.91rem;padding:9px 18px;" onclick="heroTrack()">📦 Takip Et</button>`+
-      `<button class="nbtn nbtn-d" style="font-size:.88rem;" onclick="showDl()">📱 İndir</button>`;
-  }
-}
-
-/* LOGIN */
-window.doLogin=async()=>{
-  const u=$("lu").value.trim(),p=$("lp").value;
-  if(!u||!p){toast("Tüm alanları doldur!","⚠️");return;}
-  toast("Giriş yapılıyor...","⏳");
-  try{
-    const sn=await getDocs(query(collection(db,"users"),where("username","==",u),where("password","==",p)));
-    if(sn.empty){toast("Kullanıcı adı veya şifre yanlış!","❌");return;}
-    CU={id:sn.docs[0].id,...sn.docs[0].data()};saveSes();
-    cOv("ov-login");cMob();await loadAll();
-    buildDash();setNavU();
-    savePg("pg-home");showPg("pg-home");
-    toast("Hoş geldin, "+CU.name.split(" ")[0]+"! 🎉","✅");
-  }catch(e){toast("Hata: "+e.message,"❌");}
-};
-
-window.doLogout=()=>{
-  if(!confirm("Çıkış yapmak istediğine emin misin?"))return;
-  CU=null;cart=[];clrSes();
-  $("ng").style.display="flex";$("nu").style.display="none";
-  $("mg").style.display="flex";$("mu").style.display="none";
-  $("cartfl").classList.remove("on");
-  $("sidebar").classList.add("hidden");$("main-content").classList.add("full");
-  $("mbar").innerHTML="";$("sbm").innerHTML="";
-  updHeroBtns();cMob();showPg("pg-home");toast("Görüşürüz! 👋","👋");
-};
+window.goPrf=()=>{$("pdrop").classList.remove("open");navDash("ds-profile");};
 
 /* REGISTER */
 window.pickRole=(r,el)=>{
@@ -709,6 +637,7 @@ window.startDel=async(id)=>{try{await updateDoc(doc(db,"orders",id),{status:"del
 window.completeDel=async(id)=>{try{await updateDoc(doc(db,"orders",id),{status:"delivered"});const o=orders.find(x=>x.id===id);if(o)o.status="delivered";renderDeliv();crStats();toast("Teslim edildi! ✅","✅");}catch(e){toast("Hata: "+e.message,"❌");}};
 
 
+window.heroTrack=()=>{if(CU){navDash(CU.role==="customer"?"ds-myord":CU.role==="business"?"ds-orders":"ds-delivering");}else openLogin();};
 </script>
 </body>
 </html>

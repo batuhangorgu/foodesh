@@ -42,6 +42,17 @@ button,input,select,textarea{font-family:"Nunito",sans-serif;}
 .mobdr.open{display:flex;}
 .pg{display:none;padding-top:var(--nav);min-height:100vh;}.pg.on{display:block;}
 #pg-home{background:radial-gradient(ellipse at 80% 10%,rgba(255,107,0,.15),transparent 55%),radial-gradient(ellipse at 10% 85%,rgba(232,35,10,.10),transparent 55%),#FFF8F0;}
+.home-wrap{display:flex;min-height:calc(100vh - var(--nav));}
+.home-sidebar{width:220px;flex-shrink:0;background:linear-gradient(180deg,#1A0A00,#3d1a00);padding:20px 0;display:none;}
+.home-sidebar.visible{display:block;}
+.home-sidebar .sbl{font-family:"Fredoka One",cursive;font-size:1.1rem;color:#fff;padding:0 16px 16px;border-bottom:1px solid rgba(255,255,255,.1);}
+.home-sidebar .sbl b{color:#FF6B00;}
+.home-sidebar .sbm{list-style:none;padding:8px 0;}
+.home-sidebar .sbm li a{display:flex;align-items:center;gap:7px;padding:9px 16px;color:rgba(255,255,255,.7);text-decoration:none;font-weight:700;font-size:.81rem;transition:all .18s;border-left:3px solid transparent;}
+.home-sidebar .sbm li a:hover{color:#fff;background:rgba(255,107,0,.15);border-left-color:#FF6B00;}
+.home-sidebar .sbm li.sep{height:1px;background:rgba(255,255,255,.08);margin:4px 0;}
+.home-content{flex:1;overflow-x:hidden;}
+@media(max-width:720px){.home-sidebar{display:none !important;}}
 .hero{max-width:1060px;margin:0 auto;padding:clamp(32px,7vw,72px) 14px clamp(32px,5vw,52px);display:flex;align-items:center;justify-content:space-between;gap:28px;flex-wrap:wrap;}
 .hero-t{flex:1;min-width:220px;}
 .hero-t h1{font-family:"Fredoka One",cursive;font-size:clamp(1.8rem,5vw,3.6rem);line-height:1.08;}
@@ -260,6 +271,12 @@ footer a{color:var(--or);text-decoration:none;}
   </div>
 </div>
 <div id="pg-home" class="pg on">
+  <div class="home-wrap">
+  <aside class="home-sidebar" id="home-sidebar">
+    <div class="sbl">🍔 Foo<b>Dash</b></div>
+    <ul class="sbm" id="home-sbm"></ul>
+  </aside>
+  <div class="home-content">
   <div class="hero">
     <div class="hero-t">
       <h1>Lezzetler <em>Kapında</em><br>Hızla Gelsin 🚀</h1>
@@ -292,6 +309,8 @@ footer a{color:var(--or);text-decoration:none;}
     </div>
   </div>
   <footer>© 2025 FooDash. Tüm hakları saklıdır. | <a href="#">Gizlilik</a> | <a href="#">KVKK</a></footer>
+  </div><!-- home-content -->
+  </div><!-- home-wrap -->
 </div>
 <div class="sidebar-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
 <div id="pg-dash" class="pg">
@@ -398,6 +417,16 @@ function setNavU(){
   [$("pav"),$("pav2")].forEach(e=>{if(e)e.textContent=ini;});
   [$("pnm"),$("pnm2")].forEach(e=>{if(e)e.textContent=fn;});
   updHeroBtns();
+  buildHomeSidebar();
+}
+
+function buildHomeSidebar(){
+  const hs=$("home-sidebar");
+  const hsbm=$("home-sbm");
+  if(!hs||!hsbm||!CU){return;}
+  const tabs=TABS[CU.role]||[];
+  hsbm.innerHTML=tabs.map(t=>`<li><a href="#" onclick="showPg('pg-dash');savePageSes('pg-dash');setTimeout(()=>dsShow('${t.id}',null),60);return false;">${t.ic} ${t.lb}</a></li>`).join("");
+  hs.classList.add("visible");
 }
 function updHeroBtns(){
   const c=$("hero-btns");if(!c)return;
@@ -415,11 +444,11 @@ window.doLogin=async()=>{
   const u=$("lu").value.trim(),p=$("lp").value;
   if(!u||!p){toast("Tüm alanları doldur!","⚠️");return;}
   toast("Giriş yapılıyor...","⏳");
-  try{const sn=await getDocs(query(collection(db,"users"),where("username","==",u),where("password","==",p)));if(sn.empty){toast("Kullanıcı adı veya şifre yanlış!","❌");return;}CU={id:sn.docs[0].id,...sn.docs[0].data()};saveSes();cOv("ov-login");cMob();await loadAll();setNavU();buildDash();showPg("pg-dash");toast("Hoş geldin, "+CU.name.split(" ")[0]+"! 🎉","✅");}catch(e){toast("Hata: "+e.message,"❌");}
+  try{const sn=await getDocs(query(collection(db,"users"),where("username","==",u),where("password","==",p)));if(sn.empty){toast("Kullanıcı adı veya şifre yanlış!","❌");return;}CU={id:sn.docs[0].id,...sn.docs[0].data()};saveSes();cOv("ov-login");cMob();await loadAll();setNavU();buildDash();savePageSes("pg-home");showPg("pg-home");toast("Hoş geldin, "+CU.name.split(" ")[0]+"! 🎉","✅");}catch(e){toast("Hata: "+e.message,"❌");}
 };
 window.doLogout=()=>{
   if(!confirm("Çıkış yapmak istediğine emin misin?"))return;
-  CU=null;cart=[];clrSes();$("ng").style.display="flex";$("nu").style.display="none";$("mg").style.display="flex";$("mu").style.display="none";$("cartfl").classList.remove("on");updHeroBtns();cMob();showPg("pg-home");toast("Görüşürüz! 👋","👋");
+  CU=null;cart=[];clrSes();$("ng").style.display="flex";$("nu").style.display="none";$("mg").style.display="flex";$("mu").style.display="none";$("cartfl").classList.remove("on");updHeroBtns();const hs=$("home-sidebar");if(hs){hs.classList.remove("visible");const hsbm=$("home-sbm");if(hsbm)hsbm.innerHTML="";}cMob();showPg("pg-home");toast("Görüşürüz! 👋","👋");
 };
 window.pickRole=(r,el)=>{
   uRole=r;document.querySelectorAll(".rc").forEach(c=>c.classList.remove("sel"));el.classList.add("sel");
@@ -442,7 +471,7 @@ window.doReg=async()=>{
     if(uRole==="customer"){u.addr=$("ra")?.value||"";}
     if(uRole==="courier"){u.vehicle=$("rv")?.value||"";}
     const ref=await addDoc(collection(db,"users"),u);CU={id:ref.id,...u};users.push(CU);saveSes();
-    cOv("ov-reg");setNavU();buildDash();showPg("pg-dash");toast("Kayıt başarılı! Hoş geldin 🎉","✅");
+    cOv("ov-reg");setNavU();buildDash();savePageSes("pg-home");showPg("pg-home");toast("Kayıt başarılı! Hoş geldin 🎉","✅");
   }catch(e){toast("Hata: "+e.message,"❌");}
 };
 const TABS={

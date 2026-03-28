@@ -98,7 +98,9 @@ footer a{color:var(--or);text-decoration:none;}
 .bg{background:#dcfce7;color:#16a34a;}.bo{background:#fff3e0;color:#e65100;}.br{background:#fee2e2;color:#dc2626;}.bb{background:#dbeafe;color:#1d4ed8;}
 #pg-dash{background:#f7f0ea;padding-bottom:var(--bar);}
 .dwrap{display:flex;min-height:calc(100vh - var(--nav));}
-.sidebar{width:200px;flex-shrink:0;background:linear-gradient(180deg,#1A0A00,#3d1a00);padding:20px 0;position:sticky;top:var(--nav);height:calc(100vh - var(--nav));overflow-y:auto;}
+.sidebar{width:220px;flex-shrink:0;background:linear-gradient(180deg,#1A0A00,#3d1a00);padding:20px 0;position:sticky;top:var(--nav);height:calc(100vh - var(--nav));overflow-y:auto;}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:897;backdrop-filter:blur(2px);}
+.sidebar-overlay.open{display:block;}
 .sbl{font-family:"Fredoka One",cursive;font-size:1.1rem;color:#fff;padding:0 16px 16px;border-bottom:1px solid rgba(255,255,255,.1);}
 .sbl b{color:var(--or);}
 .sbm{list-style:none;padding:8px 0;}
@@ -194,7 +196,19 @@ footer a{color:var(--or);text-decoration:none;}
   :root{--nav:52px;--bar:58px;}
   .nav-r .nbtn-d,.nav-r .nbtn-o,.nav-r .nbtn-f{display:none;}
   .ham{display:flex;}
-  .sidebar{display:none;}
+  #sb-close-btn{display:block !important;}
+  .sidebar{
+    display:block;
+    position:fixed;
+    top:0;left:-240px;
+    width:240px;
+    height:100vh;
+    z-index:1000;
+    padding-top:calc(var(--nav) + 8px);
+    transition:left .28s cubic-bezier(.4,0,.2,1);
+    box-shadow:none;
+  }
+  .sidebar.open{left:0;box-shadow:4px 0 24px rgba(0,0,0,.3);}
   .mbar{display:flex;}
   .dmain{padding:10px 10px calc(var(--bar) + 8px);}
   .cartfl{bottom:calc(var(--bar) + 8px);}
@@ -232,7 +246,7 @@ footer a{color:var(--or);text-decoration:none;}
       </div>
     </div>
   </div>
-  <button class="ham" id="ham" onclick="togMob()"><span></span><span></span><span></span></button>
+  <button class="ham" id="ham" onclick="togMob()" title="Menüyü Aç"><span></span><span></span><span></span></button>
 </nav>
 <div class="mobdr" id="mobdr">
   <div id="mg" style="display:flex;flex-direction:column;gap:7px;">
@@ -279,10 +293,11 @@ footer a{color:var(--or);text-decoration:none;}
   </div>
   <footer>© 2025 FooDash. Tüm hakları saklıdır. | <a href="#">Gizlilik</a> | <a href="#">KVKK</a></footer>
 </div>
+<div class="sidebar-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
 <div id="pg-dash" class="pg">
   <div class="dwrap">
-    <aside class="sidebar"><div class="sbl">🍔 Foo<b>Dash</b></div><ul class="sbm" id="sbm"></ul></aside>
-    <main class="dmain"><button class="back-btn" onclick="goHome()">← Ana Sayfaya Dön</button><div id="dcont"></div></main>
+    <aside class="sidebar"><div class="sbl" style="display:flex;justify-content:space-between;align-items:center;">🍔 Foo<b>Dash</b><button onclick="closeSidebar()" style="background:none;border:none;color:rgba(255,255,255,.6);font-size:1.2rem;cursor:pointer;padding:0;line-height:1;display:none;" id="sb-close-btn">✕</button></div><ul class="sbm" id="sbm"></ul></aside>
+    <main class="dmain"><button class="back-btn" onclick="closeSidebar();goHome()">← Ana Sayfaya Dön</button><div id="dcont"></div></main>
   </div>
   <nav class="mbar" id="mbar"></nav>
 </div>
@@ -316,7 +331,7 @@ async function restoreSes(){
   try{await loadAll();const ok=await restoreSes();if(ok){setNavU();buildDash();showPg("pg-dash");const ls=localStorage.getItem(LK);if(ls&&$(ls))setTimeout(()=>dsShow(ls,null),80);}}catch(e){console.error(e);}
   $("loader").style.display="none";
 })();
-window.goHome=()=>showPg("pg-home");
+window.goHome=()=>{closeSidebar();showPg("pg-home");};
 window.showPg=(id)=>{document.querySelectorAll(".pg").forEach(p=>p.classList.remove("on"));$(id).classList.add("on");window.scrollTo(0,0);};
 window.toast=(msg,ic="✅")=>{$("tmsg").textContent=msg;$("tic").textContent=ic;const t=$("toast");t.classList.add("on");setTimeout(()=>t.classList.remove("on"),2600);};
 window.cOv=(id)=>$(id).classList.remove("on");
@@ -324,8 +339,30 @@ window.openLogin=()=>$("ov-login").classList.add("on");
 window.openReg=()=>$("ov-reg").classList.add("on");
 window.showDl=()=>$("ov-dl").classList.add("on");
 window.doDl=(lbl,el)=>{el.style.borderColor="#22C55E";el.style.background="rgba(34,197,94,.1)";setTimeout(()=>{cOv("ov-dl");toast(lbl+" indiriliyor...","📥");},600);};
-window.togMob=()=>{$("ham").classList.toggle("open");$("mobdr").classList.toggle("open");};
-window.cMob=()=>{$("ham").classList.remove("open");$("mobdr").classList.remove("open");};
+window.togMob=()=>{
+  const onDash=$("pg-dash").classList.contains("on");
+  if(onDash){
+    const sb=$("sbm").closest(".sidebar");
+    const isOpen=sb.classList.contains("open");
+    if(isOpen){closeSidebar();}else{openSidebar();}
+  } else {
+    $("ham").classList.toggle("open");
+    $("mobdr").classList.toggle("open");
+  }
+};
+window.openSidebar=()=>{
+  const sb=document.querySelector(".sidebar");
+  if(sb){sb.classList.add("open");}
+  $("sb-overlay").classList.add("open");
+  $("ham").classList.add("open");
+};
+window.closeSidebar=()=>{
+  const sb=document.querySelector(".sidebar");
+  if(sb){sb.classList.remove("open");}
+  $("sb-overlay").classList.remove("open");
+  $("ham").classList.remove("open");
+};
+window.cMob=()=>{$("ham").classList.remove("open");$("mobdr").classList.remove("open");closeSidebar();};
 window.togDrop=()=>$("pdrop").classList.toggle("open");
 document.addEventListener("click",e=>{const p=$("pp");if(p&&!p.contains(e.target))$("pdrop").classList.remove("open");});
 window.goPrf=()=>{$("pdrop").classList.remove("open");showPg("pg-dash");setTimeout(()=>dsShow("ds-profile",null),60);};
@@ -404,7 +441,9 @@ window.dsShow=(id,el)=>{
   document.querySelectorAll(".sbm li a").forEach(a=>a.classList.remove("on"));
   document.querySelectorAll(".mbi").forEach(b=>b.classList.remove("on"));
   if(el)el.classList.add("on");const mb=$("mb-"+id);if(mb)mb.classList.add("on");
-  localStorage.setItem(LK,id);return false;
+  localStorage.setItem(LK,id);
+  closeSidebar();
+  return false;
 };
 window.refSec=(id)=>{
   const map={"ds-home":()=>{updStats();if(CU.role==="customer"){renderRest();updHomeOrders();}if(CU.role==="courier")crStats();},"ds-menu":renderMenu,"ds-orders":renderOrders,"ds-rest":renderRest,"ds-myord":renderMyOrd,"ds-pending":renderPend,"ds-delivering":renderDeliv,"ds-profile":renderProf};
